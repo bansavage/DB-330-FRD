@@ -1,0 +1,22 @@
+{
+  "name": "db-330-frd",
+  "version": "1.0.0",
+  "description": "Database Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lance13c/DB-330-FRD.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lance13c/DB-330-FRD/issues"
+  },
+  "homepage": "https://github.com/lance13c/DB-330-FRD#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
