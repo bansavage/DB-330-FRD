@@ -3,7 +3,7 @@
 ##High Level Architecture
 ![Alt text](/images/HLA.png)
 
-##Run The Application
+##How to Setup and Run The Application
 
 1. Download and install Node.js: <a href="https://nodejs.org/en/download/">Download Here</a>
 2. Add node.js to the system path.
