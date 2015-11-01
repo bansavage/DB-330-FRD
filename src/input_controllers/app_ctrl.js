@@ -1,0 +1,3 @@
+/*
+  Incharge of handeling user interaction within the web app.
+*/
