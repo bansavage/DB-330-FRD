@@ -19,5 +19,8 @@
   "dependencies": {
     "express": "^4.13.3",
     "mysql": "^2.9.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
   }
 }
