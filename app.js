@@ -20,9 +20,7 @@ app.use('/public/views', function(){
   jade.renderFile('/public/views/index.jade');
 });
 //Hosts the static files in public under /assets
-app.use('/assets', express.static(`${__dirname}/public`))
-
-
+app.use('/assets', express.static(`${__dirname}/public`));
 
 
 app.get('/', function(req, res){

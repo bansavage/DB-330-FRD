@@ -19,7 +19,8 @@
   "dependencies": {
     "express": "^4.13.3",
     "jade": "^1.11.0",
-    "mysql": "^2.9.0"
+    "mysql": "^2.9.0",
+    "purecss": "^0.6.0"
   },
   "devDependencies": {
     "jasmine-node": "^1.14.5"

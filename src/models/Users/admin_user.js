@@ -1,1 +1,1 @@
-var model = require('../model.js');
+var model = require('../user_model');
