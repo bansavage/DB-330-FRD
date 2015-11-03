@@ -3,15 +3,34 @@
 */
 var config = require('./config');
 var express = require('express');
+var jade = require('jade');
+
 app = express();
 
+//Redefine where views are located
+app.set('views',`${__dirname}/public/views`);
+//Sets the view engine
+app.set('view engine', 'jade');
+//varriable to keep track of compiled html
+var html = {value : {}};
+//Compiles the jade templates in the view
+app.use('/public/views', function(){
+  var options = {cache: true};
+  jade.compileFile('/public/views/index.jade', options);
+  jade.renderFile('/public/views/index.jade');
+});
+//Hosts the static files in public under /assets
 app.use('/assets', express.static(`${__dirname}/public`))
 
 
-app.set('view engine', '')
+
 
 app.get('/', function(req, res){
-  res.send(`<html><body>HelloWorld</body></html>`);
+  res.render('index',{
+     titile : 'Home',
+     username: 'lance'
+   }
+  );
 });
 
 app.get('/profile/:id', function(req, res){
