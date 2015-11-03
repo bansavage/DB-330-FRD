@@ -18,6 +18,7 @@
   "homepage": "https://github.com/lance13c/DB-330-FRD#readme",
   "dependencies": {
     "express": "^4.13.3",
+    "jade": "^1.11.0",
     "mysql": "^2.9.0"
   },
   "devDependencies": {
