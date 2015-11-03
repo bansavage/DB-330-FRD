@@ -27,14 +27,15 @@ app.use('/assets', express.static(`${__dirname}/public`))
 
 app.get('/', function(req, res){
   res.render('index',{
-     titile : 'Home',
+     title : 'Home',
      username: 'lance'
    }
   );
 });
 
 app.get('/profile/:id', function(req, res){
-  res.send(`<html><body>${req.params.id}</body></html>`);
+  res.send(`<html><body>${req.params.id}</body></html>
+    `);
 });
 
 app.listen(config.server.port);
