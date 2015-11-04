@@ -1,4 +1,4 @@
-var Model = require('./model.js');
+var User = require('../user_model');
 
 var Public(){
   var public = {};

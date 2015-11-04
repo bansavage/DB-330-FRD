@@ -1,1 +1,1 @@
-var model = require('/model');
+var model = require('./model');
