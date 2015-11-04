@@ -1,5 +1,5 @@
 # Faculty Research Database
-
+A web application that allows users to view and share research papers.
 ##High Level Architecture
 ![High Level Architecture](images/HAL.png)
 
