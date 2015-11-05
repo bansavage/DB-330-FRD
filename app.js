@@ -1,11 +1,14 @@
 /*
   Start Web Server Here and take in command line arguments, sets up the database
 */
+var Model = require('./src/models/model');
+
+"use strict"
 var config = require('./config');
 var express = require('express');
 var jade = require('jade');
 
-app = express();
+var app = express();
 
 //Redefine where views are located
 app.set('views',`${__dirname}/public/views`);
@@ -31,9 +34,11 @@ app.get('/', function(req, res){
   );
 });
 
-app.get('/profile/:id', function(req, res){
-  res.send(`<html><body>${req.params.id}</body></html>
-    `);
-});
+
+var mod = Model();
+mod.id_tracker.setup();
+console.log(mod.id_tracker);
+console.log(mod.id_tracker.value[0]);
 
 app.listen(config.server.port);
+console.log(`app running`);
