@@ -1,6 +1,22 @@
-var db = require('../database/db_pool');
+var config = require('../../config');
+var knex = require('knex')(config.conn);
+var bookshelf = require('bookshelf')(knex);
+
 var mysql = require('mysql');
 
+
+
+
+//Good way to create the model
+// Id is taken care of by the bookshelf library
+var User = bookshelf.Model.extend({
+  tableName: 'users',
+  //permissions : ...
+});
+
+//The now old way to create a model
+
+//NO LONGER WORKS
 function Model() {
 
 

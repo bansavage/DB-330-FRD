@@ -1,6 +1,11 @@
 /*
   Start Web Server Here and take in command line arguments, sets up the database
 */
+
+//Notes: Make sure the config file has the correct data or a Knex error will
+// be displayed.
+
+
 var Model = require('./src/models/model');
 
 "use strict"
@@ -36,9 +41,9 @@ app.get('/', function(req, res){
 
 
 var mod = Model();
-mod.id_tracker.setup();
-console.log(mod.id_tracker);
-console.log(mod.id_tracker.value[0]);
+// mod.id_tracker.setup();
+// console.log(mod.id_tracker);
+// console.log(mod.id_tracker.value[0]);
 
 app.listen(config.server.port);
 console.log(`app running`);
