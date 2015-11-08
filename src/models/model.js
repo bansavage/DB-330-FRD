@@ -1,6 +1,4 @@
 var config = require('../../config');
-var knex = require('knex')(config.conn);
-var bookshelf = require('bookshelf')(knex);
 var mysql = require('mysql');
 
 

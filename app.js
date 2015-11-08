@@ -40,7 +40,7 @@ app.get('/', function(req, res){
 });
 
 
-var mod = Model();
+//var mod = Model();
 // mod.id_tracker.setup();
 // console.log(mod.id_tracker);
 // console.log(mod.id_tracker.value[0]);

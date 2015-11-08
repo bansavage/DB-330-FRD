@@ -7,17 +7,11 @@ config.server = {
 };
 
 //Database Connection Configurations used with knex
-config.conn = {
-  client: 'mysql',
-  connection : {
-    host            : '127.0.0.1',
-    port            : '3333',
-    user            : 'root',
-    password        : '',
-    database        : 'frd'
-  },
-  pool : {
-    min: 1,
-    max: 20
-  }
+config.db = {
+  connectionLimit : 10;
+  host            : '127.0.0.1',
+  port            : '3333',
+  user            : 'root',
+  password        : '',
+  database        : 'frd'
 }
