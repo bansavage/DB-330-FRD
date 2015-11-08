@@ -1,6 +1,5 @@
-var model = require('./model');
-var mysql = require('')
-var db = require('db_pool');
+var mysql = require('');
+var db = require('../database/db_pool');
 
 function user_model(id){
   return {

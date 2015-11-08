@@ -5,9 +5,6 @@
 //Notes: Make sure the config file has the correct data or a Knex error will
 // be displayed.
 
-
-var Model = require('./src/models/model');
-
 "use strict"
 var config = require('./config');
 var express = require('express');
@@ -39,11 +36,6 @@ app.get('/', function(req, res){
   );
 });
 
-
-//var mod = Model();
-// mod.id_tracker.setup();
-// console.log(mod.id_tracker);
-// console.log(mod.id_tracker.value[0]);
 
 app.listen(config.server.port);
 console.log(`app running`);

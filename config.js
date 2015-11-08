@@ -8,7 +8,7 @@ config.server = {
 
 //Database Connection Configurations used with knex
 config.db = {
-  connectionLimit : 10;
+  connectionLimit : 10,
   host            : '127.0.0.1',
   port            : '3333',
   user            : 'root',
