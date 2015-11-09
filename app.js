@@ -7,9 +7,9 @@
 
 "use strict"
 var config = require('./config');
+var user_model = require('./src/models/user_model.js');
 var express = require('express');
 var jade = require('jade');
-
 var app = express();
 
 //Redefine where views are located
@@ -31,9 +31,18 @@ app.use('/assets', express.static(`${__dirname}/public`));
 app.get('/', function(req, res){
   res.render('index',{
      title : 'Home',
-     username: 'lance'
+     username: 'john'
    }
   );
+});
+
+app.get('/api/users/:id', function(req, res){
+  var newUser = user_model(req.params.id);
+
+  //console.log(newUser.fetchProps("my err", function(rows){
+  //  console.log(rows);
+  //}));
+  //console.log("worked");
 });
 
 
