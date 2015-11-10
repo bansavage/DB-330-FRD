@@ -7,7 +7,7 @@
 
 "use strict"
 var config = require('./config');
-var user_model = require('./src/models/user_model.js');
+var User = require('./src/models/user_model.js');
 var express = require('express');
 var jade = require('jade');
 var app = express();
@@ -45,6 +45,17 @@ app.get('/api/users/:id', function(req, res){
   //console.log("worked");
 });
 
+
+
+var user = new User({p_id: '1'});
+user.fetchProps('myError', function(rows){
+  console.log('here'); // Setting of fetch completed
+  console.log(`user data pid: ${user.data.p_id}`);
+  console.log(`user data f_name: ${user.data.f_name}`);
+  console.log(`user data l_name: ${user.data.l_name}`);
+  console.log(`user data pass: ${user.data.pass}`);
+  console.log(`user data email: ${user.data.email}`);
+});
 
 app.listen(config.server.port);
 console.log(`app running`);
