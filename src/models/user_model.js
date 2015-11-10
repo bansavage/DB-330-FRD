@@ -95,45 +95,48 @@ function user_model(attrs){
     //qdata is an empty array
     this.fetchProps = function(err, callback){
       //Example Connection
-      try{
+
         var self = this;
         db.getConnection(function(err, connection) {
-          if (err) {throw err;}
-          // Use the connection
-          var sql = "SELECT ??,??,??,?? FROM frd.users where p_id = ?";
-          var inserts = ['f_name','l_name','pass','email', self.data.p_id];
-          sql = mysql.format(sql, inserts);
+          try{
+            if (err) {throw err;}
+            // Use the connection
+            var sql = "SELECT ??,??,??,?? FROM frd.users where p_id = ?";
+            var inserts = ['f_name','l_name','pass','email', self.data.p_id];
+            sql = mysql.format(sql, inserts);
 
-          connection.query(sql, function(err, rows) {
-            try{
-              if (err) {throw err;}
-              if (rows[0] == undefined) {throw new Error('No row data');}
-              // And done with the connection.
-              //Set Rows Here
-              for (prop in rows[0]){
-                console.log(`prop ${prop} = ${rows[0][prop]}`);
-                self.data[prop] = rows[0][prop];
+
+            connection.query(sql, function(err, rows) {
+              try{
+                if (err) {throw err;}
+                if (rows[0] == undefined) {throw new Error('No row data');}
+                // And done with the connection.
+                //Set Rows Here
+                for (prop in rows[0]){
+                  console.log(`prop ${prop} = ${rows[0][prop]}`);
+                  self.data[prop] = rows[0][prop];
+                }
+
+                //self.data = rows;
+                callback(); // All values have been set
+                connection.release();
+              }catch (err){
+                //Create new object attib if no data is found
+                self.data = {
+                  p_id: uuid.v1(),
+                  f_name: "",
+                  l_name: "",
+                  pass : "",
+                  email : ""
+                };
               }
+            });
 
-              //self.data = rows;
-              callback(); // All values have been set
-              connection.release();
-            }catch (err){
-              //Create new object attib if no data is found
-              self.data = {
-                p_id: uuid.v1(),
-                f_name: "",
-                l_name: "",
-                pass : "",
-                email : ""
-              };
-            }
+          }catch(err){
+            console.log(`${err}`);
+          }
             // Don't use the connection here, it has been returned to the pool.
-          });
         });
-      }catch(err){
-        console.log(`${err}`);
-      }
       //If something bad happens add a string to err
       //Example: err = "update could not finish"
       return;
