@@ -1,7 +1,7 @@
 # Faculty Research Database
-
+A web application that allows users to view and share research papers.
 ##High Level Architecture
-![Alt text](/images/HLA.png)
+![High Level Architecture](images/HAL.png)
 
 ##How to Setup and Run The Application
 
@@ -47,4 +47,32 @@
     That should start the server on port 7000
 
 ##Application Design
-To be continued
+
+###Domain Model
+![Domain Model Design](images/DM.png)
+
+**Views:** Are created by the App Controller. Displays the data provided by the app controller. Talks to the App Controller via HTTP and HTTPS requests/responses.
+
+**App Controller:** Handles the requests and responses from the views. Calls certain middleware to run depending on the request/data received. Renders the views.
+
+**Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from a model.
+
+**User Model Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from the User model.
+
+**Paper Model Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from the Paper model.
+
+**Model:** This represents the data of an Object. Allowing the manipulation and retrieval of it’s data from the database.
+
+**User Model:** This represents the data of a User. Allowing the manipulation and retrieval of it’s data from the database.
+
+**Paper Model:** This represents the data of a Paper. Allowing the manipulation and retrieval of it’s data from the database.
+
+**Public User:** This will represent a Public’s Users data in the database. It will also provide extra functionality to manipulation and retrieval data to the Public (if any).
+
+**Student User:** This will represent a Student’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Students (if any).
+
+**Faculty User:** This will represent an Faculty’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Faculty (if any).
+
+**Admin User:** This will represent an Admin’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Admins (if any).
+
+**Database Pool:** This represents the MySQL Driver/Library we are using. Inside there is an easy way to create a database pool. This will allow for many users to access this application at once without having to worry about the overhead caused by creating a database connection.
