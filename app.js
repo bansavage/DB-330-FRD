@@ -48,7 +48,7 @@ app.get('/api/users/:id', function(req, res){
 
 
 var user = new User({p_id: '1'});
-user.fetchProps('myError', function(rows){
+user.fetchProps('myError', function(){
   console.log('here'); // Setting of fetch completed
   console.log(`user data pid: ${user.data.p_id}`);
   console.log(`user data f_name: ${user.data.f_name}`);
