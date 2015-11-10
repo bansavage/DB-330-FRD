@@ -99,7 +99,7 @@ var Paper = function(){
             if (err) {throw err;}
             // Use the connection
             var sql = "SELECT ??,??,??,?? FROM frd.users where p_id = ?";
-            var inserts = ['paper_id','paper_title','paper_abstract','paper_citation', self.data.p_id];
+            var inserts = ['paper_id','title','abstract','citation', self.data.p_id];
             sql = mysql.format(sql, inserts);
 
 
@@ -137,7 +137,7 @@ var Paper = function(){
       //Example: err = "update could not finish"
       return;
     };
-    
+
 	/*                    *\
 	**  Setter Functions  **
 	\*                    */
