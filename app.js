@@ -8,6 +8,7 @@
 "use strict"
 var config = require('./config');
 var User = require('./src/models/user_model.js');
+var search_mid = require('./src/middleware/search_mid')
 var express = require('express');
 var jade = require('jade');
 var app = express();
@@ -36,6 +37,24 @@ app.get('/', function(req, res){
   );
 });
 
+
+//searching, Expects an array of values EX: test?array=a&array=b&array=c
+app.get('/search/:keywords', function(req, res, next){
+  var values = req.query.array;
+  //search_min.getPapers(req.params);
+  console.log(values);
+  search_mid.getPapers(values, function(arr){
+    //Render Page with data from the arr
+    res.json({data: arr});
+  });
+
+  if (req.params === Array){
+    console.log(true);
+  }
+});
+
+
+
 app.get('/api/users/:id', function(req, res){
   var newUser = user_model(req.params.id);
 
@@ -47,15 +66,6 @@ app.get('/api/users/:id', function(req, res){
 
 
 
-var user = new User({p_id: '1'});
-user.fetchProps('myError', function(){
-  console.log('here'); // Setting of fetch completed
-  console.log(`user data pid: ${user.data.p_id}`);
-  console.log(`user data f_name: ${user.data.f_name}`);
-  console.log(`user data l_name: ${user.data.l_name}`);
-  console.log(`user data pass: ${user.data.pass}`);
-  console.log(`user data email: ${user.data.email}`);
-});
 
 app.listen(config.server.port);
 console.log(`app running`);

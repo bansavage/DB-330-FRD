@@ -13,5 +13,5 @@ config.db = {
   port            : '3333',
   user            : 'root',
   password        : '',
-  database        : 'frd'
+  database        : 'researchdb'
 }

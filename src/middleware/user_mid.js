@@ -14,15 +14,9 @@ User.exist({ username: username }, function(err, user) {
   }
 
   if (!user) {
-    // incorrect username
+    // incorrect user credentials
     return res.send(401);
   }
-
-  if (!user.validPassword(password)) {
-    // incorrect password
-    return res.send(401);
-  }
-
   // User has authenticated OK
   res.send(200);
 });
