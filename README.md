@@ -75,6 +75,9 @@ A web application that allows users to view and share research papers.
 
       Note: As of right now all queries must have at least 2 array values in them.
 
+  8. Config File
+
+      The config file is the place to change the database name, ports, and host ip.
 ##Application Design
 
 ###Domain Model
