@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 
 var Paper = function(){
 
-	/No need for Getters and Setters
+	//No need for Getters and Setters
 
     // If an id is given, find it in the database, use those attributes
     if (attrs.p_id !== undefined){
@@ -14,7 +14,7 @@ var Paper = function(){
         paper_abstract: "",
         paper_citation: ""
       };
-      console.log(`fetching`);
+      console.log(`Retrieving data...`);
       //fetch
     }else{
       this.data = {
@@ -25,7 +25,7 @@ var Paper = function(){
       };
 
       for(var property in this.data ){
-        console.log(attrs[property]);
+        //console.log(attrs[property]);
   			if(attrs[property] !== undefined){
   				this.data[property] = attrs[property];
   			}
@@ -43,7 +43,7 @@ var Paper = function(){
         if (err) {throw err;}
         // Use the connection
         var sql = "SELECT * FROM frd.papers where paper_id = ?";
-        var inserts = [self.p_id];                             //Problem: need to find way to get self into this callback method
+        var inserts = [self.p_id];                       
         sql = mysql.format(sql, inserts);
 
         connection.query(sql, function(err, rows) {
@@ -98,10 +98,9 @@ var Paper = function(){
           try{
             if (err) {throw err;}
             // Use the connection
-            var sql = "SELECT ??,??,??,?? FROM frd.users where p_id = ?";
+            var sql = "SELECT ??,??,??,?? FROM frd.papers where p_id = ?";
             var inserts = ['paper_id','title','abstract','citation', self.data.p_id];
             sql = mysql.format(sql, inserts);
-
 
             connection.query(sql, function(err, rows) {
               try{
@@ -110,7 +109,7 @@ var Paper = function(){
                 // And done with the connection.
                 //Set Rows Here
                 for (prop in rows[0]){
-                  console.log(`prop ${prop} = ${rows[0][prop]}`);
+                  //console.log(`prop ${prop} = ${rows[0][prop]}`);
                   self.data[prop] = rows[0][prop];
                 }
 
