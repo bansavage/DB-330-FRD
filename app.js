@@ -10,31 +10,43 @@ var config = require('./config');
 var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid')
 var express = require('express');
-var jade = require('jade');
+var ejs = require('ejs');
 var app = express();
 
 //Redefine where views are located
-app.set('views',`${__dirname}/public/views`);
-//Sets the view engine
-app.set('view engine', 'jade');
+app.set('views',`${__dirname}/src/views/html`);
+//Sets the view engine, it will render html as ejs
+app.engine('html', ejs.renderFile);
+app.set('view engine', 'html');
 //varriable to keep track of compiled html
-var html = {value : {}};
+//var html = {value : {}};
 //Compiles the jade templates in the view
-app.use('/public/views', function(){
-  var options = {cache: true};
-  jade.compileFile('/public/views/index.jade', options);
-  jade.renderFile('/public/views/index.jade');
-});
+//app.use('/public/views', function(){
+  //var options = {cache: true};
+  //jade.compileFile('/public/views/index.jade', options);
+  //jade.renderFile('/public/views/index.jade');
+//});
 //Hosts the static files in public under /assets
-app.use('/assets', express.static(`${__dirname}/public`));
+app.use('/assets', express.static(`${__dirname}/src/views/assets`));
 
 
 app.get('/', function(req, res){
-  res.render('index',{
+
+
+  //if no successful auth token
+  res.render('login',{
      title : 'Home',
      username: 'john'
-   }
-  );
+   });
+});
+
+app.get('/login', function(req, res){
+
+  //If no successful auth token
+  res.render('login',{
+     title : 'Home',
+     username: 'john'
+   });
 });
 
 
@@ -45,7 +57,8 @@ app.get('/search/:keywords', function(req, res, next){
   console.log(values);
   search_mid.getPapers(values, function(arr){
     //Render Page with data from the arr
-    res.json({data: arr});
+    //res.json({data: arr});
+    res.render();
   });
 
   if (req.params === Array){
