@@ -4,7 +4,8 @@
   "description": "Database Project",
   "main": "app.js",
   "scripts": {
-      "start":  "node app.js","test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,8 @@
   "homepage": "https://github.com/lance13c/DB-330-FRD#readme",
   "dependencies": {
     "bookshelf": "^0.9.1",
+    "ejs": "^2.3.4",
     "express": "^4.13.3",
-    "jade": "^1.11.0",
     "jwt-simple": "^0.3.1",
     "knex": "^0.9.0",
     "moment": "^2.10.6",
