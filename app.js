@@ -10,6 +10,8 @@ var config = require('./config');
 var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid')
 var express = require('express');
+var bodyParser = require('body-parser');
+var jwt = require('jsonwebtoken');
 var ejs = require('ejs');
 var app = express();
 
@@ -29,24 +31,75 @@ app.set('view engine', 'html');
 //Hosts the static files in public under /assets
 app.use('/assets', express.static(`${__dirname}/src/views/assets`));
 
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.json());
 
+// route middleware to verify a token
+var verify = function(req, res, next) {
+  // check header or url parameters or post parameters for token
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  // decode token
+  if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) {
+        return res.status('401').json({ success: false, message: 'Not a token' });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        console.log(req.decoded);
+        next();
+      }
+    });
+
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(401).render('login',{
+       message: 'login successful'
+     });
+  }
+};
+
+//Middleware
+//Checks token if valid (experation) and user exists, gives back user data
+var authorize = function(req, res, next) {
+  if (req.decoded){
+    //verify if auth is correct go to controlpanel
+    if (decode.userId){
+
+    }else{
+      return res.status(401).render('login',{
+         message: 'Token invalid'
+       });
+    }
+  }
+};
+
+//Default route gives back login page
 app.get('/', function(req, res){
-
-
   //if no successful auth token
   res.render('login',{
-     title : 'Home',
-     username: 'john'
+     message: 'login successful'
    });
 });
 
+//Login page route
 app.get('/login', function(req, res){
+  //if no successful auth token
 
-  //If no successful auth token
   res.render('login',{
-     title : 'Home',
-     username: 'john'
+     message: 'login successful'
    });
+});
+
+//app.use('/')
+app.get('/controlpanel', verify, function(req, res){
+
+  var data = {};
+
+  res.render('controlpanel', data);
 });
 
 
@@ -75,6 +128,34 @@ app.get('/api/users/:id', function(req, res){
   //  console.log(rows);
   //}));
   //console.log("worked");
+});
+
+
+
+app.post('/api/authenticate', function(req, res){
+
+  //Search for user
+
+
+  //req.body.name
+  //req.body.password -> should be hashed
+
+  //If user doesn't exist
+    //res.json({ success: false, message:'Authentication failed.'});
+
+  //Check if password matches
+
+  //If the user is found and password is correct
+    var token = jwt.sign({userId: 'fake'}, config.secret, {
+      expiresInMinutes: 1440 // 24 hours
+    });
+
+    res.json({
+       success: true,
+       message: 'Authentication successful',
+       token: token
+     });
+
 });
 
 

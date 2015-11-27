@@ -15,3 +15,5 @@ config.db = {
   password        : '',
   database        : 'researchdb'
 }
+
+config.secret = '4JFdif93djfkas';
