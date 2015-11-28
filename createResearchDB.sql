@@ -44,24 +44,11 @@ users_id varchar(64) not null,
 fName varchar(45),
 lName varchar(45),
 username varchar(45),
-password varchar(255),
+pass_hash varchar(255),
 email varchar(45),
 permissions_fk varchar(64) not null,
 primary key(users_id, permissions_fk),
 constraint permissions_fk foreign key(permissions_fk) references PERMISSIONS(permissions_id)
-);
-
-
-drop table if exists AUTH_TOKEN;
-
-create table AUTH_TOKEN(
-auth_token_id varchar(64) not null,
-value varchar(255),
-users_fk varchar(64) not null,
-permissions_fk varchar(64) not null,
-primary key(auth_token_id, users_fk, permissions_fk),
-constraint users_fk foreign key(users_fk) references USERS(users_id),
-constraint permissions_fk foreign key(permissions_fk) references USERS(permissions_fk)
 );
 
 
@@ -87,7 +74,7 @@ papers_fk varchar(64) not null,
 users_fk varchar(64) not null,
 permissions_fk varchar(64) not null,
 primary key(papers_fk, users_fk, permissions_fk),
-constraint papers_fk foreign key(papers_fk) references PAPERS(papers_id),
-constraint users_fk foreign key(users_fk) references USERS(users_id),
-constraint permissions_fk foreign key(permissions_fk) references USERS(permissions_fk)
+foreign key(papers_fk) references PAPERS(papers_id),
+foreign key(users_fk) references USERS(users_id),
+foreign key(permissions_fk) references USERS(permissions_fk)
 );

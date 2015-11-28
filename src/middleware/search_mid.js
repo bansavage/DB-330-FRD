@@ -51,4 +51,4 @@ var Search = function(){
   }
 }
 
-module.exports = new Search();
+module.exports = new Search;

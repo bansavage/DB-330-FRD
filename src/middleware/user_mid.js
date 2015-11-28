@@ -1,24 +1,51 @@
-var middleware = require('./middleware.js');
-/*
-  Handles requests to get information such as key-wrods, abstracts,
-  searching of any kind, etc ...
-*/
-var User = require('../models/user_model_rest');
+var mysql = require('mysql');
+var config = require('../../config');
+var user_model = require('../models/user_model');
+var db = require('../database/db_pool');
 
-//Get user profile page with papers they have authored
+function User(){
+  //Determines whether a user exists,
+  this.exist = function(obj, callback){
+    db.getConnection(function(err, connection) {
+      try{
+        if (err) {throw err;}
+        // Use the connection
+        if (obj.username !== undefined){
+          console.log(obj.username);
+          var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where username = ?`;
+          var inserts = ['users_id','fName','lName','pass_hash','email','permissions_fk', obj.username];
+          sql = mysql.format(sql, inserts);
+        }else if (obj.username !== undefined){
+          var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where email = ?`;
+          var inserts = ['users_id','fName','lName','pass_hash','email','permissions_fk', obj.email];
+          sql = mysql.format(sql, inserts);
+        }else{
+          throw new Error('No id or username provided');
+        }
 
-User.exist({ username: username }, function(err, user) {
-  if (err) {
-    // user not found
-    return res.send(401);
+        connection.query(sql, function(err, rows) {
+          try{
+            if (err) {throw err;}
+            var user = rows[0];
+            if (user == undefined) {throw new Error('No row data');}
+            //var new_user = new user_model({user});
+            //self.data = rows;
+            callback('', user); // All values have been set
+            connection.release();
+          }catch (err){
+            //Create new object attib if no data is found
+            console.log(err);
+            callback(err, {});
+            connection.release();
+          }
+        });
+      }catch(err){
+          console.log(`${err}`);
+      }
+    });
   }
+}
 
-  if (!user) {
-    // incorrect user credentials
-    return res.send(401);
-  }
-  // User has authenticated OK
-  res.send(200);
-});
+module.exports = new User();
 
 //

@@ -19,15 +19,14 @@
   "homepage": "https://github.com/lance13c/DB-330-FRD#readme",
   "dependencies": {
     "body-parser": "^1.14.1",
-    "bookshelf": "^0.9.1",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "jsonwebtoken": "^5.4.1",
     "jwt-simple": "^0.3.1",
-    "knex": "^0.9.0",
     "moment": "^2.10.6",
     "mysql": "^2.9.0",
     "node-uuid": "^1.4.3",
+    "orm": "^2.1.27",
     "purecss": "^0.6.0"
   },
   "devDependencies": {

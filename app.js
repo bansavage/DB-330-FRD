@@ -8,7 +8,8 @@
 "use strict"
 var config = require('./config');
 var User = require('./src/models/user_model.js');
-var search_mid = require('./src/middleware/search_mid')
+var search_mid = require('./src/middleware/search_mid');
+var user_mid = require('./src/middleware/user_mid');
 var express = require('express');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
@@ -134,18 +135,46 @@ app.get('/api/users/:id', function(req, res){
 
 app.post('/api/authenticate', function(req, res){
 
-  //Search for user
+  var username = req.body.username;
+  var password = req.body.password;
+
+  if (!username){
+    //throw new Error('No Username Found')
+    res.status(401).send({message: 'No Username Found'});
+  }else if (!password){
+    //throw new Error('No Password Found');
+    res.status(401).send({message: 'No Password Found'});
+  }else{
 
 
-  //req.body.name
-  //req.body.password -> should be hashed
+    //Search for user
+    user_mid.exist({ username: username }, function(err, user) {
+      if (err) {
+        // user not found
+        return res.sendStatus(401);
+      }
 
-  //If user doesn't exist
-    //res.json({ success: false, message:'Authentication failed.'});
+      if (!user) {
+        // incorrect user credentials
+        return res.sendStatus(401);
+      }
+      // User has authenticated OK
+      res.status(200).send(user);
+    });
 
-  //Check if password matches
+    //req.body.name
+    //req.body.password -> should be hashed
 
-  //If the user is found and password is correct
+    //If user doesn't exist
+      //res.json({ success: false, message:'Authentication failed.'});
+
+    //Check if password matches
+
+    //If the user is found and password is correct
+
+
+    //Working
+    /*
     var token = jwt.sign({userId: 'fake'}, config.secret, {
       expiresInMinutes: 1440 // 24 hours
     });
@@ -155,6 +184,12 @@ app.post('/api/authenticate', function(req, res){
        message: 'Authentication successful',
        token: token
      });
+     */
+
+
+  }
+  //Get user profile page with papers they have authored
+
 
 });
 

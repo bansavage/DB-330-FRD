@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var db = require('../database/db_pool');
+var config = require('../../config');
 var uuid = require('node-uuid');
 
 // Takes in an object of attribute default values, this can be empty
@@ -7,23 +8,25 @@ function user_model(attrs){
     //No need for Getters and Setters
 
     // If an id is given, find it in the database, use those attributes
-    if (attrs.p_id !== undefined){
+    if (attrs.username !== undefined){
       this.data = {
-        p_id : attrs.p_id,
-        f_name: "",
-        l_name: "",
-        pass : "",
-        email : ""
+        users_id : attrs.p_id,
+        fName: "",
+        lName: "",
+        pass_hash : "",
+        email : "",
+        permissions_fk: ""
       };
       console.log(`fetching`);
       //fetch
     }else{
       this.data = {
-        p_id: uuid.v1(),
-        f_name: "",
-        l_name: "",
-        pass : "",
-        email : ""
+        users_id: uuid.v1(),
+        fName: "",
+        lName: "",
+        pass_hash : "",
+        email : "",
+        permissions_fk: ""
       };
 
       for(var property in this.data ){
@@ -45,7 +48,7 @@ function user_model(attrs){
       db.getConnection(function(err, connection) {
         if (err) {throw err;}
         // Use the connection
-        var sql = "SELECT * FROM frd.users where p_id = ?";
+        var sql = `SELECT * FROM ${config.db.database}.users where username = ?`;
         var inserts = [self.p_id];                             //Problem: need to find way to get self into this callback method
         sql = mysql.format(sql, inserts);
 
@@ -101,8 +104,8 @@ function user_model(attrs){
           try{
             if (err) {throw err;}
             // Use the connection
-            var sql = "SELECT ??,??,??,?? FROM frd.users where p_id = ?";
-            var inserts = ['f_name','l_name','pass','email', self.data.p_id];
+            var sql = "SELECT ??,??,??,?? FROM frd.users where username = ?";
+            var inserts = ['f_name','l_name','pass','email', self.data.username];
             sql = mysql.format(sql, inserts);
 
 
