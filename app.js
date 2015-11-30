@@ -36,12 +36,6 @@ app.use('/assets', express.static(`${__dirname}/src/views/assets`));
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
-//
-var verify = function(req, res, next) {
-  // check header or url parameters or post parameters for token
-
-};
-
 //Middleware
 // Checks if token exist on input,
 //Checks token if valid (experation) and user exists, goes next
@@ -50,36 +44,23 @@ var authorize = function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   // decode token
   if (token) {
-    // verifies secret and checks exp
-    jwt.verify(token, config.secret, function(err, decoded) {
+    // verifies secret, algorithms used, and checks experation time
+    jwt.verify(token, config.secret, { algorithms: ['HS256']}, function(err, decoded) {
       if (err) {
-        return res.status('401').json({ success: false, message: 'Not a token' });
+        console.log(err);
+        //res.status('401').json({ success: false, message: 'Error with token'});
+        res.redirect('login');
+        return;
       } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;
-        console.log(req.decoded);
-        next();
+        req.body.userId = decoded.user_id;
+;        next();
       }
     });
 
   } else {
-
     // if there is no token
-    // return an error
-    return res.status(401).render('login',{
-       message: 'login successful'
-     });
-  }
-
-  if (req.decoded){
-    //verify if auth is correct go to controlpanel
-    if (decode.userId){
-
-    }else{
-      return res.status(401).render('login',{
-         message: 'Token invalid'
-       });
-    }
+    res.redirect('login');
+     return;
   }
 };
 
@@ -87,7 +68,8 @@ var authorize = function(req, res, next) {
 app.get('/', function(req, res){
   //if no successful auth token
   res.render('login',{
-     message: 'login successful'
+     message: 'login successful',
+     success: true
    });
 });
 
@@ -96,29 +78,38 @@ app.get('/login', function(req, res){
   //if no successful auth token
 
   res.render('login',{
-     message: 'login successful'
+     message: 'login successful',
+     success: true
    });
 });
 
-//app.use('/')
+//app.use('/') authorize middleware is working
 app.get('/controlpanel', function(req, res){
-
-  var data = {};
-
+  var data = {
+    userId : req.body.userId
+  };
   res.render('controlpanel', data);
+});
+
+app.get('/search', function(req, res){
+  res.render('search', {});
 });
 
 
 //searching, Expects an array of values EX: test?array=a&array=b&array=c
-app.get('/search/:keywords', function(req, res, next){
+app.get('search/:keywords', function(req, res, next){
   var values = req.query.array;
-  //search_min.getPapers(req.params);
-  console.log(values);
-  search_mid.getPapers(values, function(arr){
-    //Render Page with data from the arr
-    //res.json({data: arr});
-    res.render();
-  });
+
+  if (!values){
+    res.render('search', {});
+  }else{
+    console.log(values);
+    search_mid.getPapers(values, function(arr){
+      //Render Page with data from the arr
+      //res.json({data: arr});
+      res.render();
+    });
+  }
 
   if (req.params === Array){
     console.log(true);
@@ -151,10 +142,8 @@ app.post('/api/authenticate', function(req, res){
     user_mid.exist({ username: username }, function(err, user) {
       if (err) {
         // user not found
+        console.log(err);
         res.status(404).send({message: 'User Not Found'});
-        // res.status(404).render('login', {
-        //   message: 'User Not Found'
-        // });
         return;
       }
 
@@ -187,13 +176,14 @@ app.post('/api/authenticate', function(req, res){
       if (hash === user.pass_hash){
 
         //Create JWT Token
-        var token = jwt.sign({userId: user.users_id}, config.secret, {
+        var token = jwt.sign({userId: user.users_id}, config.secret, {algorithm: 'HS256'}, {
           expiresIn: 43200 // 24 hours
         });
 
         res.setHeader("x-access-token", "Yes");
         res.json({
            success: true,
+           user_id: user.users_id,
            message: 'Authentication successful',
            token: token
          });
@@ -201,36 +191,7 @@ app.post('/api/authenticate', function(req, res){
         res.status(401).send({message: 'Username or password is incorrect'});
       }
     });
-
-    //req.body.name
-    //req.body.password -> should be hashed
-
-    //If user doesn't exist
-      //res.json({ success: false, message:'Authentication failed.'});
-
-    //Check if password matches
-
-    //If the user is found and password is correct
-
-
-    //Working
-    /*
-    var token = jwt.sign({userId: 'fake'}, config.secret, {
-      expiresInMinutes: 1440 // 24 hours
-    });
-
-    res.json({
-       success: true,
-       message: 'Authentication successful',
-       token: token
-     });
-     */
-
-
   }
-  //Get user profile page with papers they have authored
-
-
 });
 
 
