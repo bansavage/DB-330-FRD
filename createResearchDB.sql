@@ -67,15 +67,12 @@ constraint searchable_keywords_fk foreign key(searchable_keywords_fk) references
 );
 
 
-drop table if exists AUTHORSHIP;
+drop table if exists PAPERS_USERS_MAP;
 
-create table AUTHORSHIP(
-authorship_id varchar(64) not null,
+create table PAPERS_USERS_MAP(
 papers_fk varchar(64) not null,
 users_fk varchar(64) not null,
-permissions_fk varchar(64) not null,
-primary key(papers_fk, users_fk, permissions_fk),
+primary key(papers_fk, users_fk),
 foreign key(papers_fk) references PAPERS(papers_id),
-foreign key(users_fk) references USERS(users_id),
-foreign key(permissions_fk) references USERS(permissions_fk)
+foreign key(users_fk) references USERS(users_id)
 );

@@ -22,13 +22,13 @@ var Search = function(){
             casesStr = cases.join(' or ');
           }
 
-          var sql = `select ?? from papers
+          var sql = `select ??, ??, ?? from papers
                       join paper_keywords
                       on papers.papers_id = paper_keywords.papers_fk
                       join searchable_keywords
                       on searchable_keywords.searchable_keywords_id = paper_keywords.searchable_keywords_fk
                       where ${casesStr} group by title`;
-          var inserts = ['title'];
+          var inserts = ['title', 'abstract', 'citation'];
           sql = mysql.format(sql, inserts);
 
         connection.query(sql, function(err, rows) {

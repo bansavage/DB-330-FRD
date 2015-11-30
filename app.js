@@ -84,7 +84,7 @@ app.get('/login', function(req, res){
 });
 
 //app.use('/') authorize middleware is working
-app.get('/controlpanel', function(req, res){
+app.get('/controlpanel', authorize, function(req, res){
   var data = {
     userId : req.body.userId
   };
