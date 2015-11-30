@@ -79,6 +79,14 @@ A web application that allows users to view and share research papers.
   8. Config File
 
       The config file is the place to change the database name, ports, and host ip.
+
+  9. Extra Info
+
+      Default User:
+
+      `username: username`,
+      `password: pass_hash`
+
 ##Application Design
 
 ###Domain Model
