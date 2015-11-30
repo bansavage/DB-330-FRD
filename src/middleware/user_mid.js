@@ -11,13 +11,12 @@ function User(){
         if (err) {throw err;}
         // Use the connection
         if (obj.username !== undefined){
-          console.log(obj.username);
-          var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where username = ?`;
-          var inserts = ['users_id','fName','lName','pass_hash','email','permissions_fk', obj.username];
+          var sql = `SELECT ??,??,??,??,??,??,?? FROM ${config.db.database}.users where username = ?`;
+          var inserts = ['users_id','fName','lName','pass_hash','salt','email','permissions_fk', obj.username];
           sql = mysql.format(sql, inserts);
         }else if (obj.username !== undefined){
           var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where email = ?`;
-          var inserts = ['users_id','fName','lName','pass_hash','email','permissions_fk', obj.email];
+          var inserts = ['users_id','fName','lName','pass_hash','salt','email','permissions_fk', obj.email];
           sql = mysql.format(sql, inserts);
         }else{
           throw new Error('No id or username provided');
@@ -34,13 +33,14 @@ function User(){
             connection.release();
           }catch (err){
             //Create new object attib if no data is found
+
             console.log(err);
-            callback(err, {});
             connection.release();
+            callback(err, {});
           }
         });
       }catch(err){
-          console.log(`${err}`);
+          console.log(err);
       }
     });
   }

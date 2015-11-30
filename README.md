@@ -37,7 +37,7 @@ A web application that allows users to view and share research papers.
 
       To Run MySQL type the following command in bash or cmdline:
 
-        `c:\>mysqld --port=3333`
+        `c:\>mysqld --port=3306`
 
 5. Database Setup
 

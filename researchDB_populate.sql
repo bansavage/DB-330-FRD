@@ -29,4 +29,7 @@ insert into PAPER_KEYWORDS values ('10', 'word', '1','3');
 
 insert into PERMISSIONS value ('0', 'public');
 
-insert into USERS value ('1', 'first', 'last', 'username', 'pass_hash', 'a@a.edu', '0');
+insert into USERS value ('1', 'first', 'last', 'username', 
+'d6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
+'3e0e71c7dcd5f79f7fddd9a5148e9fcb3973803440e940a55df2c3f526765d49',
+'a@a.edu', '0');

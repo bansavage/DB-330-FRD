@@ -11,6 +11,7 @@ var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid');
 var user_mid = require('./src/middleware/user_mid');
 var express = require('express');
+var crypto = require('crypto');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var ejs = require('ejs');
@@ -35,9 +36,17 @@ app.use('/assets', express.static(`${__dirname}/src/views/assets`));
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
-// route middleware to verify a token
+//
 var verify = function(req, res, next) {
   // check header or url parameters or post parameters for token
+
+};
+
+//Middleware
+// Checks if token exist on input,
+//Checks token if valid (experation) and user exists, goes next
+var authorize = function(req, res, next) {
+
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   // decode token
   if (token) {
@@ -61,11 +70,7 @@ var verify = function(req, res, next) {
        message: 'login successful'
      });
   }
-};
 
-//Middleware
-//Checks token if valid (experation) and user exists, gives back user data
-var authorize = function(req, res, next) {
   if (req.decoded){
     //verify if auth is correct go to controlpanel
     if (decode.userId){
@@ -96,7 +101,7 @@ app.get('/login', function(req, res){
 });
 
 //app.use('/')
-app.get('/controlpanel', verify, function(req, res){
+app.get('/controlpanel', function(req, res){
 
   var data = {};
 
@@ -124,11 +129,6 @@ app.get('/search/:keywords', function(req, res, next){
 
 app.get('/api/users/:id', function(req, res){
   var newUser = user_model(req.params.id);
-
-  //console.log(newUser.fetchProps("my err", function(rows){
-  //  console.log(rows);
-  //}));
-  //console.log("worked");
 });
 
 
@@ -151,15 +151,55 @@ app.post('/api/authenticate', function(req, res){
     user_mid.exist({ username: username }, function(err, user) {
       if (err) {
         // user not found
-        return res.sendStatus(401);
+        res.status(404).send({message: 'User Not Found'});
+        // res.status(404).render('login', {
+        //   message: 'User Not Found'
+        // });
+        return;
       }
 
       if (!user) {
         // incorrect user credentials
-        return res.sendStatus(401);
+        res.status(401).send({message: 'No user found'});
+        return;
+      }
+
+      if (!user.pass_hash || !user.salt){
+        res.status(401).send({message: 'User password or salt error'});
+        return;
+      }
+
+      if (!user.users_id){
+        res.status(401).send({message: 'User ID does not exist'});
+        return;
       }
       // User has authenticated OK
-      res.status(200).send(user);
+
+      // Generate password hash with user's salt(32bit)
+      var hash = crypto
+      .createHash("sha256")
+      .update(password+user.salt)
+      .digest('hex');
+
+      console.log(`hash: ${hash}`);
+      console.log(`user pass: ${user.pass_hash}`);
+
+      if (hash === user.pass_hash){
+
+        //Create JWT Token
+        var token = jwt.sign({userId: user.users_id}, config.secret, {
+          expiresIn: 43200 // 24 hours
+        });
+
+        res.setHeader("x-access-token", "Yes");
+        res.json({
+           success: true,
+           message: 'Authentication successful',
+           token: token
+         });
+      }else{
+        res.status(401).send({message: 'Username or password is incorrect'});
+      }
     });
 
     //req.body.name
