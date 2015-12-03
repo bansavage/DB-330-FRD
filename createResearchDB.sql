@@ -6,17 +6,6 @@ create database researchDB;
 
 use researchDB;
 
-
-
-drop table if exists PERMISSIONS;
-
-create table PERMISSIONS(
-permissions_id varchar(64) not null,
-level varchar(45),
-primary key(permissions_id)
-);
-
-
 drop table if exists PAPERS;
 
 create table PAPERS(
@@ -47,9 +36,8 @@ username varchar(45),
 pass_hash varchar(255),
 salt varchar(255),
 email varchar(45),
-permissions_fk varchar(64) not null,
-primary key(users_id, permissions_fk),
-constraint permissions_fk foreign key(permissions_fk) references PERMISSIONS(permissions_id)
+permission varchar(45) not null,
+primary key(users_id)
 );
 
 
