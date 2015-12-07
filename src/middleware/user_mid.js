@@ -14,7 +14,7 @@ function User(){
           var sql = `SELECT ??,??,??,??,??,??,?? FROM ${config.db.database}.users where username = ?`;
           var inserts = ['users_id','fName','lName','pass_hash','salt','email','permissions_fk', obj.username];
           sql = mysql.format(sql, inserts);
-        }else if (obj.username !== undefined){
+        }else if (obj.email !== undefined){
           var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where email = ?`;
           var inserts = ['users_id','fName','lName','pass_hash','salt','email','permissions_fk', obj.email];
           sql = mysql.format(sql, inserts);

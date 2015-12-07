@@ -53,7 +53,7 @@ var authorize = function(req, res, next) {
         return;
       } else {
         req.body.userId = decoded.user_id;
-;        next();
+;       next();
       }
     });
 
@@ -97,6 +97,13 @@ app.get('/search', function(req, res){
 
 
 //searching, Expects an array of values EX: test?array=a&array=b&array=c
+//Return object exaple: {
+  // title -> String
+  // authors -> array of strings
+  // abstract -> String
+  // citations -> String
+  // paper_keywords -> array of strings
+//}
 app.get('search/:keywords', function(req, res, next){
   var values = req.query.array;
 
@@ -117,11 +124,21 @@ app.get('search/:keywords', function(req, res, next){
 });
 
 
-
-app.get('/api/users/:id', function(req, res){
+// Get the user based on the user id in the jwt token
+app.get('/api/users/', function(req, res){
   var newUser = user_model(req.params.id);
 });
 
+//This provides the paper information based on the user id in the jwt token.
+//Give back all papers associated with the given user
+app.get('/api/papers/', function(req, res){
+  //Use paper mid
+});
+
+
+app.delete('/api/papers/:id', function(req, res){
+  //Use paper mid
+});
 
 
 app.post('/api/authenticate', function(req, res){
