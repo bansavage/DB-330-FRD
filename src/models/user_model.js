@@ -15,7 +15,7 @@ function user_model(attrs){
         lName: "",
         pass_hash : "",
         email : "",
-        permissions_fk: ""
+        permissions: ""
       };
       console.log(`fetching`);
       //fetch
@@ -26,7 +26,7 @@ function user_model(attrs){
         lName: "",
         pass_hash : "",
         email : "",
-        permissions_fk: ""
+        permissions: ""
       };
 
       for(var property in this.data ){

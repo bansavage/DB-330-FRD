@@ -10,6 +10,7 @@ var config = require('./config');
 var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid');
 var user_mid = require('./src/middleware/user_mid');
+var paper_mid = require('./src/middleware/paper_mid');
 var express = require('express');
 var crypto = require('crypto');
 var bodyParser = require('body-parser');
@@ -48,11 +49,10 @@ var authorize = function(req, res, next) {
     jwt.verify(token, config.secret, { algorithms: ['HS256']}, function(err, decoded) {
       if (err) {
         console.log(err);
-        //res.status('401').json({ success: false, message: 'Error with token'});
         res.redirect('login');
         return;
       } else {
-        req.body.userId = decoded.user_id;
+        req.body.userId = decoded.userId;
 ;       next();
       }
     });
@@ -73,9 +73,8 @@ app.get('/', function(req, res){
    });
 });
 
-//Login page route
+//Brings the user to the login page
 app.get('/login', function(req, res){
-  //if no successful auth token
 
   res.render('login',{
      message: 'login successful',
@@ -131,8 +130,17 @@ app.get('/api/users/', function(req, res){
 
 //This provides the paper information based on the user id in the jwt token.
 //Give back all papers associated with the given user
-app.get('/api/papers/', function(req, res){
-  //Use paper mid
+app.get('/api/papers/', authorize, function(req, res){
+  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
+    if (err){
+      console.log(err);
+      res.status(401).send({message: 'Invalid Request'});
+    }else{
+      res.json({
+         papers : papers
+       });
+    }
+  });
 });
 
 
@@ -140,7 +148,9 @@ app.delete('/api/papers/:id', function(req, res){
   //Use paper mid
 });
 
-
+//This will varify if a username and password provided are valid
+//If the they both are valid it will return a jwt token in the body response
+//else it will return a 401
 app.post('/api/authenticate', function(req, res){
 
   var username = req.body.username;
@@ -197,7 +207,7 @@ app.post('/api/authenticate', function(req, res){
           expiresIn: 43200 // 24 hours
         });
 
-        res.setHeader("x-access-token", "Yes");
+        res.setHeader("x-access-token", token);
         res.json({
            success: true,
            user_id: user.users_id,
