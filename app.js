@@ -96,7 +96,7 @@ app.get('/search', function(req, res){
 
 
 //searching, Expects an array of values EX: test?array=a&array=b&array=c
-//Return object exaple: {
+//Returns and array of objects example object: {
   // title -> String
   // authors -> array of strings
   // abstract -> String
@@ -124,8 +124,17 @@ app.get('search/:keywords', function(req, res, next){
 
 
 // Get the user based on the user id in the jwt token
-app.get('/api/users/', function(req, res){
-  var newUser = user_model(req.params.id);
+app.get('/api/users/', authorize, function(req, res){
+  user_mid.exist({users_id : req.body.userId}, function(err, user){
+    if (err){
+      console.log(err);
+      res.status(401).send({message: 'User does not exist'});
+    }else{
+      delete user['salt'];
+      delete user['pass_hash'];
+      res.json(user);
+    }
+  });
 });
 
 //This provides the paper information based on the user id in the jwt token.
@@ -136,6 +145,9 @@ app.get('/api/papers/', authorize, function(req, res){
       console.log(err);
       res.status(401).send({message: 'Invalid Request'});
     }else{
+
+
+
       res.json({
          papers : papers
        });

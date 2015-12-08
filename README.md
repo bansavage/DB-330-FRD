@@ -1,5 +1,4 @@
 # Faculty Research Database
-T
 A web application that allows users to view and share research papers.
 ##High Level Architecture
 ![High Level Architecture](images/HAL.png)
@@ -76,11 +75,11 @@ A web application that allows users to view and share research papers.
 
       Note: As of right now all queries must have at least 2 array values in them.
 
-  8. Config File
+ 8. Config File
 
       The config file is the place to change the database name, ports, and host ip.
 
-  9. Extra Info
+ 9. Extra Info
 
       Default User:
 

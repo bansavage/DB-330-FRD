@@ -17,8 +17,12 @@ function User(){
           var inserts = ['users_id','fName','lName','pass_hash','salt','email','permission', obj.username];
           sql = mysql.format(sql, inserts);
         }else if (obj.email !== undefined){
-          var sql = `SELECT ??,??,??,??,??,?? FROM ${config.db.database}.users where email = ?`;
+          var sql = `SELECT ??,??,??,??,??,??,?? FROM ${config.db.database}.users where email = ?`;
           var inserts = ['users_id','fName','lName','pass_hash','salt','email','permission', obj.email];
+          sql = mysql.format(sql, inserts);
+        }else if (obj.users_id !== undefined){
+          var sql = `SELECT ??,??,??,??,??,??,?? FROM ${config.db.database}.users where users_id = ?`;
+          var inserts = ['users_id','fName','lName','pass_hash','salt','email','permission', obj.users_id];
           sql = mysql.format(sql, inserts);
         }else{
           throw new Error('No id or username provided');
@@ -42,6 +46,7 @@ function User(){
         });
       }catch(err){
           console.log(err);
+          callback(err, {});
       }
     });
   },
