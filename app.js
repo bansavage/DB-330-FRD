@@ -11,7 +11,6 @@ var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid');
 var user_mid = require('./src/middleware/user_mid');
 var paper_mid = require('./src/middleware/paper_mid');
-var _ = require('lodash');
 var express = require('express');
 var crypto = require('crypto');
 var bodyParser = require('body-parser');
@@ -124,7 +123,7 @@ app.get('/api/search/:keywords', function(req, res, next){
                 console.log(err);
                 res.status(401).send({message: 'Paper Keywords Error'});
               }else{
-                paper.keywords = _.uniq(keywords);
+                paper.keywords = keywords;
                 if (index >= arr.length-1){
                   res.json({
                    papers : papers
@@ -176,7 +175,7 @@ app.get('/api/papers/', authorize, function(req, res){
             console.log(err);
             res.status(401).send({message: 'Paper Keywords Error'});
           }else{
-            paper.keywords = _.uniq(keywords);
+            paper.keywords = keywords;
             if (index >= arr.length-1){
               res.json({
                papers : papers
