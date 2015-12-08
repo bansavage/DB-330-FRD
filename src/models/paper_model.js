@@ -43,7 +43,7 @@ var Paper = function(){
         if (err) {throw err;}
         // Use the connection
         var sql = "SELECT * FROM frd.papers where paper_id = ?";
-        var inserts = [self.p_id];                       
+        var inserts = [self.p_id];
         sql = mysql.format(sql, inserts);
 
         connection.query(sql, function(err, rows) {
@@ -163,5 +163,3 @@ var Paper = function(){
 **Returns an actual new instance of a paper
 **/
 module.exports = paper_model;
-
-

@@ -83,6 +83,26 @@ app.get('/login', function(req, res){
    });
 });
 
+//Renders the delete papers page
+app.get('/papers/delete', function(req, res){
+  res.render('delete');
+});
+
+//Renders the edit papers page
+app.get('/papers/edit', function(req, res){
+  res.render('edit');
+});
+
+//Renders the create papers page
+app.get('/papers/create', function(req, res){
+  res.render('add');
+});
+
+//Renders the mypapers page
+app.get('/papers', function(req, res){
+  res.render('mypapers');
+});
+
 //app.use('/') authorize middleware is working
 app.get('/controlpanel', authorize, function(req, res){
   var data = {
@@ -92,7 +112,9 @@ app.get('/controlpanel', authorize, function(req, res){
 });
 
 app.get('/search', function(req, res){
-  res.render('search', {});
+  res.render('search', {
+    papers: []
+  });
 });
 
 
