@@ -76,11 +76,7 @@ app.get('/', function(req, res){
 
 //Brings the user to the login page
 app.get('/login', function(req, res){
-
-  res.render('login',{
-     message: 'login successful',
-     success: true
-   });
+  res.render('login',{});
 });
 
 //Renders the delete papers page
