@@ -1,0 +1,125 @@
+.input {
+	position: relative;
+	z-index: 1;
+	display: inline-block;
+	margin: 1em;
+	max-width: 350px;
+	width: calc(100% - 2em);
+	vertical-align: top;
+}
+
+.input__field {
+	position: relative;
+	display: block;
+	float: right;
+	padding: 0.8em;
+	width: 60%;
+	border: none;
+	border-radius: 0;
+	background: #f0f0f0;
+	color: #aaa;
+	font-weight: 400;
+	font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	-webkit-appearance: none; /* for box shadows to show on iOS */
+}
+
+.input__field:focus {
+	outline: none;
+}
+
+.input__label {
+	display: inline-block;
+	float: right;
+	padding: 0 1em;
+	width: 40%;
+	color: #696969;
+	font-weight: bold;
+	font-size: 70.25%;
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.input__label-content {
+	position: relative;
+	display: block;
+	padding: 1.6em 0;
+	width: 100%;
+}
+
+.graphic {
+	position: absolute;
+	top: 0;
+	left: 0;
+	fill: none;
+}
+
+.icon {
+	color: #ddd;
+	font-size: 150%;
+}
+
+/* Kohana */
+.input--kohana {
+	overflow: hidden;
+	background: #fff;
+}
+
+.input__field--kohana {
+	width: 100%;
+	background: transparent;
+	padding-left: 2.75em;
+	color: #6a7989;
+}
+
+.input__label--kohana {
+	position: absolute;
+	width: 100%;
+	text-align: left;
+	pointer-events: none;
+	color: #D2D2D2;
+}
+
+.input__label-content--kohana {
+	display: inline-block;
+	width: auto;
+	-webkit-transform: translate3d(-1.75em, 0, 0);
+	transform: translate3d(-1.75em, 0, 0);
+	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+	transition: transform 0.3s, opacity 0.3s;
+}
+
+.icon--kohana {
+	display: inline-block;
+	margin-top: 0.9em;
+	-webkit-transform: translate3d(-2em, 0, 0);
+	transform: translate3d(-2em, 0, 0);
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+}
+
+.input__field--kohana:focus + .input__label--kohana .input__label-content--kohana,
+.input--filled .input__label-content--kohana {
+	opacity: 0;
+	-webkit-transform: translate3d(100px, 0, 0);
+	transform: translate3d(100px, 0, 0);
+}
+
+.input__label-content--kohana,
+.icon--kohana,
+.input__field--kohana:focus + .input__label--kohana .input__label-content--kohana,
+.input--filled .input__label-content--kohana {
+	-webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+	transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.input__field--kohana:focus + .input__label--kohana .icon--kohana,
+.input--filled  .icon--kohana {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}

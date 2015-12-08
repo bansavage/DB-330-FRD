@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
 		<meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <title>Login</title>
         <link rel="stylesheet" type="text/css" href="../assets/css/style.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<script src="/assets/js/base.js"></script>
+		<script src="../base.js"></script>
 		<!--[if lte IE 7]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
-		<style>
+		<style>	
 			@import url(http://fonts.googleapis.com/css?family=Raleway:400,700);
 			body {
 				background: #FFF url("http://images6.alphacoders.com/306/306638.jpg") no-repeat center top;
@@ -29,9 +29,9 @@
 		</style>
     </head>
     <body onload="init();">
-        <div class="container">
+        <div class="container">		
 
-			<section class="main">
+			<section class="main" >
 				<form class="form-4" id="form">
 				    <h1>Student/Faculty Login</h1>
 				    <p>
@@ -40,15 +40,15 @@
 				    </p>
 				    <p>
 				        <label for="password">Password</label>
-				        <input id="inputPassword" type="password" name='password' placeholder="Password" required>
+				        <input id="inputPassword" type="password" name='password' placeholder="Password" required> 
 				    </p>
 
 				    <p>
-				        <input id='db-submit' type="button" name="submit" value="Continue">
-				    </p>
+				        <a href="controlpanel.html"><input type="submit" name="submit" value="Continue"></a>
+				    </p>       
 				</form>​
 			</section>
+			
         </div>
     </body>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 </html>
