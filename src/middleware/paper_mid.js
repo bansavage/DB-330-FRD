@@ -15,7 +15,7 @@ function Paper(){
           var inserts = ['papers_id','title','abstract','citation', obj.papers_id];
           sql = mysql.format(sql, inserts);
         }else{
-          throw new Error('No id paper provided');
+          throw new Error('No paper id provided');
         }
 
         connection.query(sql, function(err, rows) {
@@ -44,7 +44,46 @@ function Paper(){
   //Gets all keywords for a given paper based on paper id
   //This includes searchable keywords, and paper keywords
   this.getKeywords = function(obj, callback){
+    db.getConnection(function(err, connection) {
+      try{
+        if (err) {throw err;}
+        // Use the connection
+        if (obj.papers_id !== undefined){
+          var sql = `select ??, ?? from ${config.db.database}.papers
+                      inner join ${config.db.database}.paper_keywords
+                      on papers.papers_id = paper_keywords.papers_fk
+                      inner join ${config.db.database}.searchable_keywords
+                      on searchable_keywords.searchable_keywords_id = paper_keywords.searchable_keywords_fk
+                      where papers.papers_id = ?`;
+          var inserts = ['keyword','searchable_keywords', obj.papers_id];
+          sql = mysql.format(sql, inserts);
+        }else{
+          throw new Error('No paper id provided');
+        }
 
+        connection.query(sql, function(err, rows) {
+          try{
+            if (err) {throw err;}
+            var data = rows[0];
+            if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+            var keywords = [];
+            rows.forEach(function(obj){
+              keywords.push(obj.keyword);
+              keywords.push(obj.searchable_keywords);
+            });
+            callback('', keywords);
+
+            connection.release();
+          }catch (err){
+            console.log(err);
+            connection.release();
+            callback(err, {});
+          }
+        });
+      }catch(err){
+          console.log(err);
+      }
+    });
   }
 }
 

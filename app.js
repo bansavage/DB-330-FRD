@@ -11,6 +11,7 @@ var User = require('./src/models/user_model.js');
 var search_mid = require('./src/middleware/search_mid');
 var user_mid = require('./src/middleware/user_mid');
 var paper_mid = require('./src/middleware/paper_mid');
+var _ = require('lodash');
 var express = require('express');
 var crypto = require('crypto');
 var bodyParser = require('body-parser');
@@ -140,18 +141,51 @@ app.get('/api/users/', authorize, function(req, res){
 //This provides the paper information based on the user id in the jwt token.
 //Give back all papers associated with the given user
 app.get('/api/papers/', authorize, function(req, res){
+
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
     if (err){
       console.log(err);
       res.status(401).send({message: 'Invalid Request'});
     }else{
 
+      var paperForEach = function(){
+        papers.forEach(function(paper, index, arr) {
+          paper_mid.getKeywords(paper, function(err, keywords){
+            if (err){
+              console.log(err);
+              res.status(401).send({message: 'Paper Keywords Error'});
+              return;
+            }
+            arr[index].keywords = keywords;
+          });
+        });
+      };
 
-
-      res.json({
+      var respond = function(){
+        res.json({
          papers : papers
        });
-    }
+      }
+
+      papers.forEach(function(paper, index, arr){
+        paper_mid.getKeywords(paper, function(err, keywords){
+          if (err){
+            console.log(err);
+            res.status(401).send({message: 'Paper Keywords Error'});
+          }else{
+            paper.keywords = _.uniq(keywords);
+
+            if (index >= arr.length-1){
+              res.json({
+               papers : papers
+             });
+            }else{
+              index += 1;
+            }
+          }
+        });
+      });
+    };
   });
 });
 

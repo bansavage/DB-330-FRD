@@ -1,6 +1,6 @@
 use researchdb;
 
-insert into PAPERS values('1', 'Chrus Adventures', 'follow our journey..', 'citation1');
+insert into PAPERS values('1', 'Chrus Adventures', 'follow our journey jib jibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjib', 'citation1');
 insert into PAPERS values('2', 'Drumsticks', 'all you need to know about drumsticks', 'citation2');
 insert into PAPERS values('3', 'Pulled Pork', 'simply delicious', 'citation3');
 insert into PAPERS values('4', 'Chicken', 'yum', 'citation4');
