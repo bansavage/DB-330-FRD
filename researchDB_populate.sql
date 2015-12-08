@@ -7,6 +7,15 @@ insert into PAPERS values('4', 'Chicken', 'yum', 'citation4');
 insert into PAPERS values('5', 'Apple', 'fruit red', 'citation5');
 insert into PAPERS values('6', 'Orange', 'fruit yum', 'citation6');
 insert into PAPERS values('7', 'Banana', 'yellow', 'citation7');
+insert into PAPERS values('8', 'The Heart', 'Biology', 'citation8');
+insert into PAPERS values('9', 'The Feets', 'Biology', 'citation9');
+insert into PAPERS values('10', 'Eggs', 'Biology', 'citation10');
+insert into PAPERS values('11', 'Falling from a Tree', 'Physics', 'citation11');
+insert into PAPERS values('12', 'Breaking the Laws', 'Physics', 'citation12');
+insert into PAPERS values('13', 'Magiks', 'Physics', 'citation13');
+insert into PAPERS values('14', 'Playing with Fire', 'Chemistry', 'citation14');
+insert into PAPERS values('15', 'Some H2O2', 'Chemistry', 'citation15');
+insert into PAPERS values('16', 'NaBrO', 'Chemistry', 'citation16');
 
 
 insert into searchable_keywords values('1', 'food');
@@ -26,6 +35,17 @@ insert into searchable_keywords values('3', 'meat');
 insert into PAPER_KEYWORDS values ('8', 'word', '3','3');
 insert into PAPER_KEYWORDS values ('9', 'word', '4','3');
 insert into PAPER_KEYWORDS values ('10', 'word', '5','3');
+
+insert into searchable_keywords values('4', 'science');
+insert into PAPER_KEYWORDS values ('11', 'Biology', '8','4');
+insert into PAPER_KEYWORDS values ('12', 'Biology', '9','4');
+insert into PAPER_KEYWORDS values ('13', 'Biology', '10','4');
+insert into PAPER_KEYWORDS values ('14', 'Physics', '11','4');
+insert into PAPER_KEYWORDS values ('15', 'Physics', '12','4');
+insert into PAPER_KEYWORDS values ('16', 'Physics', '13','4');
+insert into PAPER_KEYWORDS values ('17', 'Chemistry', '14','4');
+insert into PAPER_KEYWORDS values ('18', 'Chemistry', '15','4');
+insert into PAPER_KEYWORDS values ('19', 'Chemistry', '16','4');
 
 insert into USERS value ('1', 'Kris', 'Brown', 'username', 
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
