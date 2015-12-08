@@ -104,19 +104,41 @@ app.get('/search', function(req, res){
   // citations -> String
   // paper_keywords -> array of strings
 //}
-app.get('search/:keywords', function(req, res, next){
-  var values = req.query.array;
+app.get('/api/search/:keywords', function(req, res, next){
+  var keywords = req.query.keywords;
 
-  if (!values){
-    res.render('search', {});
+  if (!keywords){
+    res.json({
+     papers : []
+   });
   }else{
-    console.log(values);
-    search_mid.getPapers(values, function(arr){
-      //Render Page with data from the arr
-      //res.json({data: arr});
-      res.render();
-    });
-  }
+    search_mid.getPapers({keywords : keywords}, function(err, papers){
+        if (err || !papers){
+          console.log(err);
+          res.status(401).send({message: 'Invalid Request'});
+        }else{
+          console.log(papers);
+          papers.forEach(function(paper, index, arr){
+            paper_mid.getKeywords(paper, function(err, keywords){
+              if (err){
+                console.log(err);
+                res.status(401).send({message: 'Paper Keywords Error'});
+              }else{
+                paper.keywords = _.uniq(keywords);
+                if (index >= arr.length-1){
+                  res.json({
+                   papers : papers
+                 });
+                }else{
+                  index += 1;
+                }
+              }
+            });
+          });
+        };
+      });
+
+    }
 
   if (req.params === Array){
     console.log(true);
@@ -148,25 +170,6 @@ app.get('/api/papers/', authorize, function(req, res){
       res.status(401).send({message: 'Invalid Request'});
     }else{
 
-      var paperForEach = function(){
-        papers.forEach(function(paper, index, arr) {
-          paper_mid.getKeywords(paper, function(err, keywords){
-            if (err){
-              console.log(err);
-              res.status(401).send({message: 'Paper Keywords Error'});
-              return;
-            }
-            arr[index].keywords = keywords;
-          });
-        });
-      };
-
-      var respond = function(){
-        res.json({
-         papers : papers
-       });
-      }
-
       papers.forEach(function(paper, index, arr){
         paper_mid.getKeywords(paper, function(err, keywords){
           if (err){
@@ -174,7 +177,6 @@ app.get('/api/papers/', authorize, function(req, res){
             res.status(401).send({message: 'Paper Keywords Error'});
           }else{
             paper.keywords = _.uniq(keywords);
-
             if (index >= arr.length-1){
               res.json({
                papers : papers
@@ -185,6 +187,7 @@ app.get('/api/papers/', authorize, function(req, res){
           }
         });
       });
+
     };
   });
 });
