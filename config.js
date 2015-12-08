@@ -12,7 +12,7 @@ config.db = {
   host       : "localhost",
   port       : "3306",
   user       : "root",
-  password   : "",
+  password   : "student",
   database   : "researchdb",
 }
 

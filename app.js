@@ -104,6 +104,63 @@ app.get('/search', function(req, res){
   // citations -> String
   // paper_keywords -> array of strings
 //}
+app.get('/search/:keywords', function(req, res, next){
+  var keywords = req.query.keywords;
+
+  if (!keywords){
+    res.json({
+     papers : []
+   });
+  }else{
+    search_mid.getPapers({keywords : keywords}, function(err, papers){
+        if (err || !papers){
+          console.log(err);
+          res.status(401).send({message: 'Invalid Request'});
+        }else{
+          //Gets keywords
+          papers.forEach(function(paper, index, arr){
+            paper_mid.getKeywords(paper, function(err, keywords){
+              if (err){
+                console.log(err);
+                res.status(401).send({message: 'Paper Authors Error'});
+              }else{
+
+                if (index >= arr.length-1){
+                  paper.keywords = _.uniq(keywords);
+                  // Gets authors
+                  papers.forEach(function(paper2, index2, arr2){
+                    paper_mid.getAuthors(paper2, function(err, keywords){
+                      if (err){
+                        console.log(err);
+                        res.status(401).send({message: 'Paper Keywords Error'});
+                      }else{
+                        if (index2 >= arr2.length-1){
+                          res.render('search',{
+                           papers : papers
+                          });
+                        }else{
+                          index2 += 1;
+                        }
+                      }
+                    });
+                  });
+              }else{
+                index += 1;
+              }
+
+            }
+            });
+          });
+        };
+      });
+    }
+
+  if (req.params === Array){
+    console.log(true);
+  }
+});
+
+
 app.get('/api/search/:keywords', function(req, res, next){
   var keywords = req.query.keywords;
 
@@ -117,34 +174,49 @@ app.get('/api/search/:keywords', function(req, res, next){
           console.log(err);
           res.status(401).send({message: 'Invalid Request'});
         }else{
-          console.log(papers);
+          //Gets keywords
           papers.forEach(function(paper, index, arr){
             paper_mid.getKeywords(paper, function(err, keywords){
               if (err){
                 console.log(err);
-                res.status(401).send({message: 'Paper Keywords Error'});
+                res.status(401).send({message: 'Paper Authors Error'});
               }else{
                 paper.keywords = _.uniq(keywords);
                 if (index >= arr.length-1){
-                  res.json({
-                   papers : papers
-                 });
-                }else{
-                  index += 1;
-                }
+
+                  // Gets authors
+                  papers.forEach(function(paper2, index2, arr2){
+                    paper_mid.getAuthors(paper2, function(err, authors){
+                      if (err){
+                        console.log(err);
+                        res.status(401).send({message: 'Paper Keywords Error'});
+                      }else{
+                        paper2.authors = authors;
+                        if (index2 >= arr2.length-1){
+                          res.json({
+                           papers : papers
+                          });
+                        }else{
+                          index2 += 1;
+                        }
+                      }
+                    });
+                  });
+              }else{
+                index += 1;
               }
+
+            }
             });
           });
         };
       });
-
     }
 
   if (req.params === Array){
     console.log(true);
   }
 });
-
 
 // Get the user based on the user id in the jwt token
 app.get('/api/users/', authorize, function(req, res){

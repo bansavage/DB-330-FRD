@@ -61,6 +61,7 @@ insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('1', '1');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('2', '1');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('3', '1');
 
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('3', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('4', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('5', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('6', '2');

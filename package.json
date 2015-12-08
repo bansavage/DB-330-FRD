@@ -31,6 +31,7 @@
     "purecss": "^0.6.0"
   },
   "devDependencies": {
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "nodemon": "^1.8.1"
   }
 }
