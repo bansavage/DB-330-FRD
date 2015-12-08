@@ -35,6 +35,13 @@ p {
 .l-box {
     padding: 0.5em 2em;
 }
+.l-form{
+    margin-top: 20px;
+}
+
+.form{
+    text-align: center;
+}
 
 /*
  * -- MENU STYLES --
@@ -238,4 +245,25 @@ p {
     .banner-head {
         font-size: 3em;
     }
+}
+
+.form-footer{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+.button-add{
+    background: #519251;
+    color: white;
+}
+
+.button-edit{
+    background: #2c4985;
+    color: white;
+}
+
+.button-delete{
+    background: #F43535;
+    color: white;
 }
