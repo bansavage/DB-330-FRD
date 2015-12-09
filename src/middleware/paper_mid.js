@@ -140,15 +140,12 @@ function Paper(){
       try{
         if (err) {throw err;}
         // Use the connection
-
         if (obj.title != undefined){
           data.title = obj.title;
         }
-
         if (obj.abstract !== undefined){
           data.abstract = obj.abstract;
         }
-
         if (obj.citation !== undefined){
           data.citation = obj.citation;
         }
@@ -170,6 +167,63 @@ function Paper(){
             console.log(err);
             connection.release();
             createPapersUsersMap(obj, data, callback, err);
+          }
+        });
+      }catch(err){
+          console.log(err);
+      }
+    });
+  },
+
+  //Edits a paper after authorization. Uses a papers_id
+  this.editPaper = function(obj, callback){
+    var data = {};
+    db.getConnection(function(err, connection) {
+      try{
+        if (obj.title !== undefined){
+          data.title = obj.title;
+        }
+        if (obj.abstract !== undefined){
+          data.abstract = obj.abstract;
+        }
+        if (obj.citation !== undefined){
+          data.citation = obj.citation;
+        }
+        console.log(data);
+
+        var sqlParams = [];
+        var sqlInserts = [];
+
+        for (var property in data) {
+          if (data.hasOwnProperty(property)) {
+            sqlParams.push('??=?');
+            sqlInserts.push(property.toString());
+            sqlInserts.push(data[property]);
+          }
+        }
+        var sqlParamsString = sqlParams.join(',');
+        sqlInserts.push(obj.papers_id);
+
+        console.log(sqlParamsString);
+        console.log(sqlInserts);
+
+        if (obj.papers_id !== undefined){
+          var sql = `update ${config.db.database}.papers set ${sqlParamsString} where papers_id = ?`;
+          sql = mysql.format(sql, sqlInserts);
+        }else{
+          throw new Error('No paper id provided');
+        }
+
+        connection.query(sql, data, function(err, result) {
+          try{
+            if (err) {throw err;}
+            callback('', result);
+
+            connection.release();
+          }catch (err){
+            console.log(err);
+            connection.release();
+            callback(err, '');
           }
         });
       }catch(err){
