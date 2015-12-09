@@ -23,13 +23,12 @@
         window.location.href = `/login`;
       }
     });
-
     listenOnATags();
   }
 
   var setupPage = function(data){
     var el = document.getElementById("db-menu-dropdown");
-    el.innerText = data.fName;
+    el.innerText = data.fName + " " + data.lName;
   }
 
   var listenOnATags = function(){

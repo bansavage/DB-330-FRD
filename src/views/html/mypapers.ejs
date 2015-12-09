@@ -36,11 +36,11 @@
     <div class="pure-menu pure-menu-horizontal normal fixed">
         <a href="#" class="pure-menu-heading">Chrus Research</a>
         <ul class="pure-menu-list fl-right">
-            <li class="pure-menu-item"><a href="search.html" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
+            <li class="pure-menu-item"><a href="/search" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
 
 
             <li class="pure-menu-item  pure-menu-has-children pure-menu-allow-hover name-nav">
-                <a href="#" class="pure-menu-link ">Christopher  <i class="fa fa-user"></i></a>
+                <a href="#" id="db-menu-dropdown" class="pure-menu-link "><i class="fa fa-user"></i></a>
                 <ul class="pure-menu-children">
                     <li class="pure-menu-item">
                         <a href="controlpanel.html" class="pure-menu-link">Control Panel <i class="fa fa-server"></i></a>
@@ -64,53 +64,63 @@
  Back to Control Panel</a>
         <div>
 
-            <div class="posts">
+          <% if (papers.length > 0){ %>
+          <div class="posts">
+              <!-- A single paper -->
+              <% for(var i=0; i<papers.length; i++) {%>
+                  <section class="post">
+                      <h1 class="content-subhead"></h1>
+                      <header class="post-header">
+                          <!-- Paper Title -->
+                          <h2 class="post-title"> <%= papers[i].title %> </h2>
+                          <!-- Paper Title end -->
+                          <!-- Author -->
+                          <p class="post-meta">
+                            <% papers[i].authors.forEach(function(author) {%>
+                              By <a href="#" class="post-author">
+                                  <%= author.fName + " " + author.lName %>
+                              </a>
+                            <% }) %>
+                          <!-- Author end -->
+                              under
+                              <!-- Keywords -->
+                              <% papers[i].keywords.forEach(function(keyword) {%>
+                                  <a class="post-category post-category-design" href="#">
+                                      <%= keyword %>
+                                  </a>
+                              <% }) %>
+                              <!-- Keywords end -->
+                          </p>
+                      </header>
+                          <!-- abstract -->
+                          <div class="post-description">
+                              <p>
+                                  <%= papers[i].abstract %>
+                              </p>
+                          </div>
+                          <!-- abstract end -->
+                          <!-- citations start-->
+                          <div class="post-description citations">
+                              <p>
+                                  <%= papers[i].citation %>
+                              </p>
+                          </div>
+                          <!-- citations end -->
+                  </section>
+              <% } %>
+              <!-- Single paper end -->
+              <!--end of ejs-->
+          </div>
 
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-                    <header class="post-header">
-
-
-                        <h2 class="post-title">
-                        Oceanography in the 21st Century
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Christopher Dumlao</a> under <a class="post-category post-category-js" href="#">Ecology</a>
-                        </p>
-                    </header>
-
-                </section>
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-
-                    <header class="post-header">
-
-                        <h2 class="post-title">
-                        Impact of Global Initiative
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Christopher Dumlao</a> under <a class="post-category" href="#">Uncategorized</a>
-                        </p>
-                    </header>
-
-
-                </section>
-
-
-                <h1 class="content-subhead"></h1>
-
-            </div>
+          <% } %>
 
 
         </div>
     </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../assets/js/startPages.js"></script>
 <script src="../assets/lib/TextInputEffects/js/classie.js"></script>
         <script>
             (function() {

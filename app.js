@@ -161,8 +161,55 @@ app.post('/api/papers/create', authorize, function(req, res){
 
 
 //Renders the mypapers page
-app.get('/papers', function(req, res){
-  res.render('mypapers');
+app.get('/papers', authorize, function(req, res){
+  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
+    if (err){
+      console.log(err);
+      res.status(401).send({message: 'Invalid Request'});
+    }else{
+
+      papers.forEach(function(paper, index, arr){
+        paper_mid.getKeywords(paper, function(err, keywords){
+          if (err){
+            console.log(err);
+            res.status(401).send({message: 'Paper Keywords Error'});
+          }else{
+            paper.keywords = keywords;
+            if (index >= arr.length-1){
+              // Gets authors
+              papers.forEach(function(paper2, index2, arr2){
+                paper_mid.getAuthors(paper2, function(err, authors){
+                  if (err){
+                    console.log(err);
+                    res.status(401).send({message: 'Paper Keywords Error'});
+                  }else{
+                    paper2.authors = authors;
+                    if (index2 >= arr2.length-1){
+                      if (!papers.authors){
+                        papers.authors = [];
+                      }
+                      if (!papers.keywords){
+                        papers.keywords = [];
+                      }
+                      res.render('mypapers',{
+                       papers : papers
+                       //test : 'helloworld'
+                      });
+                    }else{
+                      index2 += 1;
+                    }
+                  }
+                });
+              });
+            }else{
+              index += 1;
+            }
+          }
+        });
+      });
+
+    };
+  });
 });
 
 //app.use('/') authorize middleware is working
