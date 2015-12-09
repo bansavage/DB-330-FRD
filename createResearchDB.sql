@@ -50,8 +50,8 @@ keyword varchar(45),
 papers_fk varchar(64) not null,
 searchable_keywords_fk varchar(64) not null,
 primary key(paper_keywords_id, papers_fk, searchable_keywords_fk),
-constraint papers_fk foreign key(papers_fk) references PAPERS(papers_id),
-constraint searchable_keywords_fk foreign key(searchable_keywords_fk) references SEARCHABLE_KEYWORDS(searchable_keywords_id)
+foreign key(papers_fk) references PAPERS(papers_id),
+foreign key(searchable_keywords_fk) references SEARCHABLE_KEYWORDS(searchable_keywords_id)
 );
 
 

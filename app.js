@@ -90,12 +90,24 @@ app.use('/api/papers/delete', paper_mid.hasPermission);
 //Delete a paper, requires the proper premissions to do so.
 // The request just needs an object with a papers_id inside, as well as a jwt token.
 app.post('/api/papers/delete', function(req, res){
-  res.send('worked');
+  var data = {
+    papers_id : req.body.papers_id,
+    users_id : req.body.userId
+  }
+
+  paper_mid.deletePaper(data, function(err, message){
+  if (err){
+      console.log(err);
+      res.status(401).send({message : 'Paper Deletion Failed'});
+  }else{
+    res.status(200).send({message : 'Paper Deletion Successful'});
+  }
+  });
 });
 
 //Middleware for editing papers
-app.use('/api/papers/delete', authorize);
-app.use('/api/papers/delete', paper_mid.hasPermission);
+app.use('/api/papers/edit', authorize);
+app.use('/api/papers/edit', paper_mid.hasPermission);
 // Edits a paper, requires a paper object with the updated parameters
 // The request just needs an object with a papers_id inside, as well as a jwt token.
 app.get('/papers/edit', function(req, res){

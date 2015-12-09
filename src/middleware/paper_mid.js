@@ -192,10 +192,6 @@ function Paper(){
       var permission = req.body.permission;
       var papers_id = req.body.papers_id;
 
-      console.log(users_id);
-      console.log(permission);
-      console.log(papers_id);
-
       switch(permission) {
         case "admin":
           next();
@@ -208,10 +204,7 @@ function Paper(){
               res.status(404).send({message: 'Paper lookup error'});
             }else{
               papers.forEach(function(paper, index, arr){
-                console.log("a" + paper.papers_id);
-                console.log("b" + papers_id);
                 if (paper.papers_id == papers_id){
-                  console.log("adfad");
                   next(); // User has access to the paper
                   complete = true;
                 }
@@ -233,8 +226,11 @@ function Paper(){
       if (permission !== 'admin' && permission !== 'faculty' && permission !== 'student' && permission !== 'public'){
         res.status(401).send({message: 'No premissions'});
       }
+  },
 
-
+  //Deletes a paper with a given papers_id and users_id
+  this.deletePaper = function(obj, callback){
+    deletePapersSearchKeywords(obj, callback); // Will delete everything associated with the paper
   }
 }
 
@@ -271,6 +267,162 @@ var createPapersUsersMap = function(obj, data, callback, err){
           console.log(err);
           connection.release();
           callback('', result2);
+        }
+      });
+    }catch(err){
+        console.log(err);
+    }
+  });
+};
+
+
+
+
+//Deletes given paper_id paper, 4th
+var deletePaperFunction = function(obj, callback, err){
+  try{
+    if (err){throw err;}
+  }catch(err){
+    console.log(err);
+    callback(err, '');
+  }
+  db.getConnection(function(err, connection, err) {
+    try{
+      if (err) {throw err;}
+
+      if (obj.papers_id !== undefined){
+        var sql = `delete from ${config.db.database}.papers where ?? = ?`;
+        var inserts = ['papers_id', obj.papers_id];
+        sql = mysql.format(sql, inserts);
+      }else{
+        throw new Error('No paper id provided');
+      }
+
+      connection.query(sql, function(err, result2) {
+        try{
+          if (err) {throw err;}
+          //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+          callback('', result2);
+
+          connection.release();
+        }catch (err){
+          console.log(err);
+          connection.release();
+          callback(err, '');
+        }
+      });
+    }catch(err){
+        console.log(err);
+    }
+  });
+}
+
+
+
+//Deletes the papers searchable keywords, 1st
+var deletePapersSearchKeywords = function(obj, callback){
+  db.getConnection(function(err, connection) {
+    try{
+      if (err) {throw err;}
+      // Use the connection
+      if (obj.papers_id !== undefined && obj.users_id !== undefined){
+        var sql = `delete from ${config.db.database}.searchable_keywords
+                    inner join ${config.db.database}.paper_keywords
+                    on paper_keywords.searchable_keywords_fk = searchable_keywords.searchable_keywords_id
+                    where ?? = ?`;
+        var inserts = ['paper_keywords.papers_fk', obj.papers_id];
+        sql = mysql.format(sql, inserts);
+      }else{
+        throw new Error('No paper or user id provided');
+      }
+
+      connection.query(sql, function(err, result) {
+        try{
+          if (err) {throw err;}
+          //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+          deletePapersKeywords(obj, callback, '');
+          connection.release();
+        }catch (err){
+          console.log(err);
+          connection.release();
+          deletePapersKeywords(obj, callback, '');
+        }
+      });
+    }catch(err){
+        console.log(err);
+    }
+  });
+};
+
+//Deletes the papers keywords 2nd
+var deletePapersKeywords = function(obj, callback, err){
+  try{
+    if (err){throw err;}
+  }catch(err){
+    console.log(err);
+    deletePapersUsersMap(obj, callback, err);
+  }
+  db.getConnection(function(err, connection) {
+    try{
+      if (err) {throw err;}
+      // Use the connection
+      if (obj.papers_id !== undefined && obj.users_id !== undefined){
+        var sql = `delete from ${config.db.database}.paper_keywords where ?? = ?`;
+        var inserts = ['paper_keywords.papers_fk', obj.papers_id];
+        sql = mysql.format(sql, inserts);
+      }else{
+        throw new Error('No paper or user id provided');
+      }
+
+      connection.query(sql, function(err, result) {
+        try{
+          if (err) {throw err;}
+          //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+          deletePapersUsersMap(obj, callback, '');
+          connection.release();
+        }catch (err){
+          console.log(err);
+          connection.release();
+          deletePapersUsersMap(obj, callback, '');
+        }
+      });
+    }catch(err){
+        console.log(err);
+    }
+  });
+};
+
+
+//Deletes the papers users map, 3rd
+var deletePapersUsersMap = function(obj, callback, err){
+  try{
+    if (err){throw err;}
+  }catch(err){
+    console.log(err);
+    deletePaperFunction(obj, callback, err);
+  }
+  db.getConnection(function(err, connection) {
+    try{
+      if (err) {throw err;}
+      // Use the connection
+      if (obj.papers_id !== undefined && obj.users_id !== undefined){
+        var sql = `delete from ${config.db.database}.papers_users_map where ?? = ?`;
+        var inserts = ['papers_fk', obj.papers_id];
+        sql = mysql.format(sql, inserts);
+      }else{
+        throw new Error('No paper or user id provided');
+      }
+
+      connection.query(sql, function(err, result) {
+        try{
+          if (err) {throw err;}
+          //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+          deletePaperFunction(obj, callback, '');
+          connection.release();
+        }catch (err){
+          console.log(err);
+          connection.release();
+          deletePaperFunction(obj, callback, '');
         }
       });
     }catch(err){
