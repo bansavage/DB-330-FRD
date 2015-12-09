@@ -7,7 +7,7 @@ $(document).ready(function(){
 
    $("body").append( generateResult() );
    console.log("ready");
-}); 
+});
 
 function generateResult(){
 	var container = $createDiv();
@@ -33,5 +33,5 @@ function newParagraph( myText ){
 	var paragraph = document.createElementByClassName("p");
 	paragraph.append(text);
 	return paragraph;
-	
+
 }

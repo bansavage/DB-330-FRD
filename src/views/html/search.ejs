@@ -76,7 +76,7 @@
             <div class="subheader">
                 <h1 class="brand-title">Results for</h1>
                 <h1 class="brand-title search-term">All Papers</h1>
-                <h2 class="brand-tagline">10 results found</h2>
+                <h2 class="brand-tagline"><%= papers.length %> results found</h2>
             </div>
 
             <nav class="nav">
@@ -96,7 +96,6 @@
         <div>
             <!-- A wrapper for all paper results -->
             <div class="posts">
-
                 <!-- A single paper -->
                 <% for(var i=0; i<papers.length; i++) {%>
                     <section class="post">
@@ -107,17 +106,19 @@
                             <!-- Paper Title end -->
                             <!-- Author -->
                             <p class="post-meta">
+                              <% papers[i].authors.forEach(function(author) {%>
                                 By <a href="#" class="post-author">
-                                    <%= papers[i].author %>
+                                    <%= author.fName + " " + author.lName %>
                                 </a>
+                              <% }) %>
                             <!-- Author end -->
                                 under
                                 <!-- Keywords -->
-                                <% for(var i=0; i<papers[i].papers_keywords[i].length; i++) {%>
+                                <% papers[i].keywords.forEach(function(keyword) {%>
                                     <a class="post-category post-category-design" href="#">
-                                        <%= papers[i].papers_keywords[i] %>
+                                        <%= keyword %>
                                     </a>
-                                <% } %>
+                                <% }) %>
                                 <!-- Keywords end -->
                             </p>
                         </header>
@@ -131,7 +132,7 @@
                             <!-- citations start-->
                             <div class="post-description citations">
                                 <p>
-                                    <%= papers[i].citations %>
+                                    <%= papers[i].citation %>
                                 </p>
                             </div>
                             <!-- citations end -->

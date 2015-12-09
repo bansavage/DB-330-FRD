@@ -22,8 +22,10 @@ var app = express();
 //Redefine where views are located
 app.set('views',`${__dirname}/src/views/html`);
 //Sets the view engine, it will render html as ejs
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'html');
+
+app.set('view engine', 'ejs');
+app.engine('ejs', ejs.renderFile);
+
 //varriable to keep track of compiled html
 //var html = {value : {}};
 //Compiles the jade templates in the view
@@ -76,7 +78,10 @@ app.get('/', function(req, res){
 
 //Brings the user to the login page
 app.get('/login', function(req, res){
-  res.render('login',{});
+  res.render('login',{
+    message: 'login successful',
+    success: true
+  });
 });
 
 //Renders the delete papers page
@@ -170,7 +175,7 @@ app.get('/controlpanel', authorize, function(req, res){
 
 app.get('/search', function(req, res){
   res.render('search', {
-    papers: []
+    papers: [{}]
   });
 });
 
@@ -203,19 +208,27 @@ app.get('/search/:keywords', function(req, res, next){
                 console.log(err);
                 res.status(401).send({message: 'Paper Authors Error'});
               }else{
-
+                paper.keywords = _.uniq(keywords);
                 if (index >= arr.length-1){
-                  paper.keywords = _.uniq(keywords);
+
                   // Gets authors
                   papers.forEach(function(paper2, index2, arr2){
-                    paper_mid.getAuthors(paper2, function(err, keywords){
+                    paper_mid.getAuthors(paper2, function(err, authors){
                       if (err){
                         console.log(err);
                         res.status(401).send({message: 'Paper Keywords Error'});
                       }else{
+                        paper2.authors = authors;
                         if (index2 >= arr2.length-1){
+                          if (!papers.authors){
+                            papers.authors = [];
+                          }
+                          if (!papers.keywords){
+                            papers.keywords = [];
+                          }
                           res.render('search',{
                            papers : papers
+                           //test : 'helloworld'
                           });
                         }else{
                           index2 += 1;
