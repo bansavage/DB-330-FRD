@@ -7,7 +7,6 @@
         <title>Login</title>
         <link rel="stylesheet" type="text/css" href="../assets/css/style.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<script src="../assets/js/base.js"></script>
 		<!--[if lte IE 7]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
 		<style>
 			@import url(http://fonts.googleapis.com/css?family=Raleway:400,700);
@@ -28,7 +27,7 @@
 			}
 		</style>
     </head>
-    <body onload="init();">
+    <body>
         <div class="container">
 
 			<section class="main" >
@@ -44,11 +43,12 @@
 				    </p>
 
 				    <p>
-				        <a href="controlpanel.html"><input type="submit" name="submit" value="Continue"></a>
+				        <a><input id="db-submit" type="button" name="submit" value="Continue"></a>
 				    </p>
 				</form>​
 			</section>
-
+      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <script src="../assets/js/base.js"></script>
         </div>
     </body>
 </html>
