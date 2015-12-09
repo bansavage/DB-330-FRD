@@ -10,14 +10,14 @@
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 
 <!--[if lte IE 8]>
-  
+
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
-  
+
 <![endif]-->
 <!--[if gt IE 8]><!-->
-  
+
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-  
+
 <!--<![endif]-->
 
     <!--[if lte IE 8]>
@@ -35,7 +35,7 @@
         <a href="#" class="pure-menu-heading">Chrus Research</a>
         <ul class="pure-menu-list fl-right">
             <li class="pure-menu-item"><a href="search.html" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
-            
+
 
             <li class="pure-menu-item  pure-menu-has-children pure-menu-allow-hover name-nav">
                 <a href="#" class="pure-menu-link ">Christopher  <i class="fa fa-user"></i></a>
@@ -52,7 +52,7 @@
 
                 </ul>
             </li>
-            
+
         </ul>
     </div>
 
@@ -63,7 +63,7 @@
 
                 <form method="POST" action="" class="form pure-form pure-u-1 pure-u-md-5-6">
                 <h2>Edit Paper</h2>
-                
+
                 <fieldset class="pure-group">
                     <input type="text" class="pure-input-1" name="paperTitle" placeholder="Title"
                     value="<%= papers[i].title %>"
@@ -78,7 +78,7 @@
                     <input type="text" class="pure-input-1" name="paperAuthors" placeholder="Authors"
                     value="
                             <% papers[i].authors.forEach(function(author) {%>
-                                author.fName + " " + author.lName 
+                                author.fName + " " + author.lName
                             <% }) %>
                          "
                     >
@@ -86,11 +86,11 @@
                     <input type="text" class="pure-input-1"  name="paperKeywords"placeholder="Keywords"
                     value="
                             <% papers[i].paper_keywords.forEach(function(paper_keywords) {%>
-                                paper_keywords[i] 
+                                paper_keywords[i]
                             <% }) %>
                          "
                     >
-                    <br>    
+                    <br>
                     <textarea class="pure-input-1 desc" name="paperCitations" placeholder="Citations">
                    <%= papers[i].citations %>
                     </textarea>
@@ -99,12 +99,12 @@
 
                 <a href="edit.html" class="button-choose pure-button">Back</a>
                  <button class="button-choose pure-button button-edit">Update</button>
-                
+
                 </form>
         </div>
     </div> <!-- end control-tables -->
 
-    
+
 </div> <!-- end l-content -->
 
 <div class="footer l-box form-footer">
