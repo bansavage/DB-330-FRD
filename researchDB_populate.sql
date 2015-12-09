@@ -47,15 +47,25 @@ insert into PAPER_KEYWORDS values ('17', 'Chemistry', '14','4');
 insert into PAPER_KEYWORDS values ('18', 'Chemistry', '15','4');
 insert into PAPER_KEYWORDS values ('19', 'Chemistry', '16','4');
 
-insert into USERS value ('1', 'Kris', 'Brown', 'username', 
+insert into USERS value ('1', 'Public Kris', 'Brown', 'username1', 
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
 '3e0e71c7dcd5f79f7fddd9a5148e9fcb3973803440e940a55df2c3f526765d49',
-'a@a.edu', 'public');
+'k@b.edu', 'public');
 
-insert into USERS value ('2', 'John', 'Doe', 'username2', 
+insert into USERS value ('2', 'Student Jon', 'Lee', 'username2', 
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
 '3e0e71c7dcd5f79f7fddd9a5148e9fcb3973803440e940a55df2c3f526765d49',
-'b@b.edu', 'admin');
+'j@l.edu', 'student');
+
+insert into USERS value ('3', 'Teacher Joe', 'Doe', 'username3', 
+'d6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
+'3e0e71c7dcd5f79f7fddd9a5148e9fcb3973803440e940a55df2c3f526765d49',
+'j@d.edu', 'faculty');
+
+insert into USERS value ('4', 'Boss', 'Guy', 'username4', 
+'d6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
+'3e0e71c7dcd5f79f7fddd9a5148e9fcb3973803440e940a55df2c3f526765d49',
+'b@g.edu', 'admin');
 
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('1', '1');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('2', '1');
@@ -65,3 +75,11 @@ insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('3', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('4', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('5', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('6', '2');
+
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('11', '3');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('12', '3');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('7', '3');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('6', '3');
+
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('2', '4');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('13', '4');

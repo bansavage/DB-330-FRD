@@ -27,12 +27,10 @@ function User(){
         }else{
           throw new Error('No id or username provided');
         }
-
         connection.query(sql, function(err, rows) {
           try{
             if (err) {throw err;}
             var user = rows[0];
-
             if (user == undefined) {throw new Error('No row data');}
 
             callback('', user);

@@ -42,7 +42,6 @@ app.use(bodyParser.json());
 // Checks if token exist on input,
 //Checks token if valid (experation) and user exists, goes next
 var authorize = function(req, res, next) {
-
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   // decode token
   if (token) {
@@ -54,7 +53,8 @@ var authorize = function(req, res, next) {
         return;
       } else {
         req.body.userId = decoded.userId;
-;       next();
+        req.body.permission = decoded.permission;
+        next();
       }
     });
 
@@ -80,11 +80,24 @@ app.get('/login', function(req, res){
 });
 
 //Renders the delete papers page
-app.get('/papers/delete', function(req, res){
+app.get('/papers/delete', authorize, function(req, res){
   res.render('delete');
 });
 
-//Renders the edit papers page
+//Middleware for deleting papers
+app.use('/api/papers/delete', authorize);
+app.use('/api/papers/delete', paper_mid.hasPermission);
+//Delete a paper, requires the proper premissions to do so.
+// The request just needs an object with a papers_id inside, as well as a jwt token.
+app.post('/api/papers/delete', function(req, res){
+  res.send('worked');
+});
+
+//Middleware for editing papers
+app.use('/api/papers/delete', authorize);
+app.use('/api/papers/delete', paper_mid.hasPermission);
+// Edits a paper, requires a paper object with the updated parameters
+// The request just needs an object with a papers_id inside, as well as a jwt token.
 app.get('/papers/edit', function(req, res){
   res.render('edit');
 });
@@ -93,6 +106,27 @@ app.get('/papers/edit', function(req, res){
 app.get('/papers/create', function(req, res){
   res.render('add');
 });
+
+//Create a paper, requires paper object data specified below, and jwt token
+// {
+//   title,
+//   abstract,
+//   citation
+// }
+app.post('/api/papers/create', authorize, function(req, res){
+  var paperData = req.body;
+  paperData.users_id = req.body.userId;
+
+  paper_mid.createPaper(paperData, function(err, message){
+  if (err){
+      console.log(err);
+      res.status(401).send({message : 'Paper Creation Failed'});
+  }else{
+    res.status(200).send({message : 'Paper Creation Successful'});
+  }
+  });
+});
+
 
 //Renders the mypapers page
 app.get('/papers', function(req, res){
@@ -329,7 +363,6 @@ app.post('/api/authenticate', function(req, res){
         return;
       }
       // User has authenticated OK
-
       // Generate password hash with user's salt(32bit)
       var hash = crypto
       .createHash("sha256")
@@ -342,7 +375,7 @@ app.post('/api/authenticate', function(req, res){
       if (hash === user.pass_hash){
 
         //Create JWT Token
-        var token = jwt.sign({userId: user.users_id}, config.secret, {algorithm: 'HS256'}, {
+        var token = jwt.sign({userId: user.users_id, permission: user.permission}, config.secret, {algorithm: 'HS256'}, {
           expiresIn: 43200 // 24 hours
         });
 
