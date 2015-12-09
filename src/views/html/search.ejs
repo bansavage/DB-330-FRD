@@ -95,6 +95,7 @@
     <div class="content pure-u-1 pure-u-md-3-4">
         <div>
             <!-- A wrapper for all paper results -->
+            <% if (papers.length > 0){ %>
             <div class="posts">
                 <!-- A single paper -->
                 <% for(var i=0; i<papers.length; i++) {%>
@@ -141,13 +142,16 @@
                 <!-- Single paper end -->
                 <!--end of ejs-->
             </div>
+
+            <% } %>
         </div>
     </div>
 
 </div>
 
-
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="../assets/lib/TextInputEffects/js/classie.js"></script>
+<script src="../assets/js/search.js"></script>
         <script>
             (function() {
                 // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim

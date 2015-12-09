@@ -175,7 +175,7 @@ app.get('/controlpanel', authorize, function(req, res){
 
 app.get('/search', function(req, res){
   res.render('search', {
-    papers: [{}]
+    papers: []
   });
 });
 
@@ -192,7 +192,7 @@ app.get('/search/:keywords', function(req, res, next){
   var keywords = req.query.keywords;
 
   if (!keywords){
-    res.json({
+    res.render('search', {
      papers : []
    });
   }else{
