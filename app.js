@@ -168,7 +168,7 @@ app.get('/papers', function(req, res){
 //app.use('/') authorize middleware is working
 app.get('/controlpanel', authorize, function(req, res){
   var data = {
-    userId : req.body.userId
+    users_id : req.body.userId
   };
   res.render('controlpanel', data);
 });

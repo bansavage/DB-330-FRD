@@ -10,14 +10,14 @@
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 
 <!--[if lte IE 8]>
-  
+
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
-  
+
 <![endif]-->
 <!--[if gt IE 8]><!-->
-  
+
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-  
+
 <!--<![endif]-->
 
     <!--[if lte IE 8]>
@@ -34,25 +34,25 @@
 <div class="pure-menu pure-menu-horizontal normal fixed">
         <a href="#" class="pure-menu-heading">Chrus Research</a>
         <ul class="pure-menu-list fl-right">
-            <li class="pure-menu-item"><a href="search.html" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
-            
+            <li class="pure-menu-item"><a href="/search" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
+
 
             <li class="pure-menu-item  pure-menu-has-children pure-menu-allow-hover name-nav">
-                <a href="#" class="pure-menu-link ">Christopher  <i class="fa fa-user"></i></a>
+                <a href="#" id="db-menu-dropdown" class="pure-menu-link "><i class="fa fa-user"></i></a>
                 <ul class="pure-menu-children">
                     <li class="pure-menu-item">
-                        <a href="controlpanel.html" class="pure-menu-link">Control Panel <i class="fa fa-server"></i></a>
+                        <a href="/controlpanel" class="pure-menu-link">Control Panel <i class="fa fa-server"></i></a>
                     </li>
                     <li class="pure-menu-item">
-                        <a href="mypapers.html" class="pure-menu-link">My Papers</a>
+                        <a href="/papers" class="pure-menu-link">My Papers</a>
                     </li>
                     <li class="pure-menu-item">
-                        <a href="login.html" class="pure-menu-link">Logout <i class="fa fa-sign-out"></i></a>
+                        <a href="/login" class="pure-menu-link">Logout <i class="fa fa-sign-out"></i></a>
                     </li>
 
                 </ul>
             </li>
-            
+
         </ul>
     </div>
 
@@ -67,7 +67,7 @@
         <div class="pure-u-1 pure-u-md-1-3">
             <div class="control-table control-table-update">
 
-                <a href="edit.html">
+                <a href="/papers/edit">
                     <div class="control-table-header">
                         <h2>Update</h2>
 
@@ -81,7 +81,7 @@
                     <li>Admins</li>
                     <li>Faculty</li>
                 </ul>
-                <a href="edit.html">
+                <a href="/papers/edit">
                 <button class="button-choose pure-button">Choose</button>
                 </a>
             </div>
@@ -89,10 +89,10 @@
 
         <div class="pure-u-1 pure-u-md-1-3">
             <div class="control-table control-table-insert control-table-selected">
-                <a href="add.html">
+                <a href="/papers/create">
                     <div class="control-table-header">
                         <h2>Insert</h2>
-                        
+
                         <span class="control-table-price">
                             <i class="fa fa-file-text"></i> <span>Create a new paper</span>
                         </span>
@@ -104,14 +104,14 @@
                     <li>Faculty</li>
                 </ul>
 
-                <a href="add.html"><button class="button-choose pure-button">Choose</button></a>
+                <a href="/papers/create"><button class="button-choose pure-button">Choose</button></a>
             </div>
         </div>
 
         <div class="pure-u-1 pure-u-md-1-3">
             <div class="control-table control-table-delete">
 
-                <a href="delete.html">
+                <a href="/papers/delete">
                     <div class="control-table-header">
                         <h2>Delete</h2>
 
@@ -125,7 +125,7 @@
                     <li>Admins</li>
                     <li>Faculty</li>
                 </ul>
-                <a href="delete.html">
+                <a href="/papers/delete">
                 <button class="button-choose pure-button">Choose</button>
                 </a>
             </div>
@@ -179,7 +179,7 @@
 </div>
 
 
-
-
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../assets/js/controlpanelStart.js"></script>
 </body>
 </html>
