@@ -27,25 +27,25 @@ insert into PAPER_KEYWORDS values ('6', 'word', '5','1');
 insert into PAPER_KEYWORDS values ('7', 'word', '6','1');
 
 insert into searchable_keywords values('2', 'fruit');
-insert into PAPER_KEYWORDS values ('5', 'word', '7','2');
-insert into PAPER_KEYWORDS values ('6', 'word', '1','2');
-insert into PAPER_KEYWORDS values ('7', 'word', '2','2');
+insert into PAPER_KEYWORDS values ('8', 'word', '5','2');
+insert into PAPER_KEYWORDS values ('9', 'word', '6','2');
+insert into PAPER_KEYWORDS values ('10', 'word', '7','2');
 
 insert into searchable_keywords values('3', 'meat');
-insert into PAPER_KEYWORDS values ('8', 'word', '3','3');
-insert into PAPER_KEYWORDS values ('9', 'word', '4','3');
-insert into PAPER_KEYWORDS values ('10', 'word', '5','3');
+insert into PAPER_KEYWORDS values ('11', 'word', '2','3');
+insert into PAPER_KEYWORDS values ('12', 'word', '3','3');
+insert into PAPER_KEYWORDS values ('13', 'word', '4','3');
 
 insert into searchable_keywords values('4', 'science');
-insert into PAPER_KEYWORDS values ('11', 'Biology', '8','4');
-insert into PAPER_KEYWORDS values ('12', 'Biology', '9','4');
-insert into PAPER_KEYWORDS values ('13', 'Biology', '10','4');
-insert into PAPER_KEYWORDS values ('14', 'Physics', '11','4');
-insert into PAPER_KEYWORDS values ('15', 'Physics', '12','4');
-insert into PAPER_KEYWORDS values ('16', 'Physics', '13','4');
-insert into PAPER_KEYWORDS values ('17', 'Chemistry', '14','4');
-insert into PAPER_KEYWORDS values ('18', 'Chemistry', '15','4');
-insert into PAPER_KEYWORDS values ('19', 'Chemistry', '16','4');
+insert into PAPER_KEYWORDS values ('14', 'Biology', '8','4');
+insert into PAPER_KEYWORDS values ('15', 'Biology', '9','4');
+insert into PAPER_KEYWORDS values ('16', 'Biology', '10','4');
+insert into PAPER_KEYWORDS values ('17', 'Physics', '11','4');
+insert into PAPER_KEYWORDS values ('18', 'Physics', '12','4');
+insert into PAPER_KEYWORDS values ('19', 'Physics', '13','4');
+insert into PAPER_KEYWORDS values ('20', 'Chemistry', '14','4');
+insert into PAPER_KEYWORDS values ('21', 'Chemistry', '15','4');
+insert into PAPER_KEYWORDS values ('22', 'Chemistry', '16','4');
 
 insert into USERS value ('1', 'Kris', 'Brown', 'username1', 
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
