@@ -1,6 +1,6 @@
 use researchdb;
 
-insert into PAPERS values('1', 'Chrus Adventures', 'follow our journey jib jibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjibjib', 'citation1');
+insert into PAPERS values('1', 'Chrus Adventures', 'follow our journey duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck duck', 'citation1');
 insert into PAPERS values('2', 'Drumsticks', 'all you need to know about drumsticks', 'citation2');
 insert into PAPERS values('3', 'Pulled Pork', 'simply delicious', 'citation3');
 insert into PAPERS values('4', 'Chicken', 'yum', 'citation4');
@@ -16,6 +16,11 @@ insert into PAPERS values('13', 'Magiks', 'Physics', 'citation13');
 insert into PAPERS values('14', 'Playing with Fire', 'Chemistry', 'citation14');
 insert into PAPERS values('15', 'Some H2O2', 'Chemistry', 'citation15');
 insert into PAPERS values('16', 'NaBrO', 'Chemistry', 'citation16');
+insert into PAPERS values('17', 'Heisenberg Principle', 'Chemistry', 'citation17');
+insert into PAPERS values('18', 'Greenhouse Effect', 'Environment', 'citation18');
+insert into PAPERS values('19', 'Primate Language', 'Communication', 'citation19');
+insert into PAPERS values('20', 'Nanotechnology', 'Technology', 'citation20');
+insert into PAPERS values('21', 'Animal Reintroduction', 'Ecology', 'citation21');
 
 
 insert into searchable_keywords values('1', 'food');
@@ -46,6 +51,11 @@ insert into PAPER_KEYWORDS values ('19', 'Physics', '13','4');
 insert into PAPER_KEYWORDS values ('20', 'Chemistry', '14','4');
 insert into PAPER_KEYWORDS values ('21', 'Chemistry', '15','4');
 insert into PAPER_KEYWORDS values ('22', 'Chemistry', '16','4');
+insert into PAPER_KEYWORDS values ('23', 'Chemistry', '17','4');
+insert into PAPER_KEYWORDS values ('24', 'Environment', '18','4');
+insert into PAPER_KEYWORDS values ('25', 'Communication', '19','4');
+insert into PAPER_KEYWORDS values ('26', 'Technology', '20','4');
+insert into PAPER_KEYWORDS values ('27', 'Animal Reintroduction', '21','4');
 
 insert into USERS value ('1', 'Kris', 'Brown', 'username1', 
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
