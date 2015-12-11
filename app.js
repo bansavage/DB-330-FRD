@@ -143,6 +143,57 @@ app.get('/papers/edit', authorize, function(req, res){
                       if (!papers.keywords){
                         papers.keywords = [];
                       }
+                      res.render('edit',{
+                       papers : papers
+                       //test : 'helloworld'
+                      });
+                    }else{
+                      index2 += 1;
+                    }
+                  }
+                });
+              });
+            }else{
+              index += 1;
+            }
+          }
+        });
+      });
+
+    };
+  });
+});
+
+app.get('/papers/editform', authorize, function(req, res){
+  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
+    if (err){
+      console.log(err);
+      res.status(401).send({message: 'Invalid Request'});
+    }else{
+
+      papers.forEach(function(paper, index, arr){
+        paper_mid.getKeywords(paper, function(err, keywords){
+          if (err){
+            console.log(err);
+            res.status(401).send({message: 'Paper Keywords Error'});
+          }else{
+            paper.keywords = keywords;
+            if (index >= arr.length-1){
+              // Gets authors
+              papers.forEach(function(paper2, index2, arr2){
+                paper_mid.getAuthors(paper2, function(err, authors){
+                  if (err){
+                    console.log(err);
+                    res.status(401).send({message: 'Paper Keywords Error'});
+                  }else{
+                    paper2.authors = authors;
+                    if (index2 >= arr2.length-1){
+                      if (!papers.authors){
+                        papers.authors = [];
+                      }
+                      if (!papers.keywords){
+                        papers.keywords = [];
+                      }
                       res.render('editform',{
                        papers : papers
                        //test : 'helloworld'
@@ -165,11 +216,11 @@ app.get('/papers/edit', authorize, function(req, res){
 });
 
 //Middleware for editing papers
-app.use('/api/papers/edit', authorize);
-app.use('/api/papers/edit', paper_mid.hasPermission);
+app.use('/api/papers/editform', authorize);
+app.use('/api/papers/editform', paper_mid.hasPermission);
 // Edits a paper, requires a paper object with the updated parameters
 // The request just needs an object with a papers_id inside, as well as a jwt token.
-app.post('/api/papers/edit', function(req, res){
+app.post('/api/papers/editform', function(req, res){
   var paperData = req.body;
   paperData.users_id = req.body.userId;
 

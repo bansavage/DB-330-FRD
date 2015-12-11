@@ -58,46 +58,33 @@
 
 
     <div class="delete-content pure-u-1 pure-u-md-3-4">
-        <a href="controlpanel.html" class="button-choose pure-button delete-back-btn"><i class="fa fa-arrow-left"></i>
+        <a href="../controlpanel" class="button-choose pure-button delete-back-btn"><i class="fa fa-arrow-left"></i>
  Back to Control Panel</a>
         <div>
             <!-- A wrapper for all paper results -->
-            <% if (papers.length > 0){ %>
+
             <div class="posts">
-                 <% for(var i=0; i<papers.length; i++) {%>
+
                 <!-- A single paper -->
                 <section class="delete-post">
 
                     <header class="post-header">
-                            <!--paper title-->
-                            <h2 class="post-title"> <a href="" class="edit-btn">
-                            <i  title="edit paper" class="fa fa-pencil-square-o"></i></a>
-                            <%= papers[i].title %>
+
+                            
+                            <h2 class="post-title"> <a href="editform" class="edit-btn"><i class="fa fa-pencil-square-o"></i></i></a>Simulation vs Simulacra 
                             </h2>
-                            <!--paper title end -->
-                            <!-- Author -->
-                            <p class="post-meta">
-                              <% papers[i].authors.forEach(function(author) {%>
-                                By 
-                                <a href="#" class="post-author">
-                                    <%= author.fName + " " + author.lName %>
-                                </a>
-                              <% }) %>
-                            <!-- Author end -->
-                           <!-- Keywords -->
-                                <% papers[i].keywords.forEach(function(keyword) {%>
-                                    <a class="post-category post-category-design" href="#">
-                                        <%= keyword %>
-                                    </a>
-                                <% }) %>
-                            <!-- Keywords end -->
+                            
+                        
+                        <p class="post-meta">
+                            By <a href="#" class="post-author">Thomas Anderson</a> under <a class="post-category post-category-design" href="#">Philosophy</a> <a class="post-category post-category-pure" href="#">Psychology</a>
                         </p>
+                        
                     </header>
                     
                 </section>
                     
                 <h1 class="content-subhead"></h1>
-                <% } %> 
+
                   
         </div>
     </div>
@@ -140,8 +127,7 @@
                 }
             })();
         </script>
-
-
-
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="../assets/js/startPages.js"></script>
 </body>
 </html>

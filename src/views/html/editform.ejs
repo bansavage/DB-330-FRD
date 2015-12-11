@@ -66,38 +66,34 @@
 
                 <fieldset class="pure-group">
                     <input type="text" class="pure-input-1" name="paperTitle" placeholder="Title"
-                    value="<%= papers[i].title %>"
+
                     >
                     <br>
                     <textarea class="pure-input-1 desc" name="paperDescription" placeholder="Description">
-                        <%= papers[1].abstract %>
+
                     </textarea>
                 </fieldset>
 
                 <fieldset class="pure-group">
                     <input type="text" class="pure-input-1" name="paperAuthors" placeholder="Authors"
                     value="
-                            <% papers[i].authors.forEach(function(author) {%>
-                                author.fName + " " + author.lName
-                            <% }) %>
+                            
                          "
                     >
                     <br>
                     <input type="text" class="pure-input-1"  name="paperKeywords"placeholder="Keywords"
                     value="
-                            <% papers[i].paper_keywords.forEach(function(paper_keywords) {%>
-                                paper_keywords[i]
-                            <% }) %>
+                            
                          "
                     >
                     <br>
                     <textarea class="pure-input-1 desc" name="paperCitations" placeholder="Citations">
-                   <%= papers[i].citations %>
+
                     </textarea>
 
                 </fieldset>
 
-                <a href="edit.html" class="button-choose pure-button">Back</a>
+                <a href="edit" class="button-choose pure-button">Back</a>
                  <button class="button-choose pure-button button-edit">Update</button>
 
                 </form>
@@ -114,6 +110,7 @@
 
 
 
-
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../assets/js/startPages.js"></script>
 </body>
 </html>

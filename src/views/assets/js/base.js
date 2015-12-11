@@ -28,6 +28,12 @@
 
 				if (status > 400){
 	        console.log("wrong username or password");
+	        swal({
+			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+			  text: "Username and/or Password was incorrect",
+			  imageUrl: "../img/bad.png",
+			  html: true
+			});
 	      }else{
 					console.log("etaete");
 	        window.location.href = `/controlpanel/?token=${token}`;
@@ -38,6 +44,11 @@
 	    error : function(jqXHR, textStatus, errorThrown){
 	      console.log("wrong username or password");
 	      console.log(textStatus);
+	      swal({
+			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+			  text: "Username and/or Password was incorrect",
+			  imageUrl: "../assets/img/bad.png",
+			  html: true });
 	    }
 	 	});
 	 	//evt.preventDefault();

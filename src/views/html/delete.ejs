@@ -27,7 +27,15 @@
         
         <link rel="stylesheet" href="../assets/css/pricing.css">
         <link rel="stylesheet" href="../assets/css/blog.css">
+
     <!--<![endif]-->
+        <link rel="stylesheet" href="../assets/lib/SA-Alert/dist/sweetalert.css">
+        <script src="../assets/lib/SA-Alert/dist/sweetalert.min.js"></script>
+        <style>
+            .delete-btn:hover{
+                cursor: pointer;
+            }
+        </style>
        
 </head>
 <body>
@@ -58,42 +66,19 @@
 
 
     <div class="delete-content pure-u-1 pure-u-md-3-4">
-        <a href="controlpanel.html" class="button-choose pure-button delete-back-btn"><i class="fa fa-arrow-left"></i>
+        <a href="../controlpanel" class="button-choose pure-button delete-back-btn"><i class="fa fa-arrow-left"></i>
  Back to Control Panel</a>
         <div>
             <!-- A wrapper for all paper results -->
             <div class="posts">
  
-                <!-- A single paper -->
-                <section class="delete-post">
-
-                    <header class="post-header">
-
-                            
-                            <h2 class="post-title"> <a href="" class="delete-btn"><i class="fa fa-times "></i></a>Simulation vs Simulacra 
-                            </h2>
-                            
-                        
-                        <p class="post-meta">
-                            By <a href="#" class="post-author">Thomas Anderson</a> under <a class="post-category post-category-design" href="#">Philosophy</a> <a class="post-category post-category-pure" href="#">Psychology</a>
-                        </p>
-                    </header>
-                    
-                </section>
-                
-                
-               
-            </div>
-
-            <div class="posts">
-                <h1 class="content-subhead"></h1>
-
+                 <!-- A single paper -->
                 <section class="delete-post">
                     <header class="post-header">
                     
 
                         <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
+                        <i class="fa fa-times delete-btn"></i>
                         Alternative Medicine 
                         </h2>
 
@@ -110,7 +95,7 @@
                     <header class="post-header">
                     
                         <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
+                        <i class="fa fa-times delete-btn"></i>
                         Impact of Global Initiative 
                         </h2>
 
@@ -129,7 +114,9 @@
                     <header class="post-header">
 
                             
-                            <h2 class="post-title"> <a href="" class="delete-btn"><i class="fa fa-times "></i></a>Simulation vs Simulacra 
+                            <h2 class="post-title"> 
+                             <i class="fa fa-times delete-btn"></i>
+                             Simulation vs Simulacra 
                             </h2>
                             
                         
@@ -142,109 +129,7 @@
                 
                 
                
-            </div>
-
-            <div class="posts">
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-                    <header class="post-header">
-                    
-
-                        <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
-                        Alternative Medicine 
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Eric Ferraiuolo</a> under <a class="post-category post-category-js" href="#">Health</a>
-                        </p>
-                    </header>
-
-                </section>
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-
-                    <header class="post-header">
-                    
-                        <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
-                        Impact of Global Initiative 
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Reid Burke</a> under <a class="post-category" href="#">Uncategorized</a>
-                        </p>
-                    </header>
-
-
-                </section>
-
-                <h1 class="content-subhead"></h1>
-                 <!-- A single paper -->
-                <section class="delete-post">
-
-                    <header class="post-header">
-
-                            
-                            <h2 class="post-title"> <a href="" class="delete-btn"><i class="fa fa-times "></i></a>Simulation vs Simulacra 
-                            </h2>
-                            
-                        
-                        <p class="post-meta">
-                            By <a href="#" class="post-author">Thomas Anderson</a> under <a class="post-category post-category-design" href="#">Philosophy</a> <a class="post-category post-category-pure" href="#">Psychology</a>
-                        </p>
-                    </header>
-                    
-                </section>
-                
-                
-               
-            </div>
-
-            <div class="posts">
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-                    <header class="post-header">
-                    
-
-                        <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
-                        Alternative Medicine 
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Eric Ferraiuolo</a> under <a class="post-category post-category-js" href="#">Health</a>
-                        </p>
-                    </header>
-
-                </section>
-                <h1 class="content-subhead"></h1>
-
-                <section class="delete-post">
-
-                    <header class="post-header">
-                    
-                        <h2 class="post-title">
-                        <a href="" class="delete-btn"><i class="fa fa-times "></i></a>
-                        Impact of Global Initiative 
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Reid Burke</a> under <a class="post-category" href="#">Uncategorized</a>
-                        </p>
-                    </header>
-
-
-                </section>
-
-                <h1 class="content-subhead"></h1>
-                
-            </div>
-
-           
+            </div>  
         </div>
     </div>
 </div>
@@ -286,7 +171,9 @@
                 }
             })();
         </script>
-
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="../assets/js/startPages.js"></script>
+        <script src="../assets/js/delete.js"></script>
 
 
 </body>
