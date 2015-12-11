@@ -67,19 +67,25 @@ function Paper(){
           try{
             if (err) {throw err;}
             var data = rows[0];
-            if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
-            var keywords = [];
-            rows.forEach(function(obj){
-              keywords.push(obj.keyword);
-              keywords.push(obj.searchable_keywords);
-            });
-            callback('', keywords);
+              var keywords = [];
+              if (data == undefined) {
+                //throw new Error('No row data');
+              }
+              rows.forEach(function(obj){
+                if (obj == undefined) {
+                  //throw new Error('No paper data');
+                }
+                keywords.push(obj.keyword);
+                keywords.push(obj.searchable_keywords);
+              });
+              callback('', keywords);
+             // Indicates there is at least one keyword
 
             connection.release();
           }catch (err){
             console.log(err);
             connection.release();
-            callback(err, {});
+            callback(err, []);
           }
         });
       }catch(err){
@@ -282,6 +288,31 @@ function Paper(){
       }
   },
 
+  //Checks if the user has paper creation permissions
+  this.hasCreationPermission = function(req, res, next){
+      var users_id = req.body.userId;
+      var permission = req.body.permission;
+      var papers_id = req.body.papers_id;
+
+      switch(permission) {
+        case "admin":
+          next();
+          break;
+        case "faculty":
+          next();
+          break;
+        case "student":
+          res.status(401).send({message: 'Not authorized'});
+          break;
+        case "public":
+          res.status(401).send({message: 'Not authorized'});
+          break;
+      }
+
+      if (permission !== 'admin' && permission !== 'faculty' && permission !== 'student' && permission !== 'public'){
+        res.status(401).send({message: 'No premissions'});
+      }
+  },
   //Deletes a paper with a given papers_id and users_id
   this.deletePaper = function(obj, callback){
     deletePapersSearchKeywords(obj, callback); // Will delete everything associated with the paper

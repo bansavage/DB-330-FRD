@@ -51,7 +51,8 @@ var authorize = function(req, res, next) {
     jwt.verify(token, config.secret, { algorithms: ['HS256']}, function(err, decoded) {
       if (err) {
         console.log(err);
-        res.status(401).send({message : 'login err'});
+        res.redirect('login');
+        //res.status(401).send({message : 'missing token'});
         return;
       } else {
         req.body.userId = decoded.userId;
@@ -62,7 +63,8 @@ var authorize = function(req, res, next) {
 
   } else {
     // if there is no token
-    res.status(401).send({message : 'missing token'});
+    res.redirect('login');
+    //res.status(401).send({message : 'missing token'});
      return;
   }
 };
@@ -181,6 +183,8 @@ app.post('/api/papers/edit', function(req, res){
   });
 });
 
+
+
 //Renders the create papers page
 app.get('/papers/create', function(req, res){
   res.render('add');
@@ -192,7 +196,11 @@ app.get('/papers/create', function(req, res){
 //   abstract,
 //   citation
 // }
-app.post('/api/papers/create', authorize, function(req, res){
+
+app.use('/api/papers/create', authorize);
+app.use('/api/papers/create', paper_mid.hasCreationPermission);
+
+app.post('/api/papers/create', function(req, res){
   var paperData = req.body;
   paperData.users_id = req.body.userId;
 

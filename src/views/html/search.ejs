@@ -117,11 +117,13 @@
                             <!-- Author end -->
                                 Keywords&nbsp;&nbsp;
                                 <!-- Keywords -->
+                                <% if (papers[i].keywords){ %>
                                 <% papers[i].keywords.forEach(function(keyword) {%>
                                     <a class="post-category post-category-design" href="#">
                                         <%= keyword %>
                                     </a>
                                 <% }) %>
+                                <% } %>
                                 <!-- Keywords end -->
                             </p>
                         </header>
