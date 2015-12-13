@@ -43,7 +43,12 @@ A web application that allows users to view and share research papers.
     Inside /src/database there is the db_schema.sql and the db_populate.sql
     Add these to the database, first the schema then the populate.
 
-6. Running the Application
+
+ 6. Config File
+
+      The config file is the place to change the database name, ports, and host ip.
+
+ 7. Running the Application
 
     Go to the project folder and type the following command in bash or cmdline:
 
@@ -51,32 +56,7 @@ A web application that allows users to view and share research papers.
 
     That should start the server on port 7000
 
- 7. Test Search Querying
-
-      In there are currently the three keywords specified above in the database.
-      To query on keyword use them in the url demonstrated below.
-
-      `localhost:7000/search/test?array=fruit&array=meat`
-
-      or
-
-      `localhost:7000/search/test?array=food&array=""`
-
-      or
-
-      `localhost:7000/search/test?array=food&array="fruit"`
-
-      or
-
-      `localhost:7000/search/test?array=fruit&array=""`
-
-      Note: As of right now all queries must have at least 2 array values in them.
-
- 8. Config File
-
-      The config file is the place to change the database name, ports, and host ip.
-
- 9. Extra Info
+ 8. Extra Info
 
       Default Public User:
 
