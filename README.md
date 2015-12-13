@@ -42,9 +42,6 @@ A web application that allows users to view and share research papers.
 
     Inside /src/database there is the db_schema.sql and the db_populate.sql
     Add these to the database, first the schema then the populate.
-    Now the database will include three test keywords to query on.
-
-    Keywords: `food` `meat` `fruit`
 
 6. Running the Application
 
@@ -81,9 +78,24 @@ A web application that allows users to view and share research papers.
 
  9. Extra Info
 
-      Default User:
+      Default Public User:
 
-      `username: username`,
+      `username: username1`,
+      `password: pass_hash`
+
+      Default Student User:
+
+      `username: username2`,
+      `password: pass_hash`
+
+      Default Faculty User:
+
+      `username: username3`,
+      `password: pass_hash`
+
+      Default Admin User:
+
+      `username: username4`,
       `password: pass_hash`
 
 ##Application Design
@@ -91,28 +103,16 @@ A web application that allows users to view and share research papers.
 ###Domain Model
 ![Domain Model Design](images/DM.png)
 
-**Views:** Are created by the App Controller. Displays the data provided by the app controller. Talks to the App Controller via HTTP and HTTPS requests/responses.
+**Views:** Are created by the App Controller. Displays the data provided by the app controller. Talks to the App Controller via HTTP requests/responses. They use JavaScript, jQuery, and CSS files.
 
-**App Controller:** Handles the requests and responses from the views. Calls certain middleware to run depending on the request/data received. Renders the views.
+**App Controller:** Handles the requests and responses from the views. Calls certain middleware to run depending on the request/data received. Renders the views. Sends error codes and messages to the views. Is in charge of authentication and authorization.
 
-**Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from a model.
+**Middleware:** Is used by the application controller to get and manipulate certain data from given database tables.
 
-**User Model Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from the User model.
+**User Model Middleware:** Gets and manipulates data in the database pertaining to a User. Ex: Gets all papers of a given user.
 
-**Paper Model Middleware:** This takes the input data/instructions from the application controller then manipulates/retrieves data from the Paper model.
+**Paper Model Middleware:** Gets and manipulates data in the database pertaining to a Paper. Ex: Gets all keywords and searchable keywords for a paper.
 
-**Model:** This represents the data of an Object. Allowing the manipulation and retrieval of it’s data from the database.
-
-**User Model:** This represents the data of a User. Allowing the manipulation and retrieval of it’s data from the database.
-
-**Paper Model:** This represents the data of a Paper. Allowing the manipulation and retrieval of it’s data from the database.
-
-**Public User:** This will represent a Public’s Users data in the database. It will also provide extra functionality to manipulation and retrieval data to the Public (if any).
-
-**Student User:** This will represent a Student’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Students (if any).
-
-**Faculty User:** This will represent an Faculty’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Faculty (if any).
-
-**Admin User:** This will represent an Admin’s Users data in the database. It will also provide extra functionality to retrieve data specific to the Admins (if any).
+**Search Model Middleware:** In charge of getting papers data in the database by keywords. Ex: Uses keywords and searchable keywords to get specific papers and their info.
 
 **Database Pool:** This represents the MySQL Driver/Library we are using. Inside there is an easy way to create a database pool. This will allow for many users to access this application at once without having to worry about the overhead caused by creating a database connection.
