@@ -1,5 +1,16 @@
 # Faculty Research Database
 A web application that allows users to view and share research papers.
+
+The focus of this project was to learn how to connect a database from the backend to the business layer to the presentation layer. It does not follow all good security or development practices.
+
+#Security Warning
+
+**This project is susceptible to XCC and potential SQL injections.**
+
+#Development Warning
+
+**This project does not include any tests. There should be tests to ensure features work correctly, the addition of features do not break other feature, and the security of the application is maintained.**
+
 ##High Level Architecture
 ![High Level Architecture](images/HAL.png)
 
