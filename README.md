@@ -107,3 +107,6 @@ The focus of this project was to learn how to connect a database from the backen
 **Search Model Middleware:** In charge of getting papers data in the database by keywords. Ex: Uses keywords and searchable keywords to get specific papers and their info.
 
 **Database Pool:** This represents the MySQL Driver/Library we are using. Inside there is an easy way to create a database pool. This will allow for many users to access this application at once without having to worry about the overhead caused by creating a database connection.
+
+###Database Schema
+![Database Schema](images/sModel.png)
