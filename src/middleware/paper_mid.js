@@ -140,6 +140,8 @@ function Paper(){
       title: "",
       abstract: "",
       citation : ""
+      keywords : [],
+      authors : []
     }
 
     db.getConnection(function(err, connection) {

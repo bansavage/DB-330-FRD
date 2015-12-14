@@ -21,7 +21,9 @@ drop table if exists SEARCHABLE_KEYWORDS;
 
 create table SEARCHABLE_KEYWORDS(
 searchable_keywords_id varchar(64) not null,
-searchable_keywords varchar(45),
+papers_fk varchar(64) not null,
+searchable_keyword varchar(45),
+foreign key (papers_fk) references Papers(papers_id),
 primary key(searchable_keywords_id)
 );
 
@@ -38,20 +40,6 @@ salt varchar(255),
 email varchar(45),
 permission varchar(45) not null,
 primary key(users_id)
-);
-
-
-
-drop table if exists PAPER_KEYWORDS;
-
-create table PAPER_KEYWORDS(
-paper_keywords_id varchar(64) not null,
-keyword varchar(45),
-papers_fk varchar(64) not null,
-searchable_keywords_fk varchar(64) not null,
-primary key(paper_keywords_id, papers_fk, searchable_keywords_fk),
-foreign key(papers_fk) references PAPERS(papers_id),
-foreign key(searchable_keywords_fk) references SEARCHABLE_KEYWORDS(searchable_keywords_id)
 );
 
 

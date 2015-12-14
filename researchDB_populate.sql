@@ -23,39 +23,37 @@ insert into PAPERS values('20', 'Nanotechnology', 'Technology', 'citation20');
 insert into PAPERS values('21', 'Animal Reintroduction', 'Ecology', 'citation21');
 
 
-insert into searchable_keywords values('1', 'food');
-insert into PAPER_KEYWORDS values ('2', 'word', '1','1');
-insert into PAPER_KEYWORDS values ('3', 'word', '2','1');
-insert into PAPER_KEYWORDS values ('4', 'word', '3','1');
-insert into PAPER_KEYWORDS values ('5', 'word', '4','1');
-insert into PAPER_KEYWORDS values ('6', 'word', '5','1');
-insert into PAPER_KEYWORDS values ('7', 'word', '6','1');
+insert into searchable_keywords values ('1', '1','random');
+insert into searchable_keywords values ('2', '2','meat');
+insert into searchable_keywords values ('3', '3','meat');
 
-insert into searchable_keywords values('2', 'fruit');
-insert into PAPER_KEYWORDS values ('8', 'word', '5','2');
-insert into PAPER_KEYWORDS values ('9', 'word', '6','2');
-insert into PAPER_KEYWORDS values ('10', 'word', '7','2');
+insert into searchable_keywords values ('4', '4','meat');
+insert into searchable_keywords values ('5', '4','bird');
 
-insert into searchable_keywords values('3', 'meat');
-insert into PAPER_KEYWORDS values ('11', 'word', '2','3');
-insert into PAPER_KEYWORDS values ('12', 'word', '3','3');
-insert into PAPER_KEYWORDS values ('13', 'word', '4','3');
+insert into searchable_keywords values ('6', '5','fruit');
+insert into searchable_keywords values ('7', '6','fruit');
+insert into searchable_keywords values ('8', '7','fruit');
+insert into searchable_keywords values ('9', '8','biology');
+insert into searchable_keywords values ('10', '9','biology');
+insert into searchable_keywords values ('11', '10','bird');
+insert into searchable_keywords values ('12', '11','physics');
+insert into searchable_keywords values ('13', '12','physics');
+insert into searchable_keywords values ('14', '13','physics');
+insert into searchable_keywords values ('15', '14','physics');
 
-insert into searchable_keywords values('4', 'science');
-insert into PAPER_KEYWORDS values ('14', 'biology', '8','4');
-insert into PAPER_KEYWORDS values ('15', 'biology', '9','4');
-insert into PAPER_KEYWORDS values ('16', 'biology', '10','4');
-insert into PAPER_KEYWORDS values ('17', 'physics', '11','4');
-insert into PAPER_KEYWORDS values ('18', 'physics', '12','4');
-insert into PAPER_KEYWORDS values ('19', 'physics', '13','4');
-insert into PAPER_KEYWORDS values ('20', 'chemistry', '14','4');
-insert into PAPER_KEYWORDS values ('21', 'chemistry', '15','4');
-insert into PAPER_KEYWORDS values ('22', 'chemistry', '16','4');
-insert into PAPER_KEYWORDS values ('23', 'chemistry', '17','4');
-insert into PAPER_KEYWORDS values ('24', 'environment', '18','4');
-insert into PAPER_KEYWORDS values ('25', 'communication', '19','4');
-insert into PAPER_KEYWORDS values ('26', 'technology', '20','4');
-insert into PAPER_KEYWORDS values ('27', 'animal', '21','4');
+insert into searchable_keywords values ('16', '15','chemistry');
+insert into searchable_keywords values ('17', '16','chemistry');
+insert into searchable_keywords values ('18', '17','chemistry');
+insert into searchable_keywords values ('19', '15','chem');
+insert into searchable_keywords values ('20', '16','chem');
+insert into searchable_keywords values ('21', '17','chem,');
+
+insert into searchable_keywords values ('22', '18','environment');
+insert into searchable_keywords values ('23', '19','comm');
+insert into searchable_keywords values ('24', '20','tech');
+insert into searchable_keywords values ('25', '21','ecology');
+
+
 
 insert into USERS value ('1', 'Kris', 'Brown', 'username1',
 'd6e08cfee902d484a95c5ccd4a34c2b60065ed1120293f8c99ac6ca2e9ed81fb',
