@@ -2,12 +2,23 @@
 
 
 	function init(){
-	 	var submit = document.getElementById('db-submitdd');
+	 	var submit = document.getElementById('db-add');
 	 	submit.addEventListener('click', create );
+	 	$("#add-auth").click(
+	 		function(){
+	 			var addBtn = $("#add-auth").clone();
+				//$("#add-auth").remove();
+				$(".pAuth:last-child").clone().appendTo("auth-div");
+				$(".pAuth:last-child").value="";
+				$(".pAuth:last-child").placeholder="Author";
+				console.log("auth clicked");
+	 		}
+	 	);
+	 	console.log("added Event add auth");
 	}
 
-	function $( id ){
-		return document.getElementById(id);
+	function newAuthInput(){
+
 	}
 
 	function valueOf(id){
@@ -16,29 +27,30 @@
 
 	 function create(evt){
 		
-		var m-token;
-	 	if( localeStorage.getItem("token") ){
-	 		m-token = localeStorage.getItem("token");
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
 	 	}
 
-		var m-title     = valueOf("m-title");
-		var m-abstract  = valueOf("m-abstract");
-		var m-citations = valueOf("m-citation");
-		var m-keywords, m-authors;
-	 	for(var i = 0; i<10; i++){
-	 		m-keywords[i] = get[i].value;
-	 	}
+		var m_title     = valueOf("m-title");
+		var m_abstract  = valueOf("m-abstract");
+		var m_citations = valueOf("m-citation");
+		var m_keywords = {};
+		var m_authors = {};
+	 /*	for(var i = 0; i<10; i++){
+	 		m_keywords[i] = get[i].value;
+	 	}*/
 
 	 	$.ajax({
 	 		url: "/api/papers/create",
 	 		type: "POST",
 	 		data : {
-	 			title:    m-title,
-	 			abstract: m-abtract,
-	 			citation: m-citations,
-	 			keywords: m-keywords,
-	 			authors:  m-authors,
-	 			token:    m-token
+	 			title:    m_title,
+	 			abstract: m_abstract,
+	 			citation: m_citations,
+	 			keywords: m_keywords,
+	 			authors:  m_authors,
+	 			token:    m_token
 	 		},
 	 		success : function(data, textStatus, jqXHR){
 	 			
@@ -60,7 +72,6 @@
 	      return true;
 	    },
 	    error : function(jqXHR, textStatus, errorThrown){
-	      console.log("wrong username or password");
 	      console.log(textStatus);
 	      swal({
 			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
