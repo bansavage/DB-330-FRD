@@ -15,13 +15,11 @@ var Search = function(){
           if (obj.keywords.constructor === Array){
             for (var i in obj.keywords){
               var c = obj.keywords[i].replace("'"," ");
-              cases.push(`searchable_keywords.searchable_keywords = '${c}'`);
-              cases.push(`paper_keywords.keyword = '${c}'`);
+              cases.push(`searchable_keyword = '${c}'`);
             }
           }else{
             var c = obj.keywords.replace("'"," ");
-            cases.push(`searchable_keywords.searchable_keywords = '${c}'`);
-            cases.push(`paper_keywords.keyword = '${c}'`);
+            cases.push(`searchable_keyword = '${c}'`);
           }
 
           if (cases === []){
@@ -31,13 +29,12 @@ var Search = function(){
           }
           console.log(`test ${casesStr}`);
 
-          var sql = `select ??, ??, ??, ?? from ${config.db.database}.papers
-                      join ${config.db.database}.paper_keywords
-                      on papers.papers_id = paper_keywords.papers_fk
-                      join ${config.db.database}.searchable_keywords
-                      on searchable_keywords.searchable_keywords_id = paper_keywords.searchable_keywords_fk
+          var sql = `select papers_id, title, abstract, citation from ${config.db.database}.papers
+                      inner join ${config.db.database}.searchable_keywords
+                      on searchable_keywords.papers_fk = papers_id
                       where ${casesStr} group by title`;
           var inserts = ['papers_id', 'title', 'abstract', 'citation'];
+          console.log(sql);
           sql = mysql.format(sql, inserts);
 
         connection.query(sql, function(err, rows) {
