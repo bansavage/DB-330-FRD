@@ -102,10 +102,12 @@ app.post('/api/papers/delete', function(req, res){
     users_id : req.body.userId
   }
 
-  paper_mid.deletePaper(data, function(err, message){
+  paper_mid.deletePaper(data, function(err, result){
   if (err){
       console.log(err);
       res.status(401).send({message : 'Paper Deletion Failed'});
+  }else if(result.affectedRows <= 0){
+      res.status(404).send({message : 'Paper Does Not Exist'});
   }else{
     res.status(200).send({message : 'Paper Deletion Successful'});
   }
@@ -473,6 +475,19 @@ app.get('/api/users/', authorize, function(req, res){
       delete user['salt'];
       delete user['pass_hash'];
       res.json(user);
+    }
+  });
+});
+
+// Gets all users, only grabs first name, last name, and users_id
+// Must be a valid user in order to get all other users
+app.get('/api/users/all/', authorize, function(req, res){
+  user_mid.getAllUsers({users_id : req.body.userId}, function(err, users){
+    if (err){
+      console.log(err);
+      res.status(401).send({message: 'Users do not exist'});
+    }else{
+      res.json({users : users});
     }
   });
 });

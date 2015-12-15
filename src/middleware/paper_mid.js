@@ -127,46 +127,6 @@ function Paper(){
     });
   },
 
-  //Given an object with a list of authors, and a paper_id this will add those
-  // authors to the paper
-  this.setAuthors = function(obj, callback){
-    db.getConnection(function(err, connection) {
-      try{
-        if (err) {throw err;}
-        // Use the connection
-        if (obj.papers_id !== undefined){
-          var sql = `select ??, ?? from ${config.db.database}.users
-                      inner join ${config.db.database}.papers_users_map
-                      on users.users_id = papers_users_map.users_fk
-                      inner join ${config.db.database}.papers
-                      on papers.papers_id = papers_users_map.papers_fk
-                      where papers_id = ?`;
-          var inserts = ['fName','lName', obj.papers_id];
-          sql = mysql.format(sql, inserts);
-        }else{
-          throw new Error('No paper id provided');
-        }
-
-        connection.query(sql, function(err, rows) {
-          try{
-            if (err) {throw err;}
-            var data = rows[0];
-            if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
-            callback('', rows);
-
-            connection.release();
-          }catch (err){
-            console.log(err);
-            connection.release();
-            callback('', []);
-          }
-        });
-      }catch(err){
-          console.log(err);
-      }
-    });
-  },
-
   // Takes an object with the following
   //Obj might contain a list of authors -> author ids,
   // and keywords -> a list of searchable_keyword
@@ -486,7 +446,7 @@ var addKeywords = function(obj, callback, err){
 
 
 
-//Deletes given paper_id paper, 4th
+//Deletes given paper_id paper, 3th
 var deletePaperFunction = function(obj, callback, err){
   try{
     if (err){throw err;}
@@ -535,48 +495,8 @@ var deletePapersSearchKeywords = function(obj, callback){
       // Use the connection
       if (obj.papers_id !== undefined && obj.users_id !== undefined){
         var sql = `delete from ${config.db.database}.searchable_keywords
-                    inner join ${config.db.database}.paper_keywords
-                    on paper_keywords.searchable_keywords_fk = searchable_keywords.searchable_keywords_id
-                    where ?? = ?`;
-        var inserts = ['paper_keywords.papers_fk', obj.papers_id];
-        sql = mysql.format(sql, inserts);
-      }else{
-        throw new Error('No paper or user id provided');
-      }
-
-      connection.query(sql, function(err, result) {
-        try{
-          if (err) {throw err;}
-          //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
-          deletePapersKeywords(obj, callback, '');
-          connection.release();
-        }catch (err){
-          console.log(err);
-          connection.release();
-          deletePapersKeywords(obj, callback, '');
-        }
-      });
-    }catch(err){
-        console.log(err);
-    }
-  });
-};
-
-//Deletes the papers keywords 2nd
-var deletePapersKeywords = function(obj, callback, err){
-  try{
-    if (err){throw err;}
-  }catch(err){
-    console.log(err);
-    deletePapersUsersMap(obj, callback, err);
-  }
-  db.getConnection(function(err, connection) {
-    try{
-      if (err) {throw err;}
-      // Use the connection
-      if (obj.papers_id !== undefined && obj.users_id !== undefined){
-        var sql = `delete from ${config.db.database}.paper_keywords where ?? = ?`;
-        var inserts = ['paper_keywords.papers_fk', obj.papers_id];
+                    where searchable_keywords.papers_fk = ?`;
+        var inserts = [obj.papers_id];
         sql = mysql.format(sql, inserts);
       }else{
         throw new Error('No paper or user id provided');
@@ -591,7 +511,7 @@ var deletePapersKeywords = function(obj, callback, err){
         }catch (err){
           console.log(err);
           connection.release();
-          deletePapersUsersMap(obj, callback, '');
+          deletePapersUsersMap(obj, callback, err);
         }
       });
     }catch(err){
@@ -601,7 +521,7 @@ var deletePapersKeywords = function(obj, callback, err){
 };
 
 
-//Deletes the papers users map, 3rd
+//Deletes the papers users map, 2rd
 var deletePapersUsersMap = function(obj, callback, err){
   try{
     if (err){throw err;}

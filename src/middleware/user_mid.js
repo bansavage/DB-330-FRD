@@ -100,6 +100,33 @@ function User(){
           callback(err, {});
       }
     });
+  },
+
+  //Gets all of the users, only grabs first name, last name, and users_id
+  this.getAllUsers = function(obj, callback){
+    db.getConnection(function(err, connection) {
+      try{
+        if (err) {throw err;}
+        var sql = `SELECT ??,??,?? FROM ${config.db.database}.users`;
+        var inserts = ['users_id','fName','lName'];
+        sql = mysql.format(sql, inserts);
+        
+        connection.query(sql, function(err, rows) {
+          try{
+            if (err) {throw err;}
+            callback('', rows);
+            connection.release();
+          }catch (err){
+            console.log(err);
+            connection.release();
+            callback(err, {});
+          }
+        });
+      }catch(err){
+          console.log(err);
+          callback(err, {});
+      }
+    });
   }
 }
 
