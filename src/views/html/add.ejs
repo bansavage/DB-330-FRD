@@ -44,6 +44,36 @@
             .fa{
                 font-size: 1.6em!important;
             }
+            #pAuthor{
+                height: 52px;
+            }
+            .btn-success {
+            background: rgb(28, 184, 65); /* this is a 
+            green */
+            color: white;
+            font-weight: bold;
+            margin-right: 1%;
+            margin-bttom: 1%;
+            }
+            .wrap{
+                flex-wrap: wrap;
+            }
+            .added-author{
+                width: 8em;
+            }
+            .added-author:hover{
+                color: white;
+                background: rgb(202, 60, 60); /* this is a maroon */
+            }
+            .added-author:hover span{
+                display: none!important;
+            }
+            .added-author:hover:before{
+                content: "Remove";
+            }
+            h3{
+                margin: 0 2% 2% 2%;
+            }
 
         </style>
     <!--<![endif]-->
@@ -97,19 +127,23 @@
                 </fieldset>
 
                 <fieldset class="pure-group auth-div">
-                    <div class="w100 flex auth-cont">
-                        <input type="text" class="pure-input-1-2 pAuth" name="paperAuthors" placeholder="Author">
-                        <br>
+                   <h3 style="text-align:left;">Add Authors</h3>
+                    <div class="w100 flex wrap auth-cont pure-control-group">
+                        
+                            <select id="pAuthor" class="pure-input-1-2">
+                            
+                            </select>
                         <i class="add-auth fa fa-plus-circle pure-btn"></i>
+                       
                     </div>
                     <br>
+                    
 
                 </fieldset>
                 <fieldset class="pure-group key-div">
                     <div class="w100 flex" id="key-cont">
                         <input type="text" class="pure-input-1-2 pKey" name="paperKeywords" placeholder="Keyword"><br>
                         <i class="add-key fa fa-plus-circle pure-btn"></i>
-
                     </div>
                     <br>
                 </fieldset>

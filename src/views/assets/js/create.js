@@ -31,9 +31,11 @@
 
 	 	var submit = document.getElementById('db-add');
 	 	var add_key = document.getElementsByClassName('add-key')[0];
+	 	var add_author = document.getElementsByClassName("add-auth")[0];
 	 	submit.addEventListener('click', create );
 	 	add_key.addEventListener('click', addKey);
-
+	 	add_author.addEventListener('click', addAuthor);
+	 	genAuthors();
 	 	console.log("added Event add auth");
 	}
 
@@ -51,9 +53,30 @@
 				  id: users[i].users_id
 				}
 			);
-		}	
+		}
+
 		//Split here into sep methods
-	return authArr;
+		for(i= 0; i<numUsers; i++){
+			$("#pAuthor").append("<option id='author-"+authArr[i].id+"'value='"+authArr[i].id+"'>"+authArr[i].name+"</option>");
+		}
+		return authArr;
+	}
+
+	function addAuthor(evt){
+		var val = $("#pAuthor").val();
+		var remove_id = "remove-auth-" + val;
+		$(".auth-cont").append('<p id="'+remove_id+'"class="btn-success pure-button added-author"><span class="m-author" data-val="'+val+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
+		$("#author-"+val).remove();
+		$("#"+remove_id).click(removeAuthor);
+		console.log(val);
+	}
+
+	function removeAuthor(evt){
+		var remove = $(this).find(':first-child');
+		var id     = remove.attr("id");
+		var name   = remove.text();
+		$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
+		this.remove();
 	}
 
 	function addKey(evt){
@@ -85,12 +108,19 @@
 	 		m_token = localStorage.getItem("token");
 	 	}
 	 	var keywords = [];
+	 	var authors  = [];
 	 	for(var k = 0; k<document.getElementsByClassName("pKey").length;k++){
 	 		var val = document.getElementsByClassName("pKey")[k].value;
 	 		console.log(val);
 	 		keywords.push( val );
 	 	}
-	 	console.log(keywords);
+
+	 	for(var a = 0; a<document.getElementsByClassName("m-author").length;a++){
+	 		val = document.getElementsByClassName("m-author")[a].dataset.val;
+	 		console.log("value of auhor is: " + val);
+	 		authors.push( val );
+	 	}
+	 	console.log(authors);
 
 		// var m_title     = "a title";//valueOf("m-title");
 		// var m_abstract  = "asmnfjf";//valueOf("m-abstract");
@@ -102,7 +132,7 @@
 	 			abstract: valueOf("m-abstract"),
 	 			citation: valueOf("m-citation"),
 	 			keywords: keywords,
-	 			authors:  ["2", "3"],
+	 			authors:  authors,
 	 			token:    m_token
 	 		};
 
