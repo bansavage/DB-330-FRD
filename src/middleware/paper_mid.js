@@ -334,6 +334,10 @@ function Paper(){
 
   this.deleteAuthor = function(obj, callback){
     deleteAuthorFunction(obj, callback, '');
+  },
+
+  this.addAuthors = function(obj, callback){
+    addAuthorsFunction(obj, callback, '', {});
   }
 }
 
@@ -508,6 +512,69 @@ var deletePaperFunction = function(obj, callback, err){
     }
   });
 }
+
+//Creates the papers users map
+// Obj contains users_id, existing authors ids, and keyword ids, papers_id
+// Called by createPapersUsersMap and this
+var addAuthorsFunction = function(obj, callback, err, result){
+    if (err) {throw err;}
+    if (obj.authors.length <= 0) {
+      callback('Authors does not exist', result);
+    }else{
+
+      //Populate result if nothing is there
+      if (!result){
+        result = {};
+      }
+      //Sets affectedRows to 0 if nothing is there
+      if (!result.affectedRows){
+        result.affectedRows = 0;
+      }
+      //Sets preResult to distinquise from result
+      var preResult = result;
+
+      //Always taking from index 0;
+      author = obj.authors[0];
+      db.getConnection(function(err, connection) {
+        try{
+          if (obj.authors !== undefined){
+
+            if (obj.papers_id !== undefined && author !== undefined){
+              var sql = `insert ${config.db.database}.papers_users_map
+                        (papers_fk, users_fk)
+                        values (?,?)`;
+              sql = mysql.format(sql, [obj.papers_id, author]);
+            }else{
+              throw new Error('No papers_id or authors_id provided');
+            }
+          }
+          connection.query(sql, function(err, result2) {
+            try{
+              if (err) {throw err;}
+              //Remove keyword from array at index 0
+              console.log(result2);
+              result2.affectedRows += preResult.affectedRows;
+
+              obj.authors.splice(0, 1);
+              if (obj.authors.length <= 0){
+                callback('', result2);
+              }else{
+                addAuthorsFunction(obj, callback, '', result2);
+              }
+
+              connection.release();
+            }catch (err){
+              console.log(err);
+              connection.release();
+              callback('', result2);
+            }
+          });
+        }catch(err){
+            console.log(err);
+        }
+      });
+    }
+};
 
 //Deletes given author from given paper
 var deleteAuthorFunction = function(obj, callback, err){

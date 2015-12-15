@@ -118,7 +118,7 @@ app.post('/api/papers/delete', function(req, res){
 app.use('/api/papers/authers/delete', authorize);
 app.use('/api/papers/authers/delete', paper_mid.hasPermission);
 
-//Strictly deletes just a author from a given paper
+//Strictly deletes just an author from a given paper
 app.post('/api/papers/authors/delete', function(req, res){
   var data = {
     papers_id : req.body.papers_id,
@@ -134,6 +134,26 @@ app.post('/api/papers/authors/delete', function(req, res){
         res.status(404).send({message : 'Author Does Not Exist'});
     }else{
       res.status(200).send({message : `Author was Deleted Successfully`});
+    }
+  });
+});
+
+//Strictly adds just the authors from a given paper
+app.post('/api/papers/authors/add', function(req, res){
+  var data = {
+    papers_id : req.body.papers_id,
+    users_id : req.body.userId,
+    authors : req.body.authors // Equals a list of authors_id
+  }
+
+  paper_mid.addAuthors(data, function(err, result){
+    if (err){
+        console.log(err);
+        res.status(401).send({message : 'Adding Authors Failed'});
+    }else if(result.affectedRows >= 0){
+        res.status(200).send({message : `${result.affectedRows} Authors were Added Successfully`});
+    }else{
+      res.status(404).send({message : `No Authors Were Added`});
     }
   });
 });
@@ -358,6 +378,7 @@ app.get('/papers', authorize, function(req, res){
                   }else{
                     paper2.authors = authors;
                     if (index2 >= arr2.length-1){
+                      console.log(paper2.authors);
                       if (!papers.authors){
                         papers.authors = [];
                       }
@@ -575,9 +596,32 @@ app.get('/api/papers/', authorize, function(req, res){
           }else{
             paper.keywords = keywords;
             if (index >= arr.length-1){
-              res.json({
-               papers : papers
-             });
+              // Gets authors
+              papers.forEach(function(paper2, index2, arr2){
+                paper_mid.getAuthors(paper2, function(err, authors){
+                  if (err){
+                    console.log(err);
+                    res.status(401).send({message: 'Paper Keywords Error'});
+                  }else{
+                    paper2.authors = authors;
+                    if (index2 >= arr2.length-1){
+                      console.log(paper2.authors);
+                      if (!papers.authors){
+                        papers.authors = [];
+                      }
+                      if (!papers.keywords){
+                        papers.keywords = [];
+                      }
+                      res.json({
+                       papers : papers
+                       //test : 'helloworld'
+                      });
+                    }else{
+                      index2 += 1;
+                    }
+                  }
+                });
+              });
             }else{
               index += 1;
             }
