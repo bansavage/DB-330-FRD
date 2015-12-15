@@ -144,6 +144,11 @@ function Paper(){
       obj.authors = [];
     }
 
+    //Makes sure authors exists
+    if (!obj.keywords){
+      obj.keywords = [];
+    }
+
     //Checks wheather the users_id is already an author, else add it
     if (!obj.authors.indexOf(obj.users_id) > -1){
       obj.authors.push(obj.users_id); // Adds the users_id as an author
