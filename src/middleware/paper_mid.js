@@ -179,7 +179,15 @@ function Paper(){
     }
     obj.papers_id = data.papers_id;
 
-    console.log("BEEP");
+    //Makes sure authors exists
+    if (!obj.authors){
+      obj.authors = [];
+    }
+
+    //Checks wheather the users_id is already an author, else add it
+    if (!obj.authors.indexOf(obj.users_id) > -1){
+      obj.authors.push(obj.users_id); // Adds the users_id as an author
+    }
 
     db.getConnection(function(err, connection) {
       try{
@@ -200,12 +208,10 @@ function Paper(){
         }else{
           throw new Error('No paper id provided');
         }
-        console.log("BEEP");
         connection.query(sql, data, function(err, result) {
           try{
             if (err) {throw err;}
             //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
-            console.log("BEEP");
             createPapersUsersMap(obj, callback, '');
 
             connection.release();
@@ -359,37 +365,50 @@ function Paper(){
   }
 }
 
-//Creates the papers users map
-// Obj contains users_id, existing authors ids, and keyword ids
+//Creates the papers users map, adds authors to a paper
+// Addeds authors to a given paper, needs the following
+// Obj contains users_id, existing list of authors ids, and keyword ids
 // Called by createPapers
+// {
+//   authors : {
+//     users_id
+//   }
+//   papers_id
+// }
 var createPapersUsersMap = function(obj, callback, err){
   try{
     if (err){throw err;}
+    if (obj.authors.length <= 0) {throw 'Authors do not exist';}
   }catch(err){
     console.log(err);
     callback(err, '');
   }
-  console.log("BEEP");
+
+  // Should always be one author or should err above
+  author = obj.authors[0];
+
   db.getConnection(function(err, connection) {
     try{
       if (err) {throw err;}
       // Use the connection
-      if (obj.papers_id !== undefined && obj.users_id !== undefined){
+      if (obj.papers_id !== undefined && author !== undefined){
         var sql = `insert into ${config.db.database}.papers_users_map set ?`;
         var post = {
           papers_fk : obj.papers_id,
-          users_fk : obj.users_id
+          users_fk : author
         }
       }else{
         throw new Error('No paper or user id provided');
       }
-      console.log("BEEP");
       connection.query(sql, post, function(err, result2) {
         try{
           if (err) {throw err;}
           //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
-          console.log("BEEP");
-          if (obj.keywords !== undefined){
+          obj.authors.splice(0, 1);
+
+          if (obj.authors.length > 0){
+            createPapersUsersMap(obj, callback, err)
+          }else if (obj.keywords.length > 0){
             addKeywords(obj, callback, '');
           }else{
             callback('', result2);
@@ -399,7 +418,9 @@ var createPapersUsersMap = function(obj, callback, err){
         }catch (err){
           console.log(err);
           connection.release();
-          if (obj.keywords !== undefined){
+          if (obj.authors.length > 0){
+            createPapersUsersMap(obj, callback, err)
+          }else if (obj.keywords.length > 0){
             addKeywords(obj, callback, '');
           }else{
             callback('', result2);
@@ -426,7 +447,6 @@ var addKeywords = function(obj, callback, err){
 
   //Always taking from index 0;
   keyword = obj.keywords[0];
-  console.log("Keywords-------");
   db.getConnection(function(err, connection) {
     try{
       if (obj.keywords !== undefined){
@@ -436,75 +456,19 @@ var addKeywords = function(obj, callback, err){
                     (searchable_keywords_id, papers_fk, searchable_keyword)
                     values (?,?,?)`;
           sql = mysql.format(sql, [uuid.v1(), obj.papers_id, keyword]);
-          console.log(sql);
         }else{
           throw new Error('No paper id provided');
         }
       }
-      console.log("BEEP");
       connection.query(sql, function(err, result2) {
         try{
           if (err) {throw err;}
           //Remove keyword from array at index 0
           obj.keywords.splice(0, 1);
-          console.log("BEEP");
           if (obj.keywords.length <= 0){
             callback('', result2);
           }else{
             addKeywords(obj, callback, '');
-          }
-
-          connection.release();
-        }catch (err){
-          console.log(err);
-          connection.release();
-          callback('', result2);
-        }
-      });
-    }catch(err){
-        console.log(err);
-    }
-  });
-};
-
-
-var addAuthors = function(obj, data, callback, err){
-  try{
-    if (err) {throw err;}
-    if (obj.keywords == undefined) {throw 'Keywords does not exist';}
-  }catch(err){
-    console.log(err);
-    callback(err, '');
-  }
-
-  //Always taking from index 0;
-  keyword = obj.keywords[0];
-  console.log("Keywords-------");
-  db.getConnection(function(err, connection) {
-    try{
-      if (obj.keywords !== undefined){
-
-        if (data.papers_id !== undefined){
-          var sql = `insert ${config.db.database}.searchable_keywords
-                    (searchable_keywords_id, papers_fk, searchable_keyword)
-                    values (?,?,?)`;
-          sql = mysql.format(sql, [uuid.v1(), data.papers_id, keyword]);
-          console.log(sql);
-        }else{
-          throw new Error('No paper id provided');
-        }
-      }
-      console.log("BEEP");
-      connection.query(sql, function(err, result2) {
-        try{
-          if (err) {throw err;}
-          //Remove keyword from array at index 0
-          obj.keywords.splice(0, 1);
-          console.log("BEEP");
-          if (obj.keywords.length <= 0){
-            callback('', result2);
-          }else{
-            addKeywords(obj, data, callback, '');
           }
 
           connection.release();
