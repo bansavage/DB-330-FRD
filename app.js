@@ -86,8 +86,10 @@ app.get('/login', function(req, res){
   });
 });
 
+app.use('/papers/editform', authorize);
+app.use('/papers/editform', paper_mid.hasPermission);
 //Renders the delete papers page
-app.get('/papers/delete', authorize, function(req, res){
+app.get('/papers/delete', function(req, res){
   res.render('delete');
 });
 
@@ -199,8 +201,10 @@ app.post('/api/papers/keywords/add', function(req, res){
   });
 });
 
+app.use('/papers/edit', authorize);
+app.use('/papers/edit', paper_mid.hasPermission);
 // Renders the edit papers page
-app.get('/papers/edit', authorize, function(req, res){
+app.get('/papers/edit', function(req, res){
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
     if (err){
       console.log(err);
@@ -251,7 +255,10 @@ app.get('/papers/edit', authorize, function(req, res){
   });
 });
 
-app.get('/papers/editform', authorize, function(req, res){
+app.use('/papers/editform', authorize);
+app.use('/papers/editform', paper_mid.hasPermission);
+
+app.get('/papers/editform', function(req, res){
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
     if (err){
       console.log(err);
@@ -324,6 +331,9 @@ app.post('/api/papers/editform', function(req, res){
 
 
 //Renders the create papers page
+app.use('/papers/create', authorize);
+app.use('/papers/create', paper_mid.hasCreationPermission);
+
 app.get('/papers/create', function(req, res){
   res.render('add');
 });
