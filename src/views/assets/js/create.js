@@ -1,7 +1,34 @@
 (function(){
 
+	function getAuthors(){
+		
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+		$.ajax({
+	 		url: `/api/users/all?token=${m_token}`,
+	 		type: "GET",
+	 		success : function(data, textStatus, jqXHR){
+
+	 			console.log(data);
+	 			return data;
+	 			
+	 			if (status > 400){
+			        console.log("Failed");
+			   		window.location.href = `/controlpanel/?token=${m_token}`;
+				}
+			}
+	    });
+	}
 
 	function init(){
+
+		var authors = getAuthors();
+
+		console.log(authors);
+
 	 	var submit = document.getElementById('db-add');
 	 	submit.addEventListener('click', create );
 
@@ -9,7 +36,8 @@
 	 		function(){
 	 			var addBtn = $("#add-auth").clone();
 				//$("#add-auth").remove();
-				$(".pAuth:last-child").clone().appendTo("auth-div");
+				$("br").After(".auth-div:last-child");
+				$(".auth-div:last-child").clone().appendTo(".auth-div");
 				$(".pAuth:last-child").value="";
 				$(".pAuth:last-child").placeholder="Author";
 				console.log("auth clicked");
@@ -39,11 +67,11 @@
 		// var m_keywords  = ["1", "2"];
 		// var m_authors   = ["2", "3"];
 		var data = {
-	 			title:    "m_title",
-	 			abstract: "m_abstract",
-	 			citation: "m_citations",
-	 			keywords: [],
-	 			authors:  [],
+	 			title:    valueOf("m-title"),
+	 			abstract: valueOf("m-abstract"),
+	 			citation: valueOf("m-citation"),
+	 			keywords: ["dfg", "plz", "HELLLO"],
+	 			authors:  ["2", "3"],
 	 			token:    m_token
 	 		};
 	    /*for(var i = 0; i<10; i++){
@@ -53,7 +81,8 @@
 	 	$.ajax({
 	 		url: "/api/papers/create",
 	 		type: "POST",
-	 		data: data,
+	 		data: JSON.stringify(data),
+	 		contentType: "application/json",
 	 		success : function(data, textStatus, jqXHR){
 	 			console.log(data);
 	 			swal("Paper Created!", "Paper has been created successfully", "success")
