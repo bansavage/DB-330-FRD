@@ -322,6 +322,10 @@ function Paper(){
   //Deletes a paper with a given papers_id and users_id
   this.deletePaper = function(obj, callback){
     deletePapersSearchKeywords(obj, callback); // Will delete everything associated with the paper
+  },
+
+  this.deleteStrictlyKeywords = function(obj, callback){
+    deleteStrictlyKeywordsPrivate(obj, callback, {});
   }
 }
 
@@ -558,5 +562,77 @@ var deletePapersUsersMap = function(obj, callback, err){
     }
   });
 };
+
+// Deletes keywords from papers
+var deleteStrictlyKeywordsPrivate = function(obj, callback, result){
+  db.getConnection(function(err, connection) {
+    try{
+      if (err) {throw err;}
+      if (obj.keywords.length <= 0) {
+        console.log('Keywords do not exist');
+        callback('Keywords do not exist', []);
+      }else{
+
+        //Populate result if nothing is there
+        if (!result){
+          result = {};
+        }
+        //Sets affectedRows to 0 if nothing is there
+        if (!result.affectedRows){
+          result.affectedRows = 0;
+        }
+        //Sets preResult to distinquise from result
+        var preResult = result;
+
+        var keyword = obj.keywords[0];
+
+        if (obj.papers_id !== undefined && obj.keywords !== undefined){
+          var sql = `delete from ${config.db.database}.searchable_keywords
+                      where searchable_keywords.searchable_keyword = ?
+                      && searchable_keywords.papers_fk = ?`;
+          var inserts = [keyword, obj.papers_id];
+          sql = mysql.format(sql, inserts);
+        }else{
+          throw new Error('No paper or user id provided');
+        }
+
+        connection.query(sql, function(err, result) {
+          try{
+            if (err) {throw err;}
+
+            obj.keywords.splice(0, 1); // Removes the first index keyword
+
+            result.affectedRows += preResult.affectedRows; // Creates sum of affected rows
+
+            if (obj.keywords.length > 0){
+              deleteStrictlyKeywordsPrivate(obj, callback, result);
+            }else{
+              callback('', result);
+            }
+            connection.release();
+          }catch (err){
+            console.log(err);
+            connection.release();
+            callback(err, result);
+          }
+        });
+      }
+    }catch(err){
+        console.log(err);
+    }
+  });
+};
+
+//Strictly deletes just the keywords from a given paper
+// list of keyword ids
+// and a paper_i
+// {
+//   papers_id,
+//   keywords = [
+//     "exampleID",
+//     "exampleID2"
+//   ]
+// }
+
 
 module.exports = new Paper();

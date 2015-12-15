@@ -114,6 +114,31 @@ app.post('/api/papers/delete', function(req, res){
   });
 });
 
+
+app.use('/api/papers/keywords', authorize);
+app.use('/api/papers/keywords', paper_mid.hasPermission);
+
+//Strictly deletes just the keywords from a given paper
+app.post('/api/papers/keywords', function(req, res){
+  var data = {
+    papers_id : req.body.papers_id,
+    users_id : req.body.userId,
+    keywords : req.body.keywords
+  }
+
+
+  paper_mid.deleteStrictlyKeywords(data, function(err, result){
+    if (err){
+        console.log(err);
+        res.status(401).send({message : 'Keywords Deletions Failed'});
+    }else if(result.affectedRows <= 0){
+        res.status(404).send({message : 'One or More Keywords Does Not Exist'});
+    }else{
+      res.status(200).send({message : `${result.affectedRows} Keywords were Deletions Successful`});
+    }
+  });
+});
+
 // Renders the edit papers page
 app.get('/papers/edit', authorize, function(req, res){
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
