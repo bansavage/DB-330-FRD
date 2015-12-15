@@ -83,6 +83,8 @@ insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('3', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('4', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('5', '2');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('6', '2');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('7', '2');
+insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('8', '2');
 
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('7', '3');
 insert into PAPERS_USERS_MAP (papers_fk, users_fk) value ('8', '3');

@@ -115,8 +115,28 @@ app.post('/api/papers/delete', function(req, res){
 });
 
 
-app.use('/api/papers/keywords', authorize);
-app.use('/api/papers/keywords', paper_mid.hasPermission);
+app.use('/api/papers/authers/delete', authorize);
+app.use('/api/papers/authers/delete', paper_mid.hasPermission);
+
+//Strictly deletes just a author from a given paper
+app.post('/api/papers/authors/delete', function(req, res){
+  var data = {
+    papers_id : req.body.papers_id,
+    users_id : req.body.userId,
+    authors_id : req.body.authors_id
+  }
+
+  paper_mid.deleteAuthor(data, function(err, result){
+    if (err){
+        console.log(err);
+        res.status(401).send({message : 'Author Deletion Failed'});
+    }else if(result.affectedRows <= 0){
+        res.status(404).send({message : 'Author Does Not Exist'});
+    }else{
+      res.status(200).send({message : `Author was Deleted Successfully`});
+    }
+  });
+});
 
 //Strictly deletes just the keywords from a given paper
 app.post('/api/papers/keywords/delete', function(req, res){

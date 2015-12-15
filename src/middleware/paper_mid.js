@@ -330,6 +330,10 @@ function Paper(){
 
   this.addKeywords = function(obj, callback){
     addKeywordsFunction(obj, callback, '', {});
+  },
+
+  this.deleteAuthor = function(obj, callback){
+    deleteAuthorFunction(obj, callback, '');
   }
 }
 
@@ -490,6 +494,45 @@ var deletePaperFunction = function(obj, callback, err){
         try{
           if (err) {throw err;}
           //if (data == undefined) {throw new Error('No row data');} // Indicates there is at least one keyword
+          callback('', result2);
+
+          connection.release();
+        }catch (err){
+          console.log(err);
+          connection.release();
+          callback(err, '');
+        }
+      });
+    }catch(err){
+        console.log(err);
+    }
+  });
+}
+
+//Deletes given author from given paper
+var deleteAuthorFunction = function(obj, callback, err){
+  try{
+    if (err){throw err;}
+  }catch(err){
+    console.log(err);
+    callback(err, '');
+  }
+  db.getConnection(function(err, connection, err) {
+    try{
+      if (err) {throw err;}
+
+      if (obj.papers_id !== undefined && obj.authors_id !== undefined){
+        var sql = `delete from ${config.db.database}.papers_users_map
+                  where ?? = ? && ?? = ?`;
+        var inserts = ['papers_fk', obj.papers_id, 'users_fk', obj.authors_id];
+        sql = mysql.format(sql, inserts);
+      }else{
+        throw new Error('No papers_id or authors_id provided');
+      }
+
+      connection.query(sql, function(err, result2) {
+        try{
+          if (err) {throw err;}
           callback('', result2);
 
           connection.release();
