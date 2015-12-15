@@ -310,11 +310,11 @@ app.get('/papers/editform', function(req, res){
 });
 
 //Middleware for editing papers
-app.use('/api/papers/editform', authorize);
-app.use('/api/papers/editform', paper_mid.hasPermission);
+app.use('/api/papers/edit', authorize);
+app.use('/api/papers/edit', paper_mid.hasPermission);
 // Edits a paper, requires a paper object with the updated parameters
 // The request just needs an object with a papers_id inside, as well as a jwt token.
-app.post('/api/papers/editform', function(req, res){
+app.post('/api/papers/edit', function(req, res){
   var paperData = req.body;
   paperData.users_id = req.body.userId;
 
