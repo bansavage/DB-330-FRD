@@ -46,7 +46,7 @@ insert into searchable_keywords values ('17', '16','chemistry');
 insert into searchable_keywords values ('18', '17','chemistry');
 insert into searchable_keywords values ('19', '15','chem');
 insert into searchable_keywords values ('20', '16','chem');
-insert into searchable_keywords values ('21', '17','chem,');
+insert into searchable_keywords values ('21', '17','chem');
 
 insert into searchable_keywords values ('22', '18','environment');
 insert into searchable_keywords values ('23', '19','comm');
