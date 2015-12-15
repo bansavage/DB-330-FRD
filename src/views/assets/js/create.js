@@ -1,6 +1,7 @@
 (function(){
 
-	//WEIRD STUFF GOIN ONS
+	//WEIRD STUFF GOIN ONS/*
+	/*
 	function getAuthors(){
 		
 		var m_token ="";
@@ -24,7 +25,7 @@
 	    });
 	}
 
-
+*/
 
 	function init(){
 
@@ -48,18 +49,14 @@
 			authArr.push({
 				name: users[i].fName + " " + users[i].lName,
 				  id: users[i].users_id
-			}
-		);
+				}
+			);
+		}	
 		//Split here into sep methods
-		
-}
-return authArr;
+	return authArr;
 	}
 
 	function addKey(evt){
-		
-		genAuthors();
-
 		
 		var num = document.getElementsByClassName("add-key").length;
 		console.log(num);
