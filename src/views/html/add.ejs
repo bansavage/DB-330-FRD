@@ -31,10 +31,26 @@
             .w100{
                 width: 100%;
             }
+            .flex{
+                display: flex;
+            }
+            .pure-btn{
+                padding: .6em .8em .4em .8em;
+                color: green;
+            }
+            .pure-btn:hover{
+                cursor: pointer;
+            }
+            .fa{
+                font-size: 1.6em!important;
+            }
+
         </style>
     <!--<![endif]-->
+
     <link rel="stylesheet" href="../assets/lib/SA-Alert/dist/sweetalert.css">
         <script src="../assets/lib/SA-Alert/dist/sweetalert.min.js"></script>
+
 
 </head>
 <body>
@@ -81,14 +97,20 @@
                 </fieldset>
 
                 <fieldset class="pure-group">
-                    <input type="text" class="pure-input-1" name="paperAuthors" placeholder="Authors">
+                    <div class="w100 flex" id="auth-div">
+                        <input type="text" class="pure-input-1-2 pAuth" name="paperAuthors" placeholder="Author">
+                        <i id="add-auth" class="fa fa-plus-circle pure-btn"></i>
+                    </div>
                     <br>
-                    <input type="password" class="pure-input-1"  name="paperKeywords"placeholder="Keywords">
+                    <div class="w100 flex" id="key-div">
+                        <input type="text" class="pure-input-1-2 pKey" name="paperKeywords" placeholder="Keyword">
+                        <i id="add-key" class="fa fa-plus-circle pure-btn"></i>
+                    </div>
                 </fieldset>
 
 
                  <a href="../controlpanel" class="button-choose pure-button">Back</a>
-                 <button id="db-add" class="button-choose pure-button button-add">Add</button>
+                 <input type="button" id="db-add" class="button-choose pure-button button-add" value="Add">
 
                 </form>
         </div>
@@ -103,6 +125,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../assets/js/create.js"></script>
 <script src="../assets/js/startPages.js"></script>
 </body>
 </html>
