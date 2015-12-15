@@ -274,6 +274,7 @@ function Paper(){
               console.log(err);
               res.status(404).send({message: 'Paper lookup error'});
             }else{
+              console.log(papers);
               papers.forEach(function(paper, index, arr){
                 if (paper.papers_id == papers_id){
                   next(); // User has access to the paper

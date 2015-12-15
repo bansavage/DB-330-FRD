@@ -590,7 +590,10 @@ app.get('/api/users/all/', authorize, function(req, res){
 
 //This provides the paper information based on the user id in the jwt token.
 //Give back all papers associated with the given user
-app.get('/api/papers/', authorize, function(req, res){
+
+app.use('/api/papers', authorize);
+
+app.get('/api/papers/', function(req, res){
 
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
     if (err){
