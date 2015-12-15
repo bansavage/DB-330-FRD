@@ -73,9 +73,11 @@
                 <h2>Add Paper</h2>
 
                 <fieldset class="pure-group">
-                    <input type="text" class="pure-input-1" name="paperTitle" placeholder="Title">
+                    <input id="m-title" type="text" class="pure-input-1" name="paperTitle" placeholder="Title">
                     <br>
-                    <textarea class="pure-input-1 desc" name="paperDescription" placeholder="Description"></textarea>
+                    <textarea id="m-abstract" class="pure-input-1 desc" name="paperDescription" placeholder="Description"></textarea>
+                    <br>
+                    <textarea id="m-citation" class="pure-input-1 desc" name="paperCitations" placeholder="Citations"></textarea>
                 </fieldset>
 
                 <fieldset class="pure-group">
@@ -86,7 +88,7 @@
 
 
                  <a href="../controlpanel" class="button-choose pure-button">Back</a>
-                 <button class="button-choose pure-button button-add">Add</button>
+                 <button id="db-add" class="button-choose pure-button button-add">Add</button>
 
                 </form>
         </div>
