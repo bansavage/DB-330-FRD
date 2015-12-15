@@ -405,65 +405,63 @@ var createPapersUsersMap = function(obj, callback, err){
 // Obj contains users_id, existing authors ids, and keyword ids, papers_id
 // Called by createPapersUsersMap and this
 var addKeywordsFunction = function(obj, callback, err, result){
-  try{
     if (err) {throw err;}
-    if (obj.keywords == undefined) {throw 'Keywords does not exist';}
-  }catch(err){
-    console.log(err);
-    callback(err, '');
-  }
+    if (obj.keywords.length <= 0) {
+      callback('Keywords does not exist', result);
+    }else{
 
-  //Populate result if nothing is there
-  if (!result){
-    result = {};
-  }
-  //Sets affectedRows to 0 if nothing is there
-  if (!result.affectedRows){
-    result.affectedRows = 0;
-  }
-  //Sets preResult to distinquise from result
-  var preResult = result;
-
-  //Always taking from index 0;
-  keyword = obj.keywords[0];
-  db.getConnection(function(err, connection) {
-    try{
-      if (obj.keywords !== undefined){
-
-        if (obj.papers_id !== undefined){
-          var sql = `insert ${config.db.database}.searchable_keywords
-                    (searchable_keywords_id, papers_fk, searchable_keyword)
-                    values (?,?,?)`;
-          sql = mysql.format(sql, [uuid.v1(), obj.papers_id, keyword]);
-        }else{
-          throw new Error('No paper id provided');
-        }
+      //Populate result if nothing is there
+      if (!result){
+        result = {};
       }
-      connection.query(sql, function(err, result2) {
+      //Sets affectedRows to 0 if nothing is there
+      if (!result.affectedRows){
+        result.affectedRows = 0;
+      }
+      //Sets preResult to distinquise from result
+      var preResult = result;
+
+      //Always taking from index 0;
+      keyword = obj.keywords[0];
+      db.getConnection(function(err, connection) {
         try{
-          if (err) {throw err;}
-          //Remove keyword from array at index 0
+          if (obj.keywords !== undefined){
 
-          result2.affectedRows += preResult.affectedRows;
-
-          obj.keywords.splice(0, 1);
-          if (obj.keywords.length <= 0){
-            callback('', result2);
-          }else{
-            addKeywordsFunction(obj, callback, '', result2);
+            if (obj.papers_id !== undefined){
+              var sql = `insert ${config.db.database}.searchable_keywords
+                        (searchable_keywords_id, papers_fk, searchable_keyword)
+                        values (?,?,?)`;
+              sql = mysql.format(sql, [uuid.v1(), obj.papers_id, keyword]);
+            }else{
+              throw new Error('No paper id provided');
+            }
           }
+          connection.query(sql, function(err, result2) {
+            try{
+              if (err) {throw err;}
+              //Remove keyword from array at index 0
 
-          connection.release();
-        }catch (err){
-          console.log(err);
-          connection.release();
-          callback('', result2);
+              result2.affectedRows += preResult.affectedRows;
+
+              obj.keywords.splice(0, 1);
+              if (obj.keywords.length <= 0){
+                callback('', result2);
+              }else{
+                addKeywordsFunction(obj, callback, '', result2);
+              }
+
+              connection.release();
+            }catch (err){
+              console.log(err);
+              connection.release();
+              callback('', result2);
+            }
+          });
+        }catch(err){
+            console.log(err);
         }
       });
-    }catch(err){
-        console.log(err);
     }
-  });
 };
 
 
