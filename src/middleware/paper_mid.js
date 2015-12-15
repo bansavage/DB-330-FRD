@@ -326,6 +326,10 @@ function Paper(){
 
   this.deleteStrictlyKeywords = function(obj, callback){
     deleteStrictlyKeywordsPrivate(obj, callback, {});
+  },
+
+  this.addKeywords = function(obj, callback){
+    addKeywordsFunction(obj, callback, '', {});
   }
 }
 
@@ -373,7 +377,7 @@ var createPapersUsersMap = function(obj, callback, err){
           if (obj.authors.length > 0){
             createPapersUsersMap(obj, callback, err)
           }else if (obj.keywords.length > 0){
-            addKeywords(obj, callback, '');
+            addKeywordsFunction(obj, callback, '', result2);
           }else{
             callback('', result2);
           }
@@ -385,7 +389,7 @@ var createPapersUsersMap = function(obj, callback, err){
           if (obj.authors.length > 0){
             createPapersUsersMap(obj, callback, err)
           }else if (obj.keywords.length > 0){
-            addKeywords(obj, callback, '');
+            addKeywordsFunction(obj, callback, '', result2);
           }else{
             callback('', result2);
           }
@@ -400,7 +404,7 @@ var createPapersUsersMap = function(obj, callback, err){
 //Creates the papers users map
 // Obj contains users_id, existing authors ids, and keyword ids, papers_id
 // Called by createPapersUsersMap and this
-var addKeywords = function(obj, callback, err){
+var addKeywordsFunction = function(obj, callback, err, result){
   try{
     if (err) {throw err;}
     if (obj.keywords == undefined) {throw 'Keywords does not exist';}
@@ -408,6 +412,17 @@ var addKeywords = function(obj, callback, err){
     console.log(err);
     callback(err, '');
   }
+
+  //Populate result if nothing is there
+  if (!result){
+    result = {};
+  }
+  //Sets affectedRows to 0 if nothing is there
+  if (!result.affectedRows){
+    result.affectedRows = 0;
+  }
+  //Sets preResult to distinquise from result
+  var preResult = result;
 
   //Always taking from index 0;
   keyword = obj.keywords[0];
@@ -428,11 +443,14 @@ var addKeywords = function(obj, callback, err){
         try{
           if (err) {throw err;}
           //Remove keyword from array at index 0
+
+          result2.affectedRows += preResult.affectedRows;
+
           obj.keywords.splice(0, 1);
           if (obj.keywords.length <= 0){
             callback('', result2);
           }else{
-            addKeywords(obj, callback, '');
+            addKeywordsFunction(obj, callback, '', result2);
           }
 
           connection.release();

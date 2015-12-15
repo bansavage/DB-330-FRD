@@ -119,7 +119,7 @@ app.use('/api/papers/keywords', authorize);
 app.use('/api/papers/keywords', paper_mid.hasPermission);
 
 //Strictly deletes just the keywords from a given paper
-app.post('/api/papers/keywords', function(req, res){
+app.post('/api/papers/keywords/delete', function(req, res){
   var data = {
     papers_id : req.body.papers_id,
     users_id : req.body.userId,
@@ -134,7 +134,27 @@ app.post('/api/papers/keywords', function(req, res){
     }else if(result.affectedRows <= 0){
         res.status(404).send({message : 'One or More Keywords Does Not Exist'});
     }else{
-      res.status(200).send({message : `${result.affectedRows} Keywords were Deletions Successful`});
+      res.status(200).send({message : `${result.affectedRows} Keywords were Deleted Successfully`});
+    }
+  });
+});
+
+//Strictly adds just the keywords from a given paper
+app.post('/api/papers/keywords/add', function(req, res){
+  var data = {
+    papers_id : req.body.papers_id,
+    users_id : req.body.userId,
+    keywords : req.body.keywords
+  }
+
+  paper_mid.addKeywords(data, function(err, result){
+    if (err){
+        console.log(err);
+        res.status(401).send({message : 'Adding Keywords Failed'});
+    }else if(result.affectedRows >= 0){
+        res.status(200).send({message : `${result.affectedRows} Keywords were Added Successfully`});
+    }else{
+      res.status(404).send({message : `No Keywords Were Added`});
     }
   });
 });
