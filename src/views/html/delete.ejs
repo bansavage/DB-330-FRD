@@ -2,61 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Paper </title>
-    <link rel="stylesheet" href="../assets/css/normalize.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="../lib/TextInputEffects/css/set2.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A layout example that shows off a responsive control table.">
+
+    <title>Delete Paper</title>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+
+<!--[if lte IE 8]>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
+
+<![endif]-->
+<!--[if gt IE 8]><!-->
+
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
 
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
-    <![endif]-->
-    <!--[if gt IE 8]><!-->
-
-
-
-    <!--<![endif]-->
+<!--<![endif]-->
 
     <!--[if lte IE 8]>
-        <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
+        <link rel="stylesheet" href="css/layouts/control-old-ie.css">
     <![endif]-->
-
     <!--[if gt IE 8]><!-->
-
         <link rel="stylesheet" href="../assets/css/pricing.css">
-        <link rel="stylesheet" href="../assets/css/blog.css">
-
-    <!--<![endif]-->
-        <link rel="stylesheet" href="../assets/lib/SA-Alert/dist/sweetalert.css">
-        <script src="../assets/lib/SA-Alert/dist/sweetalert.min.js"></script>
+        <link rel="stylesheet" href="../assets/css/font-awesome.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <style>
-            .delete-btn:hover{
+            .w100{
+                width: 100%;
+            }
+            .flex{
+                display: flex;
+            }
+            .pure-btn{
+                padding: .6em .8em .4em .8em;
+                color: green;
+            }
+            .pure-btn:hover{
                 cursor: pointer;
             }
+            .fa{
+                font-size: 1.6em!important;
+            }
+            #pAuthor{
+                height: 52px;
+            }
+            .btn-success {
+            background: rgb(28, 184, 65); /* this is a
+            green */
+            color: white;
+            font-weight: bold;
+            margin-right: 1%;
+            margin-bttom: 1%;
+            }
+            .wrap{
+                flex-wrap: wrap;
+            }
+            .added-author{
+                width: 8em;
+            }
+            .added-author:hover{
+                color: white;
+                background: rgb(202, 60, 60); /* this is a maroon */
+            }
+            .added-author:hover span{
+                display: none!important;
+            }
+            .added-author:hover:before{
+                content: "Remove";
+            }
+            h3{
+                margin: 0 2% 2% 2%;
+            }
+
         </style>
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="../assets/lib/SA-Alert/dist/sweetalert.css">
+        <script src="../assets/lib/SA-Alert/dist/sweetalert.min.js"></script>
+
 
 </head>
 <body>
-<div class="pure-menu pure-menu-horizontal normal fixed">
+    <div class="pure-menu pure-menu-horizontal normal fixed">
         <a href="#" class="pure-menu-heading">Chrus Research</a>
         <ul class="pure-menu-list fl-right">
-            <li class="pure-menu-item"><a href="search.html" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
+            <li class="pure-menu-item"><a href="/search" class="pure-menu-link">Search  <i class="fa fa-search"></i></a></li>
 
 
             <li class="pure-menu-item  pure-menu-has-children pure-menu-allow-hover name-nav">
-                <a href="#" class="pure-menu-link ">Christopher  <i class="fa fa-user"></i></a>
+                <a href="#" id="db-menu-dropdown" class="pure-menu-link "><i class="fa fa-user"></i></a>
                 <ul class="pure-menu-children">
                     <li class="pure-menu-item">
-                        <a href="controlpanel.html" class="pure-menu-link">Control Panel <i class="fa fa-server"></i></a>
+                        <a href="../controlpanel" class="pure-menu-link">Control Panel <i class="fa fa-server"></i></a>
                     </li>
                     <li class="pure-menu-item">
-                        <a href="mypapers.html" class="pure-menu-link">My Papers</a>
+                        <a href="../papers" class="pure-menu-link">My Papers</a>
                     </li>
                     <li class="pure-menu-item">
-                        <a href="login.html" class="pure-menu-link">Logout <i class="fa fa-sign-out"></i></a>
+                        <a href="../login" class="pure-menu-link">Logout <i class="fa fa-sign-out"></i></a>
                     </li>
+
                 </ul>
             </li>
 
@@ -64,116 +110,43 @@
     </div>
 
 
-    <div class="delete-content pure-u-1 pure-u-md-3-4">
-        <a href="../controlpanel" class="button-choose pure-button delete-back-btn"><i class="fa fa-arrow-left"></i>
- Back to Control Panel</a>
-        <div>
-            <!-- A wrapper for all paper results -->
-            <div class="posts">
 
-                 <!-- A single paper -->
-                <section class="delete-post">
-                    <header class="post-header">
+<div class="l-content l-form">
+    <div class="control-tables pure-g">
+            <div class="control-table control-table-update w100">
 
+                <form method="POST" action="" class="form pure-form pure-u-1 pure-u-md-5-6">
+                <h2>Delete Papers</h2>
 
-                        <h2 class="post-title">
-                        <i class="fa fa-times delete-btn"></i>
-                        Alternative Medicine
-                        </h2>
+                <fieldset class="pure-group auth-div">
+                   <h3 style="text-align:left;">Delete Paper</h3>
+                    <div class="w100 flex wrap auth-cont pure-control-group">
 
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Eric Ferraiuolo</a> under <a class="post-category post-category-js" href="#">Health</a>
-                        </p>
-                    </header>
+                            <select id="pPapers" class="pure-input-1-2">
 
-                </section>
-                <h1 class="content-subhead"></h1>
+                            </select>
+                        <input type="button" id="db-delete" class="button-choose pure-button button-delete" value="Delete"></i>
 
-                <section class="delete-post">
-
-                    <header class="post-header">
-
-                        <h2 class="post-title">
-                        <i class="fa fa-times delete-btn"></i>
-                        Impact of Global Initiative
-                        </h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Reid Burke</a> under <a class="post-category" href="#">Uncategorized</a>
-                        </p>
-                    </header>
+                    </div>
+                    <br>
 
 
-                </section>
+                 <a href="../controlpanel" class="button-choose pure-button">Back</a>
 
-                <h1 class="content-subhead"></h1>
-                 <!-- A single paper -->
-                <section class="delete-post">
-
-                    <header class="post-header">
-
-
-                            <h2 class="post-title">
-                             <i class="fa fa-times delete-btn"></i>
-                             Simulation vs Simulacra
-                            </h2>
-
-
-                        <p class="post-meta">
-                            By <a href="#" class="post-author">Thomas Anderson</a> under <a class="post-category post-category-design" href="#">Philosophy</a> <a class="post-category post-category-pure" href="#">Psychology</a>
-                        </p>
-                    </header>
-
-                </section>
-
-
-
-            </div>
+                </form>
         </div>
-    </div>
+    </div> <!-- end control-tables -->
+
+
+</div> <!-- end l-content -->
+
+<div class="footer l-box form-footer">
+    <p>
+        <a href="#">&copy; 2015 Chrus All Rights Resevered</a>  not really    </p>
 </div>
 
-
-<script src="../lib/TextInputEffects/js/classie.js"></script>
-        <script>
-            (function() {
-                // trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
-                if (!String.prototype.trim) {
-                    (function() {
-                        // Make sure we trim BOM and NBSP
-                        var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-                        String.prototype.trim = function() {
-                            return this.replace(rtrim, '');
-                        };
-                    })();
-                }
-
-                [].slice.call( document.querySelectorAll( 'input.input__field' ) ).forEach( function( inputEl ) {
-                    // in case the input is already filled..
-                    if( inputEl.value.trim() !== '' ) {
-                        classie.add( inputEl.parentNode, 'input--filled' );
-                    }
-
-                    // events:
-                    inputEl.addEventListener( 'focus', onInputFocus );
-                    inputEl.addEventListener( 'blur', onInputBlur );
-                } );
-
-                function onInputFocus( ev ) {
-                    classie.add( ev.target.parentNode, 'input--filled' );
-                }
-
-                function onInputBlur( ev ) {
-                    if( ev.target.value.trim() === '' ) {
-                        classie.remove( ev.target.parentNode, 'input--filled' );
-                    }
-                }
-            })();
-        </script>
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="../assets/js/startPages.js"></script>
-        <script src="../assets/js/delete.js"></script>
-
-
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="../assets/js/delete.js"></script>
+<script src="../assets/js/startPages.js"></script>
 </body>
 </html>
