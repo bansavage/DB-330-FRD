@@ -3,7 +3,7 @@
 	//WEIRD STUFF GOIN ONS/*
 	/*
 	function getAuthors(){
-		
+
 		var m_token ="";
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
@@ -16,7 +16,7 @@
 
 	 			return JSON.stringify(data);
 
-	 			
+
 	 			if (status > 400){
 			        console.log("Failed");
 			   		window.location.href = `/controlpanel/?token=${m_token}`;
@@ -30,6 +30,9 @@
 	function init(){
 
 	 	var submit = document.getElementById('db-add');
+		getAuthors(function(authors){
+			console.log(authors);
+		});
 	 	var add_key = document.getElementsByClassName('add-key')[0];
 	 	var add_author = document.getElementsByClassName("add-auth")[0];
 	 	submit.addEventListener('click', create );
@@ -37,6 +40,40 @@
 	 	add_author.addEventListener('click', addAuthor);
 	 	genAuthors();
 	 	console.log("added Event add auth");
+	}
+
+	//Gives back all authors
+	//callback(authors)
+	function getAuthors(callback){
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+		$.ajax({
+	 		url: `/api/users/all/?token=${m_token}`, // /delete //  /edit-abstract  /
+	 		type: "GET",
+	 		success : function(data, textStatus, jqXHR){
+	 			console.log(data);
+	 			swal("Paper Created!", "Paper has been created successfully", "success")
+
+				if (status > 400){ //FAILED
+			        console.log("Failed to create Paper");
+			        console.log("Problem Getting Authors");
+	      }else{
+		    	console.log("Authors are here");
+					callback(data);
+	        console.log(data);
+	      }
+	      console.log(textStatus);
+	      return true;
+	    },
+	    error : function(jqXHR, textStatus, errorThrown){
+	      console.log("not success " + textStatus);
+	      console.log(data);
+				console.log("Problem Getting Authors");
+	 		}
+		});
 	}
 
 	function genAuthors(){
@@ -80,7 +117,7 @@
 	}
 
 	function addKey(evt){
-		
+
 		var num = document.getElementsByClassName("add-key").length;
 		console.log(num);
 		if( document.getElementsByClassName("pKey").length < 5){
@@ -102,7 +139,7 @@
 
 	/*Creates a paper*/
 	 function create(evt){
-		
+
 		var m_token ="";
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");

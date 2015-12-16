@@ -34,7 +34,6 @@ var Search = function(){
                       on searchable_keywords.papers_fk = papers_id
                       where ${casesStr} group by title`;
           var inserts = ['papers_id', 'title', 'abstract', 'citation'];
-          console.log(sql);
           sql = mysql.format(sql, inserts);
 
         connection.query(sql, function(err, rows) {
