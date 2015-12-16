@@ -124,7 +124,7 @@
 	 		data: JSON.stringify(data), //
 	 		contentType: "application/json",
 	 		success : function(data, textStatus, jqXHR){
-	 				if (status > 400){ //FAILED
+	 				if (status >= 400){ //FAILED
 			        console.log("Failed to delete Paper");
 			        swal({
 					  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
@@ -133,8 +133,8 @@
 					  html: true
 					});
 	      }else{
-		    console.log("etaete");
-				console.log(data);
+			    console.log("etaete");
+					console.log(data);
 
 	 				swal("Paper Deleted!", "Paper has been deleted successfully", "success")
 					$(`#paper-${current_paper_id}`).remove();

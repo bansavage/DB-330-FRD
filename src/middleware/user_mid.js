@@ -64,7 +64,9 @@ function User(){
                       inner join ${config.db.database}.papers_users_map
                       on users.users_id = papers_users_map.users_fk
                       inner join ${config.db.database}.papers
-                      on papers.papers_id = papers_users_map.papers_fk`;
+                      on papers.papers_id = papers_users_map.papers_fk
+                      group by papers.papers_id
+                      order by papers.title`;
           var inserts = ['papers_id','title','abstract','citation'];
           sql = mysql.format(sql, inserts);
         }else if (obj.users_id !== undefined){
@@ -73,7 +75,9 @@ function User(){
                       on users.users_id = papers_users_map.users_fk
                       inner join ${config.db.database}.papers
                       on papers.papers_id = papers_users_map.papers_fk
-                      where users_id = ?`;
+                      where users_id = ?
+                      group by papers.papers_id
+                      order by papers.title`;
           var inserts = ['papers_id','title','abstract','citation', obj.users_id];
           sql = mysql.format(sql, inserts);
         }else if (obj.username !== undefined){
@@ -82,7 +86,9 @@ function User(){
                       on users.users_id = papers_users_map.users_fk
                       inner join ${config.db.database}.papers
                       on papers.papers_id = papers_users_map.papers_fk
-                      where username = ?`;
+                      where username = ?
+                      group by papers.papers_id
+                      order by papers.title`;
           var inserts = ['papers_id','title','abstract','citation', obj.username];
           sql = mysql.format(sql, inserts);
         }else{
