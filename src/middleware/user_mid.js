@@ -54,7 +54,20 @@ function User(){
     db.getConnection(function(err, connection) {
       try{
         if (err) {throw err;}
-        if (obj.users_id !== undefined){
+        if (obj.permission == undefined){
+            obj.permission = "public";
+        }
+        console.log(obj.permission);
+
+        if (obj.permission == "admin"){
+          var sql = `select ??, ??, ??, ?? from ${config.db.database}.users
+                      inner join ${config.db.database}.papers_users_map
+                      on users.users_id = papers_users_map.users_fk
+                      inner join ${config.db.database}.papers
+                      on papers.papers_id = papers_users_map.papers_fk`;
+          var inserts = ['papers_id','title','abstract','citation'];
+          sql = mysql.format(sql, inserts);
+        }else if (obj.users_id !== undefined){
           var sql = `select ??, ??, ??, ?? from ${config.db.database}.users
                       inner join ${config.db.database}.papers_users_map
                       on users.users_id = papers_users_map.users_fk
@@ -110,7 +123,7 @@ function User(){
         var sql = `SELECT ??,??,?? FROM ${config.db.database}.users`;
         var inserts = ['users_id','fName','lName'];
         sql = mysql.format(sql, inserts);
-        
+
         connection.query(sql, function(err, rows) {
           try{
             if (err) {throw err;}

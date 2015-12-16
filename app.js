@@ -365,7 +365,13 @@ app.post('/api/papers/create', function(req, res){
 
 //Renders the mypapers page
 app.get('/papers', authorize, function(req, res){
-  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
+
+  var data = {
+    users_id : req.body.userId,
+    permission : req.body.permission
+  }
+
+  user_mid.getPapers(data, function(err, papers){
     if (err){
       console.log(err);
       res.status(401).send({message: 'Invalid Request'});
@@ -595,7 +601,14 @@ app.use('/api/papers', authorize);
 
 app.get('/api/papers/', function(req, res){
 
-  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
+  var data = {
+    users_id : req.body.userId,
+    permission : req.body.permission
+  }
+
+  console.log("mydata" + data);
+
+  user_mid.getPapers(data, function(err, papers){
     if (err){
       console.log(err);
       res.status(401).send({message: 'Invalid Request'});
