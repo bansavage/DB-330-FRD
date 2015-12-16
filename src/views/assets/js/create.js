@@ -1,70 +1,100 @@
 (function(){
 
-	//WEIRD STUFF GOIN ONS/*
-	/*
-	function getAuthors(){
+	function init(){
+
+	 	var submit = document.getElementById('db-add');
+	 	var add_key = document.getElementsByClassName('add-key')[0];
+	 	var add_author = document.getElementsByClassName("add-auth")[0];
+
+	 	submit.addEventListener('click', create );
+	 	add_key.addEventListener('click', addKey);
+	 	add_author.addEventListener('click', addAuthor);
+
+		getAuthors(function(authors){
+			//console.log(authors);
+			genAuthors( authors );
+		});
+	 	
+	 	console.log("added Event add auth");
+	}
+
+	function getCurrentUser(callback){
 
 		var m_token ="";
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
+
+
 		$.ajax({
-	 		url: `/api/users/all?token=${m_token}`,
-	 		type: "GET",
-	 		async:
-	 		success : function(data, textStatus, jqXHR){
-
-	 			return JSON.stringify(data);
-
-
-	 			if (status > 400){
-			        console.log("Failed");
-			   		window.location.href = `/controlpanel/?token=${m_token}`;
-				}
-			}
+	      url: `/api/users`,
+	      type: "GET",
+	      headers: {
+	        'x-access-token': m_token
+	      },
+	      success : function(data, textStatus, jqXHR){
+		        if (status > 400){
+		          //window.location.href = `/login`;
+		        }else{
+		          callback(data);
+		        }
+		        console.log(textStatus);
+		        return true;
+	      },
+	      error : function(jqXHR, textStatus, errorThrown){
+	        console.log(textStatus);
+	        window.location.href = `/login`;
+	      }
 	    });
-	}
-
-*/
-
-	function init(){
-
-	 	var submit = document.getElementById('db-add');
-		getAuthors(function(authors){
-			console.log(authors);
-		});
-	 	var add_key = document.getElementsByClassName('add-key')[0];
-	 	var add_author = document.getElementsByClassName("add-auth")[0];
-	 	submit.addEventListener('click', create );
-	 	add_key.addEventListener('click', addKey);
-	 	add_author.addEventListener('click', addAuthor);
-	 	genAuthors();
-	 	console.log("added Event add auth");
 	}
 
 	//Gives back all authors
 	//callback(authors)
 	function getAuthors(callback){
+
 		var m_token ="";
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
 
 		$.ajax({
-	 		url: `/api/users/all/?token=${m_token}`, // /delete //  /edit-abstract  /
+	 		url: `/api/users/all/`, // /delete //  /edit-abstract  /
+	 		headers: {'x-access-token': m_token },
 	 		type: "GET",
 	 		success : function(data, textStatus, jqXHR){
-	 			console.log(data);
-	 			swal("Paper Created!", "Paper has been created successfully", "success")
+	 			//console.log(data);
 
-				if (status > 400){ //FAILED
+			if (status > 400){ //FAILED
 			        console.log("Failed to create Paper");
 			        console.log("Problem Getting Authors");
-	      }else{
-		    	console.log("Authors are here");
-					callback(data);
-	        console.log(data);
-	      }
+		    }else{
+			    	console.log("Authors are here");
+					
+					getCurrentUser(
+						function(currentUser){
+							/*
+							{
+								"users_id": "1",
+								"fName": "Kris",
+								"lName": "Brown",
+								"email": "k@b.edu",
+								"permission": "public"
+								}
+							*/
+							var current_user_index = -1;
+							for(var i = 0; i < data.users.length; i++){
+								if( data.users[i].users_id == currentUser.users_id)
+									current_user_index = i;
+							}
+							data.users.splice(current_user_index, 1);
+
+							callback(data);
+
+						}
+					);
+
+		        	console.log(data);
+		    }
 	      console.log(textStatus);
 	      return true;
 	    },
@@ -76,13 +106,14 @@
 		});
 	}
 
-	function genAuthors(){
-
-		var a = JSON.parse('{"users":[{"users_id":"1","fName":"Kris","lName":"Brown"},{"users_id":"2","fName":"Jon","lName":"Lee"},{"users_id":"3","fName":"Joe","lName":"Doe"},{"users_id":"4","fName":"Boss","lName":"Guy"}]}');
-		var users = a.users;
-		var numUsers = Object.keys(a.users).length;
+	function genAuthors( authors ){
+		//debugger;
+		//var a = JSON.parse('{"users":[{"users_id":"1","fName":"Kris","lName":"Brown"},{"users_id":"2","fName":"Jon","lName":"Lee"},{"users_id":"3","fName":"Joe","lName":"Doe"},{"users_id":"4","fName":"Boss","lName":"Guy"}]}');
+		var users = authors.users;
+		var numUsers = users.length;
+		console.log(numUsers);
 		var authArr = [];
-		console.log(users);
+		//console.log(users);
 		console.log(numUsers);
 		for(var i = 0; i<numUsers; i++){
 			authArr.push({
@@ -95,6 +126,8 @@
 		//Split here into sep methods
 		for(i= 0; i<numUsers; i++){
 			$("#pAuthor").append("<option id='author-"+authArr[i].id+"'value='"+authArr[i].id+"'>"+authArr[i].name+"</option>");
+			console.log("added author");
+
 		}
 		return authArr;
 	}
