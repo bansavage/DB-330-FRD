@@ -399,7 +399,8 @@ app.get('/search/:keywords', function(req, res, next){
 
   if (!keywords){
     res.render('search', {
-     papers : []
+     papers : [],
+     keywords : []
    });
   }else{
     search_mid.getPapers({keywords : keywords}, function(err, papers){
@@ -434,7 +435,7 @@ app.get('/search/:keywords', function(req, res, next){
                           }
                           res.render('search',{
                            papers : papers,
-                           keywords : keywords
+                           keywords : keywords // Keywords from the search
                            //test : 'helloworld'
                           });
                         }else{
