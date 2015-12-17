@@ -121,12 +121,15 @@ app.use('/api/papers/authers/delete', authorize);
 app.use('/api/papers/authers/delete', paper_mid.hasPermission);
 
 //Strictly deletes just an author from a given paper
+//Needs authors_id, papers_id, and the token
 app.post('/api/papers/authors/delete', function(req, res){
   var data = {
     papers_id : req.body.papers_id,
     users_id : req.body.userId,
     authors_id : req.body.authors_id
   }
+
+  console.log('here');
 
   paper_mid.deleteAuthor(data, function(err, result){
     if (err){
@@ -235,60 +238,6 @@ app.get('/papers/edit', function(req, res){
                         papers.keywords = [];
                       }
                       res.render('edit',{
-                       papers : papers
-                       //test : 'helloworld'
-                      });
-                    }else{
-                      index2 += 1;
-                    }
-                  }
-                });
-              });
-            }else{
-              index += 1;
-            }
-          }
-        });
-      });
-
-    };
-  });
-});
-
-app.use('/papers/editform', authorize);
-app.use('/papers/editform', paper_mid.hasPermission);
-
-app.get('/papers/editform', function(req, res){
-  user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
-    if (err){
-      console.log(err);
-      res.status(401).send({message: 'Invalid Request'});
-    }else{
-
-      papers.forEach(function(paper, index, arr){
-        paper_mid.getKeywords(paper, function(err, keywords){
-          if (err){
-            console.log(err);
-            res.status(401).send({message: 'Paper Keywords Error'});
-          }else{
-            paper.keywords = keywords;
-            if (index >= arr.length-1){
-              // Gets authors
-              papers.forEach(function(paper2, index2, arr2){
-                paper_mid.getAuthors(paper2, function(err, authors){
-                  if (err){
-                    console.log(err);
-                    res.status(401).send({message: 'Paper Keywords Error'});
-                  }else{
-                    paper2.authors = authors;
-                    if (index2 >= arr2.length-1){
-                      if (!papers.authors){
-                        papers.authors = [];
-                      }
-                      if (!papers.keywords){
-                        papers.keywords = [];
-                      }
-                      res.render('editform',{
                        papers : papers
                        //test : 'helloworld'
                       });
@@ -484,7 +433,8 @@ app.get('/search/:keywords', function(req, res, next){
                             papers.keywords = [];
                           }
                           res.render('search',{
-                           papers : papers
+                           papers : papers,
+                           keywords : keywords
                            //test : 'helloworld'
                           });
                         }else{

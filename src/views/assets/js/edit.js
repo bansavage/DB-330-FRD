@@ -128,7 +128,7 @@
 	}
 
   //author-> the author object -> completed
-  function addAuthorById(author){
+  function addAuthorById(author, papers_id){
     var authors_id = author.users_id;
     console.log(author);
 		var remove_id = "remove-auth-" + authors_id;
@@ -138,19 +138,51 @@
                               </span>
                             </p>`);
 		$("#author-"+authors_id).remove();
-		$("#"+remove_id).click(removeAuthor);
+		$("#"+remove_id).click(removeAuthor.bind(this, authors_id, papers_id));
 	}
 
   //this -> is the button that calls this event
-  function removeAuthor(evt){
-		var remove = $(this).find(':first-child');
-		var id     = remove.attr("id");
-		var name   = remove.text();
+  function removeAuthor(authors_id, papers_id){
 
-    //Call Server with post
+		var self = $(`#remove-auth-${authors_id}`);
+		// var remove = self.find(':first-child');
+		// var id     = remove.attr("data-val"); // Authors id
+		// var name   = remove.text();
 
-		$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
-		this.remove();
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+		debugger;
+
+		$.ajax({
+	      url: `/api/papers/authors/delete`,
+	      type: "POST",
+				contentType: "application/json",
+	      headers: {
+	        'x-access-token': m_token
+	      },
+				data : {
+						papers_id : papers_id,
+						authors_id : authors_id
+				},
+	      success : function(data, textStatus, jqXHR){
+		        if (status > 400){
+		          //window.location.href = `/login`;
+							console.log('Remove was Unsuccessful');
+		        }else{
+
+							$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
+							self.remove();
+		        }
+		        console.log(textStatus);
+		        return true;
+	      },
+	      error : function(jqXHR, textStatus, errorThrown){
+	        console.log(textStatus);
+					console.log('Remove was Unsuccessful');
+	      }
+	    });
 	}//end of removeAuthor()
 
 	function genPapers( papers ){
@@ -180,7 +212,7 @@
       formE.citationE.value = currentPaper.citation;
 
       for (var i=0; i<currentPaper.authors.length; i++){
-        addAuthorById(currentPaper.authors[i]);
+        addAuthorById(currentPaper.authors[i], currentPaper.papers_id);
       }
   }
 
@@ -191,8 +223,8 @@
 		return document.getElementById(id).value;
 	}
 
-	/*Creates a paper*/
-	 function deletePaper(evt){
+	 // Only saves changes of title, citation, and abstract
+	 function saveChanges(evt){
 
 		var current_paper= document.getElementById("pPapers");
 
