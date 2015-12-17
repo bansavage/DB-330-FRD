@@ -133,12 +133,14 @@
 	}
 
 	function addAuthor(evt){
+
 		var val = $("#pAuthor").val();
 		var remove_id = "remove-auth-" + val;
-		$(".auth-cont").append('<p id="'+remove_id+'"class="btn-success pure-button added-author"><span class="m-author" data-val="'+val+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
+		$(".auth-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-author" data-val="'+val+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
 		$("#author-"+val).remove();
 		$("#"+remove_id).click(removeAuthor);
 		console.log(val);
+
 	}
 
 	function removeAuthor(evt){
@@ -147,21 +149,76 @@
 		var name   = remove.text();
 		$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
 		this.remove();
-	}
+	}//end of removeAuthor()
 
 	function addKey(evt){
+			
+			console.log("hello");
 
 		var num = document.getElementsByClassName("add-key").length;
+		var val = $("#pKey").val();
+		var remove_id = "remove-key-"+val;
+
 		console.log(num);
-		if( document.getElementsByClassName("pKey").length < 5){
-		$(".key-div").append("<div class='w100 flex key-cont'><input type='text' class='pure-input-1-2 pKey' name='paperKeywords' placeholder='Keyword'><i class='add-key fa fa-plus-circle pure-btn'></i></div><br/>");
-		document.getElementsByClassName('add-key')[num-1].remove();
-		document.getElementsByClassName('add-key')[num-1].addEventListener('click', addKey);
+		if( isValidKey() ){
+			if( document.getElementsByClassName("m-key").length < 5){
+				$("#key-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-key" data-val="'+val+'">'+$("#pKey").val()+'</span></p>');
+				$("#key-"+val).remove();
+				$("#"+remove_id).click(removeKey);
+			}
+			else{
+				swal("Sorry Buddy", "Does this paper really need that many keywords?");
+			}
 		}
 		else{
-			swal("Sorry Buddy", "Does this paper really need that many keywords?");
+			swal("Key not Added", "Keyword was a duplicate or was left blank");
 		}
 	}
+
+	function isValidKey(){
+		var keysOnPage = document.getElementsByClassName("m-key");
+	
+		var bool, inputKey, isDuplicate;
+		if(keysOnPage.length > 0){
+				console.log(keysOnPage.length);
+			for(var i = 0; i<keysOnPage.length; i++){
+				inputKey = document.getElementById("pKey").value;
+				
+				console.log(keysOnPage[i].textContent);
+				if( inputKey == keysOnPage[i].textContent || inputKey == "" ){
+					bool = false;
+					isDuplicate = true;
+					console.log("key was duplicate");
+					console.log("keywords on page: " + i + " " + keysOnPage[i].textContent );
+				}
+				else{
+					if(isDuplicate){
+						bool = false;
+					} 
+					else{
+						 bool = true;
+					}
+				}
+			}
+			//console.log(keysOnPage.length+ " was added");
+		}
+		else{
+			inputKey = document.getElementById("pKey").value;
+				if( inputKey == "" ){
+					bool = false;
+				}
+				else{
+					bool = true;
+				}
+			console.log("first word added");
+		}
+		console.log("isValid? " + bool);
+		return bool;
+	}
+
+	function removeKey(evt){
+		this.remove();	
+	}//end of removeKey()
 
 	/*
 	 *Gets value of element with specified id
@@ -179,8 +236,8 @@
 	 	}
 	 	var keywords = [];
 	 	var authors  = [];
-	 	for(var k = 0; k<document.getElementsByClassName("pKey").length;k++){
-	 		var val = document.getElementsByClassName("pKey")[k].value;
+	 	for(var k = 0; k<document.getElementsByClassName("m-key").length;k++){
+	 		var val = document.getElementsByClassName("m-key")[k].textContent;
 	 		console.log(val);
 	 		keywords.push( val );
 	 	}
@@ -197,7 +254,25 @@
 		// var m_citations = "choite";//valueOf("m-citation");
 		// var m_keywords  = ["1", "2"];
 		// var m_authors   = ["2", "3"];
-		var data = {
+		
+
+	 	// Send paper ID
+	    /*for(var i = 0; i<10; i++){
+	 		m_keywords[i] = get[i].value;
+	 	}*/
+	 	if( valueOf("m-title") == " " || valueOf("m-title") == null || valueOf("m-title") === ""){
+	 		console.log(valueOf("m-title"));
+	 		swal({
+				title: "<h2 style='color:#DD6B55;'>Oppps! Title Missing</h2>",
+				text: "Failed to add paper",
+				imageUrl: "../img/bad.png",
+				html: true
+			});	
+	 	}
+	 	else{
+
+
+	 		var data = {
 	 			title:    valueOf("m-title"),
 	 			abstract: valueOf("m-abstract"),
 	 			citation: valueOf("m-citation"),
@@ -206,45 +281,42 @@
 	 			token:    m_token
 	 		};
 
-	 	// Send paper ID
-	    /*for(var i = 0; i<10; i++){
-	 		m_keywords[i] = get[i].value;
-	 	}*/
+		 	$.ajax({
+		 		url: "/api/papers/create", // /delete //  /edit-abstract  /
+		 		type: "POST",
+		 		data: JSON.stringify(data), //
+		 		contentType: "application/json",
+		 		success : function(data, textStatus, jqXHR){
+		 			console.log(data);
+		 			swal("Paper Created!", "Paper has been created successfully", "success")
 
-	 	$.ajax({
-	 		url: "/api/papers/create", // /delete //  /edit-abstract  /
-	 		type: "POST",
-	 		data: JSON.stringify(data), //
-	 		contentType: "application/json",
-	 		success : function(data, textStatus, jqXHR){
-	 			console.log(data);
-	 			swal("Paper Created!", "Paper has been created successfully", "success")
-
-				if (status > 400){ //FAILED
-			        console.log("Failed to create Paper");
-			        swal({
-					  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-					  text: "Failed to add paper",
-					  imageUrl: "../img/bad.png",
-					  html: true
-					});
-	      }else{
-		    console.log("etaete");
-	        console.log(data);
-	      }
-	      console.log(textStatus);
-	      return true;
-	    },
-	    error : function(jqXHR, textStatus, errorThrown){
-	      console.log("not success " + textStatus);
-	      console.log(data);
-	      swal({
-			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-			  text: "Failed to add paper",
-			  imageUrl: "../assets/img/bad.png",
-			  html: true });
-	      }
-	 	});
+					if (status > 400){ //FAILED
+				        console.log("Failed to create Paper");
+				        swal({
+						  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+						  text: "Failed to add paper",
+						  imageUrl: "../img/bad.png",
+						  html: true
+						});
+		      }else{
+			    console.log("etaete");
+		        console.log(data);
+		      }
+		      console.log(textStatus);
+		      return true;
+		    },
+		    error : function(jqXHR, textStatus, errorThrown){
+		      console.log("not success " + textStatus);
+		      console.log(data);
+		      swal({
+				  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+				  text: "Failed to add paper",
+				  imageUrl: "../assets/img/bad.png",
+				  html: true });
+		      }
+		 	});//end of AJAX call
+		}
+		
 	 	//evt.preventDefault();
 	 	return false;
 	 }

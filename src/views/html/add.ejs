@@ -47,6 +47,12 @@
             #pAuthor{
                 height: 52px;
             }
+            #pKey{
+                height: 52px!important;
+            }
+            .r-box{
+                margin-bottom: 0;
+            }
             .btn-success {
             background: rgb(28, 184, 65); /* this is a
             green */
@@ -141,9 +147,12 @@
 
                 </fieldset>
                 <fieldset class="pure-group key-div">
+                    <h3 style="text-align:left;">Add Keywords</h3>
                     <div class="w100 flex" id="key-cont">
-                        <input type="text" class="pure-input-1-2 pKey" name="paperKeywords" placeholder="Keyword"><br>
+                        
+                        <input type="text" class="pure-input-1-2" id="pKey" name="paperKeywords" placeholder="Keyword"><br>
                         <i class="add-key fa fa-plus-circle pure-btn"></i>
+
                     </div>
                     <br>
                 </fieldset>
