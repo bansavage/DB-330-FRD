@@ -28,7 +28,19 @@
 
   var setupPage = function(data){
     var el = document.getElementById("db-menu-dropdown");
-    el.innerText = data.fName + " " + data.lName;
+    var current_user = document.createTextNode( data.fName + " " + data.lName + " ");
+    var icon = document.createElement("i");
+    var welcomeMsg = document.createTextNode("Welcome Back " + data.fName + "!");
+
+    icon.classList.add("fa");
+    icon.classList.add("fa-user");
+
+    
+    el.appendChild(current_user);
+    el.appendChild(icon);
+    if(document.getElementsByClassName("banner-head")[0]){
+      document.getElementsByClassName("banner-head")[0].appendChild( welcomeMsg );
+    }
   }
 
   var listenOnATags = function(){
