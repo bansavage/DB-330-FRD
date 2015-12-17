@@ -72,15 +72,6 @@
 					
 					getCurrentUser(
 						function(currentUser){
-							/*
-							{
-								"users_id": "1",
-								"fName": "Kris",
-								"lName": "Brown",
-								"email": "k@b.edu",
-								"permission": "public"
-								}
-							*/
 							var current_user_index = -1;
 							for(var i = 0; i < data.users.length; i++){
 								if( data.users[i].users_id == currentUser.users_id)
