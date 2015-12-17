@@ -136,7 +136,7 @@
 
 		var val = $("#pAuthor").val();
 		var remove_id = "remove-auth-" + val;
-		$(".auth-cont").append('<p id="'+remove_id+'"class="btn-success pure-button added-author"><span class="m-author" data-val="'+val+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
+		$(".auth-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-author" data-val="'+val+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
 		$("#author-"+val).remove();
 		$("#"+remove_id).click(removeAuthor);
 		console.log(val);
@@ -157,12 +157,12 @@
 
 		var num = document.getElementsByClassName("add-key").length;
 		var val = $("#pKey").val();
-		var remove_id = "remove-key-" + val;
+		var remove_id = "remove-key-"+val;
 
 		console.log(num);
 		if( isValidKey() ){
-			if( document.getElementsByClassName("pKey").length < 5){
-				$("#key-cont").append('<p id="'+remove_id+'"class="btn-success pure-button added-author"><span class="m-key" data-val="'+val+'">'+$("#pKey").val()+'</span></p>');
+			if( document.getElementsByClassName("m-key").length < 5){
+				$("#key-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-key" data-val="'+val+'">'+$("#pKey").val()+'</span></p>');
 				$("#key-"+val).remove();
 				$("#"+remove_id).click(removeKey);
 			}
@@ -237,7 +237,7 @@
 	 	var keywords = [];
 	 	var authors  = [];
 	 	for(var k = 0; k<document.getElementsByClassName("m-key").length;k++){
-	 		var val = document.getElementsByClassName("m-key")[k].value;
+	 		var val = document.getElementsByClassName("m-key")[k].textContent;
 	 		console.log(val);
 	 		keywords.push( val );
 	 	}
@@ -254,7 +254,25 @@
 		// var m_citations = "choite";//valueOf("m-citation");
 		// var m_keywords  = ["1", "2"];
 		// var m_authors   = ["2", "3"];
-		var data = {
+		
+
+	 	// Send paper ID
+	    /*for(var i = 0; i<10; i++){
+	 		m_keywords[i] = get[i].value;
+	 	}*/
+	 	if( valueOf("m-title") == " " || valueOf("m-title") == null || valueOf("m-title") === ""){
+	 		console.log(valueOf("m-title"));
+	 		swal({
+				title: "<h2 style='color:#DD6B55;'>Oppps! Title Missing</h2>",
+				text: "Failed to add paper",
+				imageUrl: "../img/bad.png",
+				html: true
+			});	
+	 	}
+	 	else{
+
+
+	 		var data = {
 	 			title:    valueOf("m-title"),
 	 			abstract: valueOf("m-abstract"),
 	 			citation: valueOf("m-citation"),
@@ -263,45 +281,42 @@
 	 			token:    m_token
 	 		};
 
-	 	// Send paper ID
-	    /*for(var i = 0; i<10; i++){
-	 		m_keywords[i] = get[i].value;
-	 	}*/
+		 	$.ajax({
+		 		url: "/api/papers/create", // /delete //  /edit-abstract  /
+		 		type: "POST",
+		 		data: JSON.stringify(data), //
+		 		contentType: "application/json",
+		 		success : function(data, textStatus, jqXHR){
+		 			console.log(data);
+		 			swal("Paper Created!", "Paper has been created successfully", "success")
 
-	 	$.ajax({
-	 		url: "/api/papers/create", // /delete //  /edit-abstract  /
-	 		type: "POST",
-	 		data: JSON.stringify(data), //
-	 		contentType: "application/json",
-	 		success : function(data, textStatus, jqXHR){
-	 			console.log(data);
-	 			swal("Paper Created!", "Paper has been created successfully", "success")
-
-				if (status > 400){ //FAILED
-			        console.log("Failed to create Paper");
-			        swal({
-					  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-					  text: "Failed to add paper",
-					  imageUrl: "../img/bad.png",
-					  html: true
-					});
-	      }else{
-		    console.log("etaete");
-	        console.log(data);
-	      }
-	      console.log(textStatus);
-	      return true;
-	    },
-	    error : function(jqXHR, textStatus, errorThrown){
-	      console.log("not success " + textStatus);
-	      console.log(data);
-	      swal({
-			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-			  text: "Failed to add paper",
-			  imageUrl: "../assets/img/bad.png",
-			  html: true });
-	      }
-	 	});
+					if (status > 400){ //FAILED
+				        console.log("Failed to create Paper");
+				        swal({
+						  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+						  text: "Failed to add paper",
+						  imageUrl: "../img/bad.png",
+						  html: true
+						});
+		      }else{
+			    console.log("etaete");
+		        console.log(data);
+		      }
+		      console.log(textStatus);
+		      return true;
+		    },
+		    error : function(jqXHR, textStatus, errorThrown){
+		      console.log("not success " + textStatus);
+		      console.log(data);
+		      swal({
+				  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+				  text: "Failed to add paper",
+				  imageUrl: "../assets/img/bad.png",
+				  html: true });
+		      }
+		 	});//end of AJAX call
+		}
+		
 	 	//evt.preventDefault();
 	 	return false;
 	 }
