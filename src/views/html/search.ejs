@@ -75,17 +75,19 @@
             </div>
             <div class="subheader">
                 <h1 class="brand-title">Results for</h1>
-                <h1 class="brand-title search-term">All Papers</h1>
+                <h1 class="brand-title search-term">
+                     <% if(keywords){%>
+                        <% for(var i=0; i<keywords.length; i++) {%>
+                            <%= keywords[i] + ", "%>
+                        <% } %>
+                    <% } %>
+                </h1>
                 <h2 class="brand-tagline"><%= papers.length %> results found</h2>
             </div>
 
             <nav class="nav">
                 <ul class="nav-list">
                     <li class="nav-item">
-
-
-
-
                     </li>
                 </ul>
             </nav>
