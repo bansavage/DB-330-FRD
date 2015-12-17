@@ -95,13 +95,13 @@ function Paper(){
         if (err) {throw err;}
         // Use the connection
         if (obj.papers_id !== undefined){
-          var sql = `select ??, ?? from ${config.db.database}.users
+          var sql = `select ??, ??, ?? from ${config.db.database}.users
                       inner join ${config.db.database}.papers_users_map
                       on users.users_id = papers_users_map.users_fk
                       inner join ${config.db.database}.papers
                       on papers.papers_id = papers_users_map.papers_fk
                       where papers_id = ?`;
-          var inserts = ['fName','lName', obj.papers_id];
+          var inserts = ['users_id','fName','lName', obj.papers_id];
           sql = mysql.format(sql, inserts);
         }else{
           throw new Error('No paper id provided');

@@ -12,6 +12,7 @@
     });
 
     selectButton.addEventListener('click', function(evt){
+      cleanUp();
       var papersE = document.getElementById('pPapers');
       var currentPaper = papersE.selectedOptions[0];
 
@@ -74,6 +75,11 @@
     }
   }
 
+  function cleanUp(){
+    var allAuthorButtons = $('.r-box');
+    allAuthorButtons.remove();
+  }
+
 	//Gives back all authors
 	//callback(authors)
 	function getPapers(callback){
@@ -110,6 +116,43 @@
 		});
 	}
 
+  //id -> the id of the author
+  function addAuthorByButton(evt){
+		var id = $("#pAuthor").val();
+		var remove_id = "remove-auth-" + id;
+		$(".auth-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-author" data-val="'+id+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
+		$("#author-"+author_id).remove();
+		$("#"+remove_id).click(removeAuthor);
+
+    //Add to server
+	}
+
+  //author-> the author object -> completed
+  function addAuthorById(author){
+    var authors_id = author.users_id;
+    console.log(author);
+		var remove_id = "remove-auth-" + authors_id;
+		$(".auth-cont").append(`<p id='${remove_id}' class='r-box btn-success pure-button added-author'>
+                              <span class='m-author' data-val='${authors_id}'>
+                              ${author.fName} ${author.lName}
+                              </span>
+                            </p>`);
+		$("#author-"+authors_id).remove();
+		$("#"+remove_id).click(removeAuthor);
+	}
+
+  //this -> is the button that calls this event
+  function removeAuthor(evt){
+		var remove = $(this).find(':first-child');
+		var id     = remove.attr("id");
+		var name   = remove.text();
+
+    //Call Server with post
+
+		$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
+		this.remove();
+	}//end of removeAuthor()
+
 	function genPapers( papers ){
 		var numPapers = papers.length;
 
@@ -131,9 +174,14 @@
       // authorsE : document.getElementById('pAuthor')
       var currentPaper = getLocalPaper(currentPaper.getAttribute('data-paper-id'));
 
+
       formE.titleE.value = currentPaper.title;
       formE.abstractE.value = currentPaper.abstract;
       formE.citationE.value = currentPaper.citation;
+
+      for (var i=0; i<currentPaper.authors.length; i++){
+        addAuthorById(currentPaper.authors[i]);
+      }
   }
 
 	/*
