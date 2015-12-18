@@ -4,11 +4,16 @@
 
 	function init(){
 
+
+
 	 	var selectButton = document.getElementById('db-select');
 		var addAuthorButton  = $(".add-auth");
 		var addKeywordButton = $(".add-key");
 		var saveButton = $("#db-save");
-		;
+		
+
+		addAuthorButton.click(addAuthorByButton);
+		addKeywordButton.click(addKeywordByButton);
 		saveButton.click(saveChanges);
 
 	 	var selectButton = document.getElementById('db-select');
@@ -32,8 +37,7 @@
 			$(".auth-div").show();
 			$(".key-div").show();
 			$(".cont-div").show();
-			addAuthorButton.click(addAuthorByButton);
-			addKeywordButton.click(addKeywordByButton)
+			
 		});
 
 	 	console.log("added Event add auth");
