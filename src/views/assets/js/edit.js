@@ -734,7 +734,7 @@
 			}
 		}//end of if isValidKey
 		else{
-			swal("Key not Added", "Keyword was a duplicate or was left blank");
+			swal("Key not Added", "Not a valid keyword");
 		}
 	}//end of addKeywordByButton function
 
@@ -749,7 +749,7 @@
 				inputKey = document.getElementsByClassName("pKey")[0].value;
 				console.log("input key" + inputKey);
 				console.log("keys on Page " + keysOnPage[i].getAttribute("data-val"));
-				if( inputKey === keysOnPage[i].getAttribute("data-val") || inputKey == "" ){
+				if( inputKey === keysOnPage[i].getAttribute("data-val") || inputKey == "" || inputKey.indexOf(' ') >= 0){
 					bool = false;
 					isDuplicate = true;
 					console.log("key was duplicate");
