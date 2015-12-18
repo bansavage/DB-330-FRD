@@ -4,11 +4,11 @@
 
 	function init(){
 
-	 	var selectButton = document.getElementById('db-select');
-		var addAuthorButton  = $(".add-auth");
-		var addKeywordButton = $(".add-key");
-		addAuthorButton.click(addAuthorByButton);
-		addKeywordButton.click(addKeywordByButton);
+	 	var selectButton = document.getElementById('db-select');	
+
+	 	$(".cont-div").hide();
+	 	$(".auth-div").hide();
+	 	$(".key-div").hide();	
 
     	getPapers(function(papers){
     	genPapers( papers );
@@ -22,6 +22,9 @@
 
 			//CurrentPaper is an object with the current paper info
 			populateFields(currentPaper);
+			$(".auth-div").show();
+			$(".key-div").show();
+			$(".cont-div").show();
 		});
 
 	 	console.log("added Event add auth");
@@ -365,6 +368,13 @@
 			$("#pPapers").append(`<option id='paper-${papers[i].papers_id}' data-paper-id=${papers[i].papers_id}>${papers[i].title}</option>`);
 			console.log("added papers");
 		}
+
+		var addAuthorButton  = $(".add-auth");
+		var addKeywordButton = $(".add-key");
+		addAuthorButton.click(addAuthorByButton);
+		addKeywordButton.click(addKeywordByButton);
+
+
 		return papers;
 	}
 
@@ -538,7 +548,7 @@
 			kw = keywords[i];
 			$("#key-cont").append(
 				`<p id='${kw}' class='r-box btn-success pure-button added-author'>
-					<span class='m-author' data-val='${kw}'>
+					<span class='m-key' data-val='${kw}'>
 						${ kw }
 					</span>
 				</p>`
@@ -609,55 +619,102 @@
 		var currentPaper = papersE.selectedOptions[0];
 		var currentPaperId = currentPaper.getAttribute('data-paper-id');
 
-		if (keyword != "" || keyword != null){
-			console.log("hit");			
-			var data = {
-					papers_id : currentPaperId, 
-					keywords : [ 
-						keyword
-					],
-					data: m_token 
-			}
+		if( isValidKey() ){
+			if( document.getElementsByClassName("m-key").length < 5){
+				console.log("hit");			
 
-			var dataJSON = JSON.stringify(data);
+				var data = {
+						papers_id : currentPaperId, 
+						keywords : [ 
+							keyword
+						],
+						data: m_token 
+				}
 
-			//Add to server
-			$.ajax({
-		      url: `/api/papers/keywords/add`,
-		      type: "POST",
-					data : dataJSON,
-					contentType: "application/json",
-		      		success : function(data, textStatus, jqXHR){
+				var dataJSON = JSON.stringify(data);
 
-			        	if (status > 400){
+				//Add to server
+				$.ajax({
+			      url: `/api/papers/keywords/add`,
+			      type: "POST",
+						data : dataJSON,
+						contentType: "application/json",
+			      		success : function(data, textStatus, jqXHR){
+
+				        	if (status > 400){
+								console.log('Addition was Unsuccessful');
+				        	}else{
+				        		//appends new keyword to page
+								$("#key-cont").append(
+									`<p id='${keyword}' class='r-box btn-success pure-button added-author'>
+										<span class='m-key' data-val='${keyword}'>
+											${ keyword }
+										</span>
+									</p>`
+								);
+								//adds click evt to remove keyword
+								$("#"+keyword).click( removeKey.bind( this, keyword, currentPaperId ) );
+				        	}
+				        	console.log(textStatus);
+				        	return true;
+
+			      		},//end of success
+			      		error : function(jqXHR, textStatus, errorThrown){
+			        		console.log(textStatus);
 							console.log('Addition was Unsuccessful');
-			        	}else{
-			        		//appends new keyword to page
-							$("#key-cont").append(
-								`<p id='${keyword}' class='r-box btn-success pure-button added-author'>
-									<span class='m-author' data-val='${keyword}'>
-										${ keyword }
-									</span>
-								</p>`
-							);
-							//adds click evt to remove keyword
-							$("#"+keyword).click( removeKey.bind( this, keyword, currentPaperId ) );
-			        	}
-			        	console.log(textStatus);
-			        	return true;
-
-		      		},//end of success
-		      		error : function(jqXHR, textStatus, errorThrown){
-		        		console.log(textStatus);
-						console.log('Addition was Unsuccessful');
-		      		}//end of error
-		    });//end of AJAX
-			//Add to server
-		}else{
-			//Print out to screen
-			console.log('No Author Selected');
+			      		}//end of error
+			    });//end of AJAX
+			}//end of if < 5
+			else{
+				swal("Sorry Buddy", "Does this paper really need that many keywords?");
+			}
+		}//end of if isValidKey
+		else{
+			swal("Key not Added", "Keyword was a duplicate or was left blank");
 		}
 	}//end of addKeywordByButton function
+
+	//Checks if keyword is a valid one that can be added
+	function isValidKey(){
+		var keysOnPage = document.getElementsByClassName("m-key");
+	
+		var bool, inputKey, isDuplicate;
+		if(keysOnPage.length > 0){
+				console.log(keysOnPage.length);
+			for(var i = 0; i<keysOnPage.length; i++){
+				inputKey = document.getElementsByClassName("pKey")[0].value;
+				
+				console.log(keysOnPage[i].textContent);
+				if( inputKey == keysOnPage[i].textContent || inputKey == "" ){
+					bool = false;
+					isDuplicate = true;
+					console.log("key was duplicate");
+					console.log("keywords on page: " + i + " " + keysOnPage[i].textContent );
+				}
+				else{
+					if(isDuplicate){
+						bool = false;
+					} 
+					else{
+						 bool = true;
+					}
+				}
+			}
+			//console.log(keysOnPage.length+ " was added");
+		}
+		else{
+			inputKey = document.getElementById("pKey").value;
+				if( inputKey == "" ){
+					bool = false;
+				}
+				else{
+					bool = true;
+				}
+			console.log("first word added");
+		}
+		console.log("isValid? " + bool);
+		return bool;
+	}//end of isValidKey
 
 	 init();
  })();
