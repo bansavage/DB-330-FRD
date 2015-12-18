@@ -46,6 +46,17 @@
     	}
 	}
 
+	//clean page of buttons and options
+  	function cleanUp(){
+    	var allAuthorButtons = $('.r-box');
+		var allAuthorOpt = $('.authorOpt'); // Gets all author option tags
+		var keywordInput = $('.pKey');
+	
+		allAuthorOpt.remove();
+   		allAuthorButtons.remove();
+   		keywordInput.val('');
+  	}
+
   //Return the elements from the form
   	function getFormElements(){
 	    return {
@@ -109,15 +120,6 @@
 			}
 		});
 	}
-
-	//clean page of buttons and options
-  	function cleanUp(){
-    	var allAuthorButtons = $('.r-box');
-		var allAuthorOpt = $('.authorOpt'); // Gets all author option tags
-	
-		allAuthorOpt.remove();
-   		allAuthorButtons.remove();
-  	}
 
 	//Gives back all authors
 	//callback(authors)

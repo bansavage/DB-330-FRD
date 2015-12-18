@@ -27,56 +27,7 @@
         <link rel="stylesheet" href="../assets/css/pricing.css">
         <link rel="stylesheet" href="../assets/css/font-awesome.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <style>
-            .w100{
-                width: 100%;
-            }
-            .flex{
-                display: flex;
-            }
-            .pure-btn{
-                padding: .6em .8em .4em .8em;
-                color: green;
-            }
-            .pure-btn:hover{
-                cursor: pointer;
-            }/*
-            .fa{
-                font-size: 1.6em!important;
-            }
-            #pAuthor{
-                height: 52px;
-            }
-            */
-            .btn-success {
-            background: rgb(28, 184, 65); /* this is a
-            green */
-            color: white;
-            font-weight: bold;
-            margin-right: 1%;
-            margin-bttom: 1%;
-            }
-            .wrap{
-                flex-wrap: wrap;
-            }
-            .added-author{
-                width: 8em;
-            }
-            .added-author:hover{
-                color: white;
-                background: rgb(202, 60, 60); /* this is a maroon */
-            }
-            .added-author:hover span{
-                display: none!important;
-            }
-            .added-author:hover:before{
-                content: "Remove";
-            }
-            h3{
-                margin: 0 2% 2% 2%;
-            }
-
-        </style>
+        <link rel="stylesheet" href="../assets/css/forms.css">
     <!--<![endif]-->
 
     <link rel="stylesheet" href="../assets/lib/SA-Alert/dist/sweetalert.css">
@@ -118,17 +69,16 @@
 
                 <form method="POST" action="" class="form pure-form pure-u-1 pure-u-md-5-6">
                 <h2>Edit Papers</h2>
-
-                <div class="w100 flex wrap pure-control-group">
+                 <fieldset class="pure-group">
+                    <div class="w100 flex wrap pure-control-group">
 
                         <select id="pPapers" class="pure-input-1-2">
 
                         </select>
-                    <input type="button" id="db-select" class="button-choose pure-button button-edit" value="Select"></i>
+                        <input type="button" id="db-select" class="button-choose pure-button button-edit" value="Select">
 
-                </div>
-                <br><br><br>
-
+                    </div>
+                </fieldset>
 
                 <fieldset class="pure-group">
                     <input id="m-title" type="text" class="pure-input-1" name="paperTitle" placeholder="Title">
@@ -137,10 +87,11 @@
                     <br>
                     <textarea id="m-citation" class="pure-input-1 desc" name="paperCitations" placeholder="Citations"></textarea>
                     <br>
-                    <a href="../controlpanel" class="button-choose pure-button">Back</a>
-                    <input type="button" id="db-save" class="button-choose pure-button button-add" value="Save">
+                    
+                    <a id="db-add" class="button-choose pure-button button-add" type="button" value="Save">Save</a>
                 </fieldset>
 
+                <br>
 
                 <fieldset class="pure-group auth-div">
                    <h3 style="text-align:left;">Edit Authors</h3>
@@ -149,8 +100,7 @@
                             <select id="pAuthor" class="pure-input-1-2">
 
                             </select>
-                        <i class="add-auth fa fa-plus-circle pure-btn"></i>
-
+                            <i class="add-auth fa fa-plus-circle pure-btn"></i>
                     </div>
                     <br>
 
@@ -163,6 +113,8 @@
                     </div>
                     <br>
                 </fieldset>
+
+                <a href="../controlpanel" class="button-choose pure-button">Back</a>
 
                 </form>
         </div>
