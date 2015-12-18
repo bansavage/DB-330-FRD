@@ -5,11 +5,14 @@
 	function init(){
 
 	 	var selectButton = document.getElementById('db-select');
-		var addAuthorButton = $(".add-auth");
+		var addAuthorButton  = $(".add-auth");
+		var addKeywordButton = $(".add-key");
 		addAuthorButton.click(addAuthorByButton);
+		addKeywordButton.click(addKeywordByButton);
 
-    getPapers(function(papers){
-      genPapers( papers );
+    	getPapers(function(papers){
+    	genPapers( papers );
+
     });
 
 		selectButton.addEventListener('click', function(evt){
@@ -24,16 +27,35 @@
 	 	console.log("added Event add auth");
 	}
 
+	/*
+	 *Gets value of element with specified id
+	 */
+	function valueOf(id){
+		return document.getElementById(id).value;
+	}
+
+	/*
+	* validate string
+	*/
+	function validate(x){
+		if (x == null || x == "") {
+        	return false;
+    	}
+    	else{
+    		return true;
+    	}
+	}
+
   //Return the elements from the form
-  function getFormElements(){
-    return {
-      papersE   : document.getElementById('pPapers'),
-      titleE    : document.getElementById('m-title'),
-      abstractE : document.getElementById('m-abstract'),
-      citationE : document.getElementById('m-citation'),
-      authorsE  : document.getElementById('pAuthor')
-    };
-  }
+  	function getFormElements(){
+	    return {
+	      papersE   : document.getElementById('pPapers'),
+	      titleE    : document.getElementById('m-title'),
+	      abstractE : document.getElementById('m-abstract'),
+	      citationE : document.getElementById('m-citation'),
+	      authorsE  : document.getElementById('pAuthor')
+	    };
+  	}
 
 	function getCurrentUser(callback){
 
@@ -41,7 +63,6 @@
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
-
 
 		$.ajax({
 	      url: `/api/users`,
@@ -65,17 +86,17 @@
 	    });
 	}
 
-  //Gets the given paper's information from localStorage
-	//Actually gets from the server
-  function getLocalPaper(papers_id){
-    var papersString = localStorage.getItem('papers');
-    var papers = JSON.parse(papersString);
-    for (var i=0; i<papers.length; i++){
-      if (papers[i].papers_id == papers_id){
-        return papers[i];
-      }
-    }
-  }
+	  //Gets the given paper's information from localStorage
+     //Actually gets from the server
+	function getLocalPaper(papers_id){
+	    var papersString = localStorage.getItem('papers');
+	    var papers = JSON.parse(papersString);
+	    for (var i=0; i<papers.length; i++){
+	      if (papers[i].papers_id == papers_id){
+	        return papers[i];
+	      }
+	    }
+	}
 
 	//Gets a paper with papers_id provided
 	function getPaper(papers_id, callback){
@@ -89,12 +110,14 @@
 		});
 	}
 
-  function cleanUp(){
-    var allAuthorButtons = $('.r-box');
+	//clean page of buttons and options
+  	function cleanUp(){
+    	var allAuthorButtons = $('.r-box');
 		var allAuthorOpt = $('.authorOpt'); // Gets all author option tags
+	
 		allAuthorOpt.remove();
-    allAuthorButtons.remove();
-  }
+   		allAuthorButtons.remove();
+  	}
 
 	//Gives back all authors
 	//callback(authors)
@@ -115,8 +138,8 @@
 			if (status > 400 || !data.papers){ //FAILED
 			        console.log("Problem Getting Papers");
 		    }else{
-			    		console.log("Authors are here");
-							console.log(data);
+			    	console.log("Authors are here");
+					console.log(data);
               var stringifiedPapers = JSON.stringify(data.papers);
               localStorage.setItem('papers', stringifiedPapers);
 							callback(data.papers);
@@ -125,17 +148,12 @@
 	      return true;
 	    },
 	    error : function(jqXHR, textStatus, errorThrown){
-	      console.log("not success " + textStatus);
-	      console.log(data);
-				console.log("Problem Getting Authors");
-	 		}
+	      	console.log("not success " + textStatus);
+	      	console.log(data);
+			console.log("Problem Getting Authors");
+	 	}//end of error
 		});
 	}
-
-
-
-
-
 
   //id -> the id of the author
   function addAuthorByButton(){
@@ -155,11 +173,11 @@
 			var authors_id = authorE.val();
 			var remove_id = "remove-auth-" + authors_id;
 			var data = {
-					papers_id : currentPaperId,
-					authors : [
+					papers_id : currentPaperId, // <-keep dat
+					authors : [ //keywords : [ keyword ]
 						authors_id
 					],
-					data: m_token
+					data: m_token 
 			}
 
 			var dataJSON = JSON.stringify(data);
@@ -173,24 +191,21 @@
 		      success : function(data, textStatus, jqXHR){
 			        if (status > 400){
 			          //window.location.href = `/login`;
-								console.log('Addition was Unsuccessful');
+						console.log('Addition was Unsuccessful');
 			        }else{
-
-								$(".auth-cont").append(`<p id='${remove_id}' class='r-box btn-success pure-button added-author'>
-						                              <span class='m-author' data-val='${authors_id}'>
-						                              ${authorE.find(":selected").text()}
-						                              </span>
-						                            </p>`);
-								debugger;
-
+						$(".auth-cont").append(`<p id='${remove_id}' class='r-box btn-success pure-button added-author'>
+						                        	<span class='m-author' data-val='${authors_id}'>
+						                             	${authorE.find(":selected").text()}
+						                            </span>
+						                       	</p>`);
 								var author = {
 									users_id : authors_id,
 									fName: authorE.find(":selected").text(),
 									lName: ""
 								}
 
-								$(`#author-${authors_id}`).remove();
-								$("#"+remove_id).click(removeAuthor.bind(this, author, currentPaperId));
+						$(`#author-${authors_id}`).remove();
+						$("#"+remove_id).click(removeAuthor.bind(this, author, currentPaperId));
 			        }
 			        console.log(textStatus);
 			        return true;
@@ -206,11 +221,6 @@
 			console.log('No Author Selected');
 		}
 	}
-
-
-
-
-
 
   //author-> the author object -> completed
   function addAuthorById(author, papers_id){
@@ -257,51 +267,52 @@
 	function getAuthors(callback){
 
 		var m_token ="";
+
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
 
 		$.ajax({
-	 		url: `/api/users/all/`, // /delete //  /edit-abstract  /
+	 		url: `/api/users/all/`, 
 	 		headers: {'x-access-token': m_token },
 	 		type: "GET",
 	 		success : function(data, textStatus, jqXHR){
-	 			//console.log(data);
+				if (status > 400){ //FAILED
+				        console.log("Failed to create Paper");
+				        console.log("Problem Getting Authors");
+			    }
+			    else{
+				    console.log("Authors are here");
 
-			if (status > 400){ //FAILED
-			        console.log("Failed to create Paper");
-			        console.log("Problem Getting Authors");
-		    }else{
-			    	console.log("Authors are here");
+						getCurrentUser(
+							function(currentUser){
 
-					getCurrentUser(
-						function(currentUser){
-							var current_user_index = -1;
-							for(var i = 0; i < data.users.length; i++){
-								if( data.users[i].users_id == currentUser.users_id)
-									current_user_index = i;
+								var current_user_index = -1;
+								for(var i = 0; i < data.users.length; i++){
+									if( data.users[i].users_id == currentUser.users_id)
+										current_user_index = i;
+								}
+								data.users.splice(current_user_index, 1);
+
+								callback(data);
+
 							}
-							data.users.splice(current_user_index, 1);
+						);
 
-							callback(data);
-
-						}
-					);
-
-		        	console.log(data);
-		    }
-	      console.log(textStatus);
-	      return true;
-	    },
+			        console.log(data);
+			    }//end of else
+	      			console.log(textStatus);
+	      			return true;
+	    	},//end of succes
 	    error : function(jqXHR, textStatus, errorThrown){
 	      console.log("not success " + textStatus);
 	      console.log(data);
 				console.log("Problem Getting Authors");
 	 		}
-		});
-	}
+		});//end of AJAX
+	}//end of getAuthors function
 
-  //this -> is the button that calls this event
+     //this -> is the button that calls this event
 	//author object -> users_id, fName, lName
   function removeAuthor(author, papers_id){
 		var authors_id = author.users_id;
@@ -358,28 +369,24 @@
   //Gets currently selected paper's info and populates the fields
   function populateFields(currentPaperE){
       var formE = getFormElements();
-      // papersE : document.getElementById('pPapers'),
-      // titleE : document.getElementById('m-title'),
-      // abstractE : document.getElementById('m-abstract'),
-      // citationE : document.getElementById('m-citation'),
-      // authorsE : document.getElementById('pAuthor')
-      //var currentPaper = getLocalPaper(currentPaper.getAttribute('data-paper-id'));
-			console.log(currentPaperE);
+      
+		console.log(currentPaperE);
 
 			var currentPaperId = currentPaperE.getAttribute('data-paper-id');
 			getPaper(currentPaperId, function(currentPaper){
 
-				formE.titleE.value = currentPaper.title;
-	      formE.abstractE.value = currentPaper.abstract;
-	      formE.citationE.value = currentPaper.citation;
+				formE.titleE.value    =  currentPaper.title;
+	    		formE.abstractE.value =  currentPaper.abstract;
+	    		formE.citationE.value =  currentPaper.citation;
 
 				getAuthors(function(authors){
 
 					//Makes it so the current user can't remove themself as an author of a paper
 					getCurrentUser(function(currentUser){
-							var current_user_index = -1;
+						var current_user_index = -1;
 							for(var i = 0; i < currentPaper.authors.length; i++){
 								if( currentPaper.authors[i].users_id != currentUser.users_id){
+
 									addAuthorById(currentPaper.authors[i], currentPaper.papers_id);
 
 									//Loop over authors, if exists in authors, delete it from array
@@ -393,22 +400,24 @@
 									if (current_author_index != -1){
 										authors.users.splice(current_author_index, 1);
 									}
-								}
-							}
+
+								}//end of if
+							}//end of for
 							//Creates dropdown of authors
 							genAuthors(authors);
-						});
-				});
+					});//end of CurrentUserMethod
+				
+				});//end of getAuthorsMethod
 
-			});
+
+				//Keywords ----
+				console.log("doing keywords now");
+				console.log(currentPaper.keywords);
+
+				genKeywords( currentPaper.keywords, currentPaperId );
+
+			});//end of getPaper
   }
-
-	/*
-	 *Gets value of element with specified id
-	 */
-	function valueOf(id){
-		return document.getElementById(id).value;
-	}
 
 	/**
 	**Compares values on the page to the values in localstorage
@@ -450,15 +459,6 @@
 	 	return data;
 	}
 
-	function validate(x){
-		if (x == null || x == "") {
-        	return false;
-    	}
-    	else{
-    		return true;
-    	}
-	}
-
 	 // Only saves changes of title, citation, and abstract
 	 function saveChanges(evt){
 
@@ -484,7 +484,7 @@
 		 	$.ajax({
 		 		url: "/api/papers/edit",
 		 		type: "POST",
-		 		data: JSON.stringify(data), //
+		 		data: JSON.stringify(data), 
 		 		contentType: "application/json",
 		 		success : function(data, textStatus, jqXHR){
 		 				if (status >= 400){ //FAILED
@@ -520,6 +520,142 @@
 	 	//evt.preventDefault();
 	 	return false;
 	 }
+
+	 //Keywords stuff
+
+	 //Adds keywords of the selected paper to the page
+	function genKeywords( selected_keywords, currentPaperId ){
+		
+		var keywords = selected_keywords;
+		var numKeywords = keywords.length;
+		var kw; // single keyword
+		console.log(numKeywords);
+
+		for(i= 0; i<numKeywords; i++){
+			//append the keyword button to the page
+			kw = keywords[i];
+			$("#key-cont").append(
+				`<p id='${kw}' class='r-box btn-success pure-button added-author'>
+					<span class='m-author' data-val='${kw}'>
+						${ kw }
+					</span>
+				</p>`
+			);
+
+			$("#"+kw).click(removeKey.bind(this, kw, currentPaperId ));
+			//$("#"+kw).remove();
+			console.log(kw);
+		}
+
+	}//end of genKeyword function
+
+	function removeKey( keyword, papers_id ){
+
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+	 	var kwEle = document.getElementById( keyword );
+	 	console.log("key is: " + keyword );
+	 	console.log(kwEle);
+
+	 	var data = {
+			papers_id : papers_id,
+			keywords  : [ keyword ],
+			data: m_token
+		}
+
+		var dataJSON = JSON.stringify(data);
+
+		$.ajax({
+	      		url: `/api/papers/keywords/delete`,
+	      		type: "POST",
+	      		contentType: "application/json",
+				data : dataJSON,
+	      		success : function(data, textStatus, jqXHR){
+		        	if (status > 400){
+		          	//window.location.href = `/login`;
+						console.log('Remove was Unsuccessful');
+		        	}else{
+						kwEle.remove();
+		        	}
+		        	console.log(textStatus);
+		        	console.log(keyword
+		        	 + "has been removed successfully");
+		        	return true;
+	     		},//end of success
+	      		error : function(jqXHR, textStatus, errorThrown){
+	        		console.log(textStatus);
+					console.log('Remove was Unsuccessful');
+	      		}//end of error
+	    });
+		
+	}//end of removeKey()
+
+	//adds keyword to selected paper when plus button clicked
+	function addKeywordByButton(){
+
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+		var keywordE = document.getElementsByClassName("pKey")[0];
+		var keyword = keywordE.value;
+		var papersE  = document.getElementById('pPapers');
+		var currentPaper = papersE.selectedOptions[0];
+		var currentPaperId = currentPaper.getAttribute('data-paper-id');
+
+		if (keyword != "" || keyword != null){
+			console.log("hit");			
+			var data = {
+					papers_id : currentPaperId, 
+					keywords : [ 
+						keyword
+					],
+					data: m_token 
+			}
+
+			var dataJSON = JSON.stringify(data);
+
+			//Add to server
+			$.ajax({
+		      url: `/api/papers/keywords/add`,
+		      type: "POST",
+					data : dataJSON,
+					contentType: "application/json",
+		      		success : function(data, textStatus, jqXHR){
+
+			        	if (status > 400){
+							console.log('Addition was Unsuccessful');
+			        	}else{
+			        		//appends new keyword to page
+							$("#key-cont").append(
+								`<p id='${keyword}' class='r-box btn-success pure-button added-author'>
+									<span class='m-author' data-val='${keyword}'>
+										${ keyword }
+									</span>
+								</p>`
+							);
+							//adds click evt to remove keyword
+							$("#"+keyword).click( removeKey.bind( this, keyword, currentPaperId ) );
+			        	}
+			        	console.log(textStatus);
+			        	return true;
+
+		      		},//end of success
+		      		error : function(jqXHR, textStatus, errorThrown){
+		        		console.log(textStatus);
+						console.log('Addition was Unsuccessful');
+		      		}//end of error
+		    });//end of AJAX
+			//Add to server
+		}else{
+			//Print out to screen
+			console.log('No Author Selected');
+		}
+	}//end of addKeywordByButton function
 
 	 init();
  })();

@@ -238,19 +238,9 @@
 	 		console.log("value of auhor is: " + val);
 	 		authors.push( val );
 	 	}
+	 	
 	 	console.log(authors);
 
-		// var m_title     = "a title";//valueOf("m-title");
-		// var m_abstract  = "asmnfjf";//valueOf("m-abstract");
-		// var m_citations = "choite";//valueOf("m-citation");
-		// var m_keywords  = ["1", "2"];
-		// var m_authors   = ["2", "3"];
-		
-
-	 	// Send paper ID
-	    /*for(var i = 0; i<10; i++){
-	 		m_keywords[i] = get[i].value;
-	 	}*/
 	 	if( valueOf("m-title") == " " || valueOf("m-title") == null || valueOf("m-title") === ""){
 	 		console.log(valueOf("m-title"));
 	 		swal({
