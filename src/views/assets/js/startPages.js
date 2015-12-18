@@ -1,14 +1,16 @@
 (function(){
   var token = localStorage.getItem("token");
+  var headers = {};
+if(token){
+    headers['x-access-token'] = token;
+}
 
   var init = function(){
 
     $.ajax({
       url: `/api/users`,
       type: "GET",
-      headers: {
-        'x-access-token': token
-      },
+      headers: headers,
       success : function(data, textStatus, jqXHR){
         if (status > 400){
           //window.location.href = `/login`;

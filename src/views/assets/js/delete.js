@@ -7,7 +7,25 @@
 	 	var deleteButton = document.getElementById('db-delete');
 
 		//Maybe popup before deleting - "Are you sure you want to delete"
-	 	deleteButton.addEventListener('click', deletePaper );
+	 	deleteButton.addEventListener('click', function(){
+
+			swal({
+			  title: "Are you sure?",
+			  text: "This paper will deleted permanently",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Yes, delete it!",
+			  closeOnConfirm: false
+			},
+			function(){
+				deletePaper();
+			  	swal("Deleted!", "Paper has been deleted.", "success");
+			})
+	 		
+
+
+	 		});//end of add evt
 
 		getPapers(function(papers){
 			//console.log(authors);

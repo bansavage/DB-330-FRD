@@ -45,6 +45,7 @@ app.use(bodyParser.json());
 //Checks token if valid (experation) and user exists, goes next
 var authorize = function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log("balh");
   // decode token
   if (token) {
     // verifies secret, algorithms used, and checks experation time

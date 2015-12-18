@@ -162,7 +162,7 @@
 			}
 		}
 		else{
-			swal("Key not Added", "Keyword was a duplicate or was left blank");
+			swal("Key not Added", "Not a valid keyword");
 		}
 	}
 
@@ -175,12 +175,12 @@
 			for(var i = 0; i<keysOnPage.length; i++){
 				inputKey = document.getElementById("pKey").value;
 				
-				console.log(keysOnPage[i].textContent);
-				if( inputKey == keysOnPage[i].textContent || inputKey == "" ){
+				console.log(keysOnPage[i].getAttribute("data-val"));
+				if( inputKey === keysOnPage[i].getAttribute("data-val") || inputKey == "" || inputKey.indexOf(' ') >= 0){
 					bool = false;
 					isDuplicate = true;
 					console.log("key was duplicate");
-					console.log("keywords on page: " + i + " " + keysOnPage[i].textContent );
+					console.log("keywords on page: " + i + " " + keysOnPage[i].getAttribute("data-val") );
 				}
 				else{
 					if(isDuplicate){
@@ -228,7 +228,7 @@
 	 	var keywords = [];
 	 	var authors  = [];
 	 	for(var k = 0; k<document.getElementsByClassName("m-key").length;k++){
-	 		var val = document.getElementsByClassName("m-key")[k].textContent;
+	 		var val = document.getElementsByClassName("m-key")[k].Page[i].getAttribute("data-val");
 	 		console.log(val);
 	 		keywords.push( val );
 	 	}
