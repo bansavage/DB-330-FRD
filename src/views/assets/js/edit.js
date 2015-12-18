@@ -320,44 +320,61 @@
      //this -> is the button that calls this event
 	//author object -> users_id, fName, lName
   function removeAuthor(author, papers_id){
-		var authors_id = author.users_id;
-		var self = $(`#remove-auth-${authors_id}`);
-		// var remove = self.find(':first-child');
-		// var id     = remove.attr("data-val"); // Authors id
-		// var name   = remove.text();
 
-		var m_token ="";
-	 	if( localStorage.getItem("token") ){
-	 		m_token = localStorage.getItem("token");
-	 	}
+  		swal({
+		  title: "Are you sure?",
+		  text: "This author will be permanently removed from this paper",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, Remove author!",
+		  closeOnConfirm: false
+		},
+		function(){
 
-		$.ajax({
-	      url: `/api/papers/authors/delete`,
-	      type: "POST",
+				var authors_id = author.users_id;
+				var self = $(`#remove-auth-${authors_id}`);
+				// var remove = self.find(':first-child');
+				// var id     = remove.attr("data-val"); // Authors id
+				// var name   = remove.text();
 
-				data : {
-						papers_id : papers_id,
-						authors_id : authors_id,
-						data: m_token
-				},
-	      success : function(data, textStatus, jqXHR){
-		        if (status > 400){
-		          //window.location.href = `/login`;
+				var m_token ="";
+			 	if( localStorage.getItem("token") ){
+			 		m_token = localStorage.getItem("token");
+			 	}
+
+				$.ajax({
+			      url: `/api/papers/authors/delete`,
+			      type: "POST",
+
+						data : {
+								papers_id : papers_id,
+								authors_id : authors_id,
+								data: m_token
+						},
+			      success : function(data, textStatus, jqXHR){
+				        if (status > 400){
+				          //window.location.href = `/login`;
+									console.log('Remove was Unsuccessful');
+				        }else{
+
+									$("#pAuthor").append("<option class='authorOpt' id='author-"+authors_id+"'value='"+authors_id+"'>"+author.fName +
+									 										" " + author.lName + "</option>");
+									self.remove();
+				        }
+				        console.log(textStatus);
+				        return true;
+			      },//end of success
+			      error : function(jqXHR, textStatus, errorThrown){
+			        console.log(textStatus);
 							console.log('Remove was Unsuccessful');
-		        }else{
+			      }//end of error
+			    });//end of AJAX
 
-							$("#pAuthor").append("<option class='authorOpt' id='author-"+authors_id+"'value='"+authors_id+"'>"+author.fName +
-							 										" " + author.lName + "</option>");
-							self.remove();
-		        }
-		        console.log(textStatus);
-		        return true;
-	      },
-	      error : function(jqXHR, textStatus, errorThrown){
-	        console.log(textStatus);
-					console.log('Remove was Unsuccessful');
-	      }
-	    });
+		 		swal("Removed!", "Author has been removed.", "success");
+
+		});//end of swal
+
 	}//end of removeAuthor()
 
 	function genPapers( papers ){
@@ -563,45 +580,61 @@
 
 	function removeKey( keyword, papers_id ){
 
-		var m_token ="";
-	 	if( localStorage.getItem("token") ){
-	 		m_token = localStorage.getItem("token");
-	 	}
 
-	 	var kwEle = document.getElementById( keyword );
-	 	console.log("key is: " + keyword );
-	 	console.log(kwEle);
+		swal({
+		  title: "Are you sure?",
+		  text: "Keyword will be permanently removed from this paper",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, Remove keyword!",
+		  closeOnConfirm: false
+		},
+		function(){
+		 			
+				var m_token ="";
+			 	if( localStorage.getItem("token") ){
+			 		m_token = localStorage.getItem("token");
+			 	}
 
-	 	var data = {
-			papers_id : papers_id,
-			keywords  : [ keyword ],
-			data: m_token
-		}
+			 	var kwEle = document.getElementById( keyword );
+			 	console.log("key is: " + keyword );
+			 	console.log(kwEle);
 
-		var dataJSON = JSON.stringify(data);
+			 	var data = {
+					papers_id : papers_id,
+					keywords  : [ keyword ],
+					data: m_token
+				}
 
-		$.ajax({
-	      		url: `/api/papers/keywords/delete`,
-	      		type: "POST",
-	      		contentType: "application/json",
-				data : dataJSON,
-	      		success : function(data, textStatus, jqXHR){
-		        	if (status > 400){
-		          	//window.location.href = `/login`;
-						console.log('Remove was Unsuccessful');
-		        	}else{
-						kwEle.remove();
-		        	}
-		        	console.log(textStatus);
-		        	console.log(keyword
-		        	 + "has been removed successfully");
-		        	return true;
-	     		},//end of success
-	      		error : function(jqXHR, textStatus, errorThrown){
-	        		console.log(textStatus);
-					console.log('Remove was Unsuccessful');
-	      		}//end of error
-	    });
+				var dataJSON = JSON.stringify(data);
+
+				$.ajax({
+			      		url: `/api/papers/keywords/delete`,
+			      		type: "POST",
+			      		contentType: "application/json",
+						data : dataJSON,
+			      		success : function(data, textStatus, jqXHR){
+				        	if (status > 400){
+				          	//window.location.href = `/login`;
+								console.log('Remove was Unsuccessful');
+				        	}else{
+								kwEle.remove();
+				        	}
+				        	console.log(textStatus);
+				        	console.log(keyword
+				        	 + "has been removed successfully");
+				        	return true;
+			     		},//end of success
+			      		error : function(jqXHR, textStatus, errorThrown){
+			        		console.log(textStatus);
+							console.log('Remove was Unsuccessful');
+			      		}//end of error
+			    });//end of AJAX
+
+			    swal("Removed!", "Keyword has been removed.", "success");
+
+		});//end of swal
 		
 	}//end of removeKey()
 
