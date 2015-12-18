@@ -260,7 +260,6 @@
 
 	//Adds authors to the dropdown, takes in author objects
 	function genAuthors( authors ){
-		//debugger;
 		//var a = JSON.parse('{"users":[{"users_id":"1","fName":"Kris","lName":"Brown"},{"users_id":"2","fName":"Jon","lName":"Lee"},{"users_id":"3","fName":"Joe","lName":"Doe"},{"users_id":"4","fName":"Boss","lName":"Guy"}]}');
 		var users = authors.users;
 		var numUsers = users.length;
@@ -512,7 +511,6 @@
 
 		var current_paper     =  document.getElementById("pPapers");
 		var current_paper_id  =  current_paper.selectedOptions[0].getAttribute('data-paper-id');
-
 		getPaper(current_paper_id, function(currentPaper){
 			var curr_paper_data   =  getFormElements();
 
@@ -680,22 +678,9 @@
 		var currentPaper = papersE.selectedOptions[0];
 		var currentPaperId = currentPaper.getAttribute('data-paper-id');
 
-<<<<<<< HEAD
-		if (keyword != "" || keyword != null){
-			console.log("hit");
-			var data = {
-					papers_id : currentPaperId,
-					keywords : [
-						keyword
-					],
-					data: m_token
-			}
-
-			var dataJSON = JSON.stringify(data);
-
 		if( isValidKey() ){
 			if( document.getElementsByClassName("m-key").length < 5){
-				console.log("hit");			
+				console.log("hit");
 
 				var data = {
 						papers_id : currentPaperId,

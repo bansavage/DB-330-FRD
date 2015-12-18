@@ -214,7 +214,7 @@ function Paper(){
         for (var property in data) {
           if (data.hasOwnProperty(property)) {
             sqlParams.push('??=?');
-            var c = property.toString().replace("'"," ");
+            var c = property.toString();//.replace("'"," ");
             sqlInserts.push(c);
             sqlInserts.push(data[c]);
           }

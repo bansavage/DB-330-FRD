@@ -50,7 +50,6 @@ var authorize = function(req, res, next) {
     // verifies secret, algorithms used, and checks experation time
     jwt.verify(token, config.secret, { algorithms: ['HS256']}, function(err, decoded) {
       if (err) {
-        console.log('ccccccccccccccccccccccc');
         console.log(err);
         res.redirect('login');
         //res.status(401).send({message : 'missing token'});
@@ -569,6 +568,7 @@ app.get('/api/papers/', function(req, res){
   console.log("mydata" + data);
 
   user_mid.getPapers(data, function(err, papers){
+    console.log('adfadfadf2222222222222');
     if (err){
       console.log(err);
       res.status(401).send({message: 'Invalid Request'});
@@ -598,7 +598,7 @@ app.get('/api/papers/', function(req, res){
                       if (!papers.keywords){
                         papers.keywords = [];
                       }
-                      res.json({
+                      res.status(200).json({
                        papers : papers
                        //test : 'helloworld'
                       });
