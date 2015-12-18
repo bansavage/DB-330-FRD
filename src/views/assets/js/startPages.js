@@ -35,7 +35,7 @@
     icon.classList.add("fa");
     icon.classList.add("fa-user");
 
-    
+
     el.appendChild(current_user);
     el.appendChild(icon);
     if(document.getElementsByClassName("banner-head")[0]){
@@ -62,6 +62,7 @@
   var goWithToken = function(href){
     console.log(href);
     var token = localStorage.getItem("token");
+    console.log(token);
     //Checks to see if the next page is authorized
     $.ajax({
       url: `${href}`,
@@ -75,7 +76,7 @@
           console.log(data);
           swal({
             title: "<h2 style='color:#DD6B55;'>This Page is Unaccessable</h2>",
-    			  text: "Quick Fixes: Try adding a paper.",
+    			  text: "Quick Fix: Try adding a paper.",
     			  imageUrl: "../assets/img/bad.png",
     			  html: true
           });
@@ -89,7 +90,7 @@
         console.log(textStatus);
         swal({
   			  title: "<h2 style='color:#DD6B55;'>This Page is Unaccessable</h2>",
-  			  text: "Quick Fixe: Try adding a paper.",
+  			  text: "Quick Fix: Try adding a paper.",
   			  imageUrl: "../assets/img/bad.png",
   			  html: true
         });

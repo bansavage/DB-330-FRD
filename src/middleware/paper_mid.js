@@ -221,9 +221,6 @@ function Paper(){
         var sqlParamsString = sqlParams.join(',');
         sqlInserts.push(obj.papers_id);
 
-        console.log(sqlParamsString);
-        console.log(sqlInserts);
-
         if (obj.papers_id !== undefined){
           var sql = `update ${config.db.database}.papers set ${sqlParamsString} where papers_id = ?`;
           sql = mysql.format(sql, sqlInserts);
@@ -269,7 +266,7 @@ function Paper(){
           break;
         case "faculty":
           var complete = false;
-          user_mid.getPapers({users_id: users_id}, function(err, papers){
+          user_mid.getPapers({users_id: users_id, permission: permission}, function(err, papers){
             if (err) {
               console.log(err);
               res.status(404).send({message: 'Paper lookup error'});
@@ -279,7 +276,7 @@ function Paper(){
                   next(); // User has access to the paper
                   complete = true;
                 }
-                if (index >= arr.length-1 && complete == false){
+                if (index > arr.length-1 && complete == false){
                   res.status(404).send({message: 'Unauthorized Paper Access'}); // User does not have access to that paper
                 }
               });

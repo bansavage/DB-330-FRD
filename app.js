@@ -86,8 +86,8 @@ app.get('/login', function(req, res){
   });
 });
 
-app.use('/papers/editform', authorize);
-app.use('/papers/editform', paper_mid.hasPermission);
+app.use('/papers/delete', authorize);
+app.use('/papers/delete', paper_mid.hasCreationPermission);
 //Renders the delete papers page
 app.get('/papers/delete', function(req, res){
   res.render('delete');
@@ -211,7 +211,7 @@ app.post('/api/papers/keywords/add', function(req, res){
 });
 
 app.use('/papers/edit', authorize);
-app.use('/papers/edit', paper_mid.hasPermission);
+app.use('/papers/edit', paper_mid.hasCreationPermission);
 // Renders the edit papers page
 app.get('/papers/edit', function(req, res){
   user_mid.getPapers({users_id : req.body.userId}, function(err, papers){
@@ -266,7 +266,7 @@ app.get('/papers/edit', function(req, res){
 
 //Middleware for editing papers
 app.use('/api/papers/edit', authorize);
-app.use('/api/papers/edit', paper_mid.hasPermission);
+app.use('/api/papers/edit', paper_mid.hasCreationPermission);
 // Edits a paper, requires a paper object with the updated parameters
 // The request just needs an object with a papers_id inside, as well as a jwt token.
 app.post('/api/papers/edit', function(req, res){
