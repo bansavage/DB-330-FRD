@@ -206,7 +206,7 @@ function Paper(){
         if (obj.citation !== undefined){
           data.citation = obj.citation;
         }
-        console.log(data);
+        console.log("adfa--------------"+data);
 
         var sqlParams = [];
         var sqlInserts = [];
@@ -214,14 +214,15 @@ function Paper(){
         for (var property in data) {
           if (data.hasOwnProperty(property)) {
             sqlParams.push('??=?');
-            sqlInserts.push(property.toString());
-            sqlInserts.push(data[property]);
+            var c = property.toString().replace("'"," ");
+            sqlInserts.push(c);
+            sqlInserts.push(data[c]);
           }
         }
         var sqlParamsString = sqlParams.join(',');
         sqlInserts.push(obj.papers_id);
 
-        if (obj.papers_id !== undefined){
+        if (obj.papers_id !== undefined || sqlInserts !== undefined){
           var sql = `update ${config.db.database}.papers set ${sqlParamsString} where papers_id = ?`;
           sql = mysql.format(sql, sqlInserts);
         }else{
@@ -301,6 +302,7 @@ function Paper(){
       var users_id = req.body.userId;
       var permission = req.body.permission;
       var papers_id = req.body.papers_id;
+      console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
 
       switch(permission) {
         case "admin":

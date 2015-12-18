@@ -50,11 +50,13 @@ var authorize = function(req, res, next) {
     // verifies secret, algorithms used, and checks experation time
     jwt.verify(token, config.secret, { algorithms: ['HS256']}, function(err, decoded) {
       if (err) {
+        console.log('ccccccccccccccccccccccc');
         console.log(err);
         res.redirect('login');
         //res.status(401).send({message : 'missing token'});
         return;
       } else {
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
         req.body.userId = decoded.userId;
         req.body.permission = decoded.permission;
         next();
@@ -62,6 +64,7 @@ var authorize = function(req, res, next) {
     });
 
   } else {
+    console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbb');
     // if there is no token
     res.redirect('login');
     //res.status(401).send({message : 'missing token'});

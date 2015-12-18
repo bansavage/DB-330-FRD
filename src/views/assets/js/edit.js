@@ -7,8 +7,10 @@
 	 	var selectButton = document.getElementById('db-select');
 		var addAuthorButton  = $(".add-auth");
 		var addKeywordButton = $(".add-key");
+		var saveButton = $("#db-save");
 		addAuthorButton.click(addAuthorByButton);
 		addKeywordButton.click(addKeywordByButton);
+		saveButton.click(saveChanges);
 
     	getPapers(function(papers){
     	genPapers( papers );
@@ -38,7 +40,7 @@
 	* validate string
 	*/
 	function validate(x){
-		if (x == null || x == "") {
+		if (!x || x == "") {
         	return false;
     	}
     	else{
@@ -114,7 +116,7 @@
   	function cleanUp(){
     	var allAuthorButtons = $('.r-box');
 		var allAuthorOpt = $('.authorOpt'); // Gets all author option tags
-	
+
 		allAuthorOpt.remove();
    		allAuthorButtons.remove();
   	}
@@ -177,7 +179,7 @@
 					authors : [ //keywords : [ keyword ]
 						authors_id
 					],
-					data: m_token 
+					data: m_token
 			}
 
 			var dataJSON = JSON.stringify(data);
@@ -273,7 +275,7 @@
 	 	}
 
 		$.ajax({
-	 		url: `/api/users/all/`, 
+	 		url: `/api/users/all/`,
 	 		headers: {'x-access-token': m_token },
 	 		type: "GET",
 	 		success : function(data, textStatus, jqXHR){
@@ -369,7 +371,7 @@
   //Gets currently selected paper's info and populates the fields
   function populateFields(currentPaperE){
       var formE = getFormElements();
-      
+
 		console.log(currentPaperE);
 
 			var currentPaperId = currentPaperE.getAttribute('data-paper-id');
@@ -406,7 +408,7 @@
 							//Creates dropdown of authors
 							genAuthors(authors);
 					});//end of CurrentUserMethod
-				
+
 				});//end of getAuthorsMethod
 
 
@@ -424,8 +426,10 @@
 	**if they are the same return false
 	**if there are different values return
 	**a data object with the different values
+	**cp - currentPaper data on screen
+	**dbp - current database paper
 	**/
-	function getData( cp, lp ){
+	function getData( cp, dbp ){
 
 		var data = {};
 		var cp_title, cp_abstract, cp_citation;
@@ -433,27 +437,27 @@
 
 	 	cp_title      =  cp.titleE.value;
 	 	cp_abstract   =  cp.abstractE.value;
-	 	cp_citations  =  cp.citationE.value;
+	 	cp_citation  =  cp.citationE.value;
 
-	 	lp_title      =  lp.title;
-	 	lp_abstract   =  lp.abstract;
-	 	lp_citations  =  lp.citation;
+	 	dbp_title      =  dbp.title;
+	 	dbp_abstract   =  dbp.abstract;
+	 	dbp_citation  =  dbp.citation;
 
 
 	 	//Compare values
 	 	//Compare Title
-	 	if( validate(cp_title)    ||  cp_title     !==  lp_title     ){
+	 	if( validate(cp_title)     &&  cp_title     !==  dbp_title     ){
 	 		data.title = cp_title;
 	 	}
 
 	 	//Compare abstract
-	 	if( validate(cp_abstract) ||  cp_abstract  !==  lp_abstract  ){
+	 	if( validate(cp_abstract)  &&  cp_abstract  !==  dbp_abstract  ){
 	 		data.abstract = cp_abstract;
 	 	}
 
 	 	//Compare citations
-	 	if( validate(cp_citations)||  cp_citations !==  lp_citations ){
-	 		data.citations = cp_citations;
+	 	if( validate(cp_citation) &&  cp_citation !==  dbp_citation ){
+	 		data.citation = cp_citation;
 	 	}
 
 	 	return data;
@@ -464,68 +468,79 @@
 
 		var current_paper     =  document.getElementById("pPapers");
 		var current_paper_id  =  current_paper.selectedOptions[0].getAttribute('data-paper-id');
-		var local_paper_data  =  getLocalPaper( current_paper_id );
-		var curr_paper_data   =  getFormElements();
 
-		var m_token ="";
-	 	if( localStorage.getItem("token") ){
-	 		m_token = localStorage.getItem("token");
-	 	}
+		getPaper(current_paper_id, function(currentPaper){
+			var curr_paper_data   =  getFormElements();
 
-	 	var valid_data = getData();
-	 	if( valid_data != null ){
-			var data = {
-		 			papers_id:  current_paper_id,
-		 			token:    m_token,
-		 			title: valid_data.title,
-		 			title: valid_data.citations,
-		 			title: valid_data.abstract,
-		 	};
-		 	$.ajax({
-		 		url: "/api/papers/edit",
-		 		type: "POST",
-		 		data: JSON.stringify(data), 
-		 		contentType: "application/json",
-		 		success : function(data, textStatus, jqXHR){
-		 				if (status >= 400){ //FAILED
-				        console.log("Failed to delete Paper");
-				        swal({
+			var m_token ="";
+		 	if( localStorage.getItem("token") ){
+		 		m_token = localStorage.getItem("token");
+		 	}
+
+		 	var data = getData(curr_paper_data, currentPaper);
+			if (Object.keys(data).length > 0){
+				data.papers_id = current_paper_id;
+				data.token = m_token;
+
+				var tempData = data; // Used so it persists inside of the ajax call
+
+				 	$.ajax({
+				 		url: "/api/papers/edit",
+				 		type: "POST",
+				 		data: JSON.stringify(data),
+				 		contentType: "application/json",
+				 		success : function(data, textStatus, jqXHR){
+				 				if (status >= 400){ //FAILED
+						        console.log("Failed to Update Paper");
+						        swal({
+								  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+								  text: "Failed to save data",
+								  imageUrl: "../img/bad.png",
+								  html: true
+								});
+				      }else{
+						    console.log("etaete");
+								console.log(data);
+								//Sets the title to the new title
+								if (tempData.title){
+									var pE = document.getElementById('pPapers');
+									var selected = pE.selectedOptions[0];
+									selected.innerText = tempData.title;
+								}
+
+				 				swal("Paper Updated!", "Paper has been updated successfully", "success")
+								//$(`#paper-${current_paper_id}`).remove();
+				        console.log(data);
+				      }
+				      console.log(textStatus);
+				      return true;
+				    },
+				    error : function(jqXHR, textStatus, errorThrown){
+				      console.log("not success " + textStatus);
+				      console.log(data);
+				      swal({
 						  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-						  text: "Failed to add paper",
-						  imageUrl: "../img/bad.png",
-						  html: true
-						});
-		      }else{
-				    console.log("etaete");
-						console.log(data);
-
-		 				swal("Paper Deleted!", "Paper has been deleted successfully", "success")
-						$(`#paper-${current_paper_id}`).remove();
-		        console.log(data);
-		      }
-		      console.log(textStatus);
-		      return true;
-		    },
-		    error : function(jqXHR, textStatus, errorThrown){
-		      console.log("not success " + textStatus);
-		      console.log(data);
-		      swal({
-				  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-				  text: "Failed to delete paper",
-				  imageUrl: "../assets/img/bad.png",
-				  html: true });
-		      }
-		 	});
-		}
-	 	//evt.preventDefault();
-	 	return false;
+						  text: "Failed to Update Paper",
+						  imageUrl: "../assets/img/bad.png",
+						  html: true });
+				      }
+				 	});
+			}else{
+				swal({
+				title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+				text: "No Changes Were Made",
+				imageUrl: "../assets/img/bad.png",
+				html: true });
+			}
+			return false;
+		});
 	 }
 
 	 //Keywords stuff
 
 	 //Adds keywords of the selected paper to the page
 	function genKeywords( selected_keywords, currentPaperId ){
-		
+
 		var keywords = selected_keywords;
 		var numKeywords = keywords.length;
 		var kw; // single keyword
@@ -590,7 +605,7 @@
 					console.log('Remove was Unsuccessful');
 	      		}//end of error
 	    });
-		
+
 	}//end of removeKey()
 
 	//adds keyword to selected paper when plus button clicked
@@ -608,13 +623,13 @@
 		var currentPaperId = currentPaper.getAttribute('data-paper-id');
 
 		if (keyword != "" || keyword != null){
-			console.log("hit");			
+			console.log("hit");
 			var data = {
-					papers_id : currentPaperId, 
-					keywords : [ 
+					papers_id : currentPaperId,
+					keywords : [
 						keyword
 					],
-					data: m_token 
+					data: m_token
 			}
 
 			var dataJSON = JSON.stringify(data);
