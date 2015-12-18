@@ -27,11 +27,11 @@
   //Return the elements from the form
   function getFormElements(){
     return {
-      papersE : document.getElementById('pPapers'),
-      titleE : document.getElementById('m-title'),
+      papersE   : document.getElementById('pPapers'),
+      titleE    : document.getElementById('m-title'),
       abstractE : document.getElementById('m-abstract'),
       citationE : document.getElementById('m-citation'),
-      authorsE : document.getElementById('pAuthor')
+      authorsE  : document.getElementById('pAuthor')
     };
   }
 
@@ -410,58 +410,113 @@
 		return document.getElementById(id).value;
 	}
 
+	/**
+	**Compares values on the page to the values in localstorage
+	**if they are the same return false
+	**if there are different values return
+	**a data object with the different values
+	**/
+	function getData( cp, lp ){
+
+		var data = {};
+		var cp_title, cp_abstract, cp_citation; 
+		var lp_title, lp_abstract, lp_citation;
+
+	 	cp_title      =  cp.titleE.value; 
+	 	cp_abstract   =  cp.abstractE.value; 
+	 	cp_citations  =  cp.citationE.value; 
+
+	 	lp_title      =  lp.title; 
+	 	lp_abstract   =  lp.abstract; 
+	 	lp_citations  =  lp.citation; 
+
+
+	 	//Compare values
+	 	//Compare Title
+	 	if( validate(cp_title)    ||  cp_title     !==  lp_title     ){
+	 		data.title = cp_title;
+	 	}
+
+	 	//Compare abstract
+	 	if( validate(cp_abstract) ||  cp_abstract  !==  lp_abstract  ){
+	 		data.abstract = cp_abstract;
+	 	}
+
+	 	//Compare citations
+	 	if( validate(cp_citations)||  cp_citations !==  lp_citations ){
+	 		data.citations = cp_citations;
+	 	}
+
+	 	return data;
+	}
+
+	function validate(x){
+		if (x == null || x == "") {
+        	return false;
+    	}
+    	else{
+    		return true;
+    	}
+	}
+
 	 // Only saves changes of title, citation, and abstract
 	 function saveChanges(evt){
 
-		var current_paper= document.getElementById("pPapers");
-
-		var current_paper_id = current_paper.selectedOptions[0].getAttribute('data-paper-id');
+		var current_paper     =  document.getElementById("pPapers");
+		var current_paper_id  =  current_paper.selectedOptions[0].getAttribute('data-paper-id');
+		var local_paper_data  =  getLocalPaper( current_paper_id );
+		var curr_paper_data   =  getFormElements();
 
 		var m_token ="";
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
 
-		var data = {
-	 			papers_id:  current_paper_id,
-	 			token:    m_token
-	 		};
+	 	var valid_data = getData();
+	 	if( valid_data != null ){
+			var data = {
+		 			papers_id:  current_paper_id,
+		 			token:    m_token,
+		 			title: valid_data.title,
+		 			title: valid_data.citations,
+		 			title: valid_data.abstract,
+		 	};
+		 	$.ajax({
+		 		url: "/api/papers/edit", 
+		 		type: "POST",
+		 		data: JSON.stringify(data), //
+		 		contentType: "application/json",
+		 		success : function(data, textStatus, jqXHR){
+		 				if (status >= 400){ //FAILED
+				        console.log("Failed to delete Paper");
+				        swal({
+						  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+						  text: "Failed to add paper",
+						  imageUrl: "../img/bad.png",
+						  html: true
+						});
+		      }else{
+				    console.log("etaete");
+						console.log(data);
 
-	 	$.ajax({
-	 		url: "/api/papers/delete", // /delete //  /edit-abstract  /
-	 		type: "POST",
-	 		data: JSON.stringify(data), //
-	 		contentType: "application/json",
-	 		success : function(data, textStatus, jqXHR){
-	 				if (status >= 400){ //FAILED
-			        console.log("Failed to delete Paper");
-			        swal({
-					  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-					  text: "Failed to add paper",
-					  imageUrl: "../img/bad.png",
-					  html: true
-					});
-	      }else{
-			    console.log("etaete");
-					console.log(data);
-
-	 				swal("Paper Deleted!", "Paper has been deleted successfully", "success")
-					$(`#paper-${current_paper_id}`).remove();
-	        console.log(data);
-	      }
-	      console.log(textStatus);
-	      return true;
-	    },
-	    error : function(jqXHR, textStatus, errorThrown){
-	      console.log("not success " + textStatus);
-	      console.log(data);
-	      swal({
-			  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
-			  text: "Failed to delete paper",
-			  imageUrl: "../assets/img/bad.png",
-			  html: true });
-	      }
-	 	});
+		 				swal("Paper Deleted!", "Paper has been deleted successfully", "success")
+						$(`#paper-${current_paper_id}`).remove();
+		        console.log(data);
+		      }
+		      console.log(textStatus);
+		      return true;
+		    },
+		    error : function(jqXHR, textStatus, errorThrown){
+		      console.log("not success " + textStatus);
+		      console.log(data);
+		      swal({
+				  title: "<h2 style='color:#DD6B55;'>Oppps!</h2>",
+				  text: "Failed to delete paper",
+				  imageUrl: "../assets/img/bad.png",
+				  html: true });
+		      }
+		 	});
+		}
 	 	//evt.preventDefault();
 	 	return false;
 	 }
@@ -470,26 +525,3 @@
  })();
 
 
-// for(var i = 0; i<document.getElementsByClassName("fa-times").length; i++){
-// 	document.getElementsByClassName("fa-times")[i].addEventListener("click", function(e){
-//
-// 		swal({
-// 		  title: "Are you sure?",
-// 		  text: "This Paper will be permanently deleted",
-// 		  type: "warning",
-// 		  showCancelButton: true,
-// 		  confirmButtonColor: "#DD6B55",
-// 		  confirmButtonText: "Yes, delete it!",
-// 		  cancelButtonText: "No, cancel plx!",
-// 		  closeOnConfirm: false,
-// 		  closeOnCancel: false
-// 		},
-// 			function(isConfirm){
-// 			  if (isConfirm) {
-// 			    swal("Deleted!", "Paper has been deleted", "success");
-// 			  } else {
-// 				    swal("Cancelled", "Paper is safe and sound and not deleted :)", "error");
-// 			  }
-// 			});
-// 		});
-// }
