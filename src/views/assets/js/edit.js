@@ -5,20 +5,21 @@
 	function init(){
 
 	 	var selectButton = document.getElementById('db-select');
-
+		var addAuthorButton = $(".add-auth");
+		addAuthorButton.click(addAuthorByButton);
 
     getPapers(function(papers){
       genPapers( papers );
     });
 
-    selectButton.addEventListener('click', function(evt){
-      cleanUp();
-      var papersE = document.getElementById('pPapers');
-      var currentPaper = papersE.selectedOptions[0];
+		selectButton.addEventListener('click', function(evt){
+			cleanUp();
+			var papersE = document.getElementById('pPapers');
+			var currentPaper = papersE.selectedOptions[0];
 
-      //CurrentAuthor is an object with the current author info
-      populateFields(currentPaper);
-    });
+			//CurrentPaper is an object with the current paper info
+			populateFields(currentPaper);
+		});
 
 	 	console.log("added Event add auth");
 	}
@@ -43,7 +44,7 @@
 
 
 		$.ajax({
-	      url: `/api/papers`,
+	      url: `/api/users`,
 	      type: "GET",
 	      headers: {
 	        'x-access-token': m_token
@@ -65,6 +66,7 @@
 	}
 
   //Gets the given paper's information from localStorage
+	//Actually gets from the server
   function getLocalPaper(papers_id){
     var papersString = localStorage.getItem('papers');
     var papers = JSON.parse(papersString);
@@ -75,8 +77,22 @@
     }
   }
 
+	//Gets a paper with papers_id provided
+	function getPaper(papers_id, callback){
+		getPapers(function(papers){
+			for(var i=0; i<papers.length; i++){
+				if (papers[i].papers_id == papers_id){
+					callback(papers[i]);
+					return;
+				}
+			}
+		});
+	}
+
   function cleanUp(){
     var allAuthorButtons = $('.r-box');
+		var allAuthorOpt = $('.authorOpt'); // Gets all author option tags
+		allAuthorOpt.remove();
     allAuthorButtons.remove();
   }
 
@@ -116,16 +132,85 @@
 		});
 	}
 
-  //id -> the id of the author
-  function addAuthorByButton(evt){
-		var id = $("#pAuthor").val();
-		var remove_id = "remove-auth-" + id;
-		$(".auth-cont").append('<p id="'+remove_id+'"class="r-box btn-success pure-button added-author"><span class="m-author" data-val="'+id+'">'+$("#pAuthor").find(":selected").text()+'</span></p>');
-		$("#author-"+author_id).remove();
-		$("#"+remove_id).click(removeAuthor);
 
-    //Add to server
+
+
+
+
+  //id -> the id of the author
+  function addAuthorByButton(){
+
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+		var authorE = $("#pAuthor");
+		var papersE = document.getElementById('pPapers');
+		var currentPaper = papersE.selectedOptions[0];
+		var currentPaperId = currentPaper.getAttribute('data-paper-id');
+
+		if (authorE.find(":selected").length > 0){
+			console.log("hit");
+			var authors_id = authorE.val();
+			var remove_id = "remove-auth-" + authors_id;
+			var data = {
+					papers_id : currentPaperId,
+					authors : [
+						authors_id
+					],
+					data: m_token
+			}
+
+			var dataJSON = JSON.stringify(data);
+
+			//Add to server
+			$.ajax({
+		      url: `/api/papers/authors/add`,
+		      type: "POST",
+					data : dataJSON,
+					contentType: "application/json",
+		      success : function(data, textStatus, jqXHR){
+			        if (status > 400){
+			          //window.location.href = `/login`;
+								console.log('Addition was Unsuccessful');
+			        }else{
+
+								$(".auth-cont").append(`<p id='${remove_id}' class='r-box btn-success pure-button added-author'>
+						                              <span class='m-author' data-val='${authors_id}'>
+						                              ${authorE.find(":selected").text()}
+						                              </span>
+						                            </p>`);
+								debugger;
+
+								var author = {
+									users_id : authors_id,
+									fName: authorE.find(":selected").text(),
+									lName: ""
+								}
+
+								$(`#author-${authors_id}`).remove();
+								$("#"+remove_id).click(removeAuthor.bind(this, author, currentPaperId));
+			        }
+			        console.log(textStatus);
+			        return true;
+		      },
+		      error : function(jqXHR, textStatus, errorThrown){
+		        console.log(textStatus);
+						console.log('Addition was Unsuccessful');
+		      }
+		    });
+			//Add to server
+		}else{
+			//Print out to screen
+			console.log('No Author Selected');
+		}
 	}
+
+
+
+
+
 
   //author-> the author object -> completed
   function addAuthorById(author, papers_id){
@@ -138,12 +223,88 @@
                               </span>
                             </p>`);
 		$("#author-"+authors_id).remove();
-		$("#"+remove_id).click(removeAuthor.bind(this, authors_id, papers_id));
+		$("#"+remove_id).click(removeAuthor.bind(this, author, papers_id));
+	}
+
+	//Adds authors to the dropdown, takes in author objects
+	function genAuthors( authors ){
+		//debugger;
+		//var a = JSON.parse('{"users":[{"users_id":"1","fName":"Kris","lName":"Brown"},{"users_id":"2","fName":"Jon","lName":"Lee"},{"users_id":"3","fName":"Joe","lName":"Doe"},{"users_id":"4","fName":"Boss","lName":"Guy"}]}');
+		var users = authors.users;
+		var numUsers = users.length;
+		console.log(numUsers);
+		var authArr = [];
+		//console.log(users);
+		console.log(numUsers);
+		for(var i = 0; i<numUsers; i++){
+			authArr.push({
+				name: users[i].fName + " " + users[i].lName,
+				  id: users[i].users_id
+				}
+			);
+		}
+
+		//Split here into sep methods
+		for(i= 0; i<numUsers; i++){
+			$("#pAuthor").append("<option class='authorOpt' id='author-"+authArr[i].id+"'value='"+authArr[i].id+"'>"+authArr[i].name+"</option>");
+			console.log("added author");
+		}
+
+		return authArr;
+	}
+
+
+	function getAuthors(callback){
+
+		var m_token ="";
+	 	if( localStorage.getItem("token") ){
+	 		m_token = localStorage.getItem("token");
+	 	}
+
+		$.ajax({
+	 		url: `/api/users/all/`, // /delete //  /edit-abstract  /
+	 		headers: {'x-access-token': m_token },
+	 		type: "GET",
+	 		success : function(data, textStatus, jqXHR){
+	 			//console.log(data);
+
+			if (status > 400){ //FAILED
+			        console.log("Failed to create Paper");
+			        console.log("Problem Getting Authors");
+		    }else{
+			    	console.log("Authors are here");
+
+					getCurrentUser(
+						function(currentUser){
+							var current_user_index = -1;
+							for(var i = 0; i < data.users.length; i++){
+								if( data.users[i].users_id == currentUser.users_id)
+									current_user_index = i;
+							}
+							data.users.splice(current_user_index, 1);
+
+							callback(data);
+
+						}
+					);
+
+		        	console.log(data);
+		    }
+	      console.log(textStatus);
+	      return true;
+	    },
+	    error : function(jqXHR, textStatus, errorThrown){
+	      console.log("not success " + textStatus);
+	      console.log(data);
+				console.log("Problem Getting Authors");
+	 		}
+		});
 	}
 
   //this -> is the button that calls this event
-  function removeAuthor(authors_id, papers_id){
-
+	//author object -> users_id, fName, lName
+  function removeAuthor(author, papers_id){
+		var authors_id = author.users_id;
 		var self = $(`#remove-auth-${authors_id}`);
 		// var remove = self.find(':first-child');
 		// var id     = remove.attr("data-val"); // Authors id
@@ -153,18 +314,15 @@
 	 	if( localStorage.getItem("token") ){
 	 		m_token = localStorage.getItem("token");
 	 	}
-		debugger;
 
 		$.ajax({
 	      url: `/api/papers/authors/delete`,
 	      type: "POST",
-				contentType: "application/json",
-	      headers: {
-	        'x-access-token': m_token
-	      },
+
 				data : {
 						papers_id : papers_id,
-						authors_id : authors_id
+						authors_id : authors_id,
+						data: m_token
 				},
 	      success : function(data, textStatus, jqXHR){
 		        if (status > 400){
@@ -172,7 +330,8 @@
 							console.log('Remove was Unsuccessful');
 		        }else{
 
-							$("#pAuthor").append("<option id='author-"+id+"'value='"+id+"'>"+name+"</option>");
+							$("#pAuthor").append("<option id='author-"+authors_id+"'value='"+authors_id+"'>"+author.fName +
+							 										" " + author.lName + "</option>");
 							self.remove();
 		        }
 		        console.log(textStatus);
@@ -197,23 +356,51 @@
 	}
 
   //Gets currently selected paper's info and populates the fields
-  function populateFields(currentPaper){
+  function populateFields(currentPaperE){
       var formE = getFormElements();
       // papersE : document.getElementById('pPapers'),
       // titleE : document.getElementById('m-title'),
       // abstractE : document.getElementById('m-abstract'),
       // citationE : document.getElementById('m-citation'),
       // authorsE : document.getElementById('pAuthor')
-      var currentPaper = getLocalPaper(currentPaper.getAttribute('data-paper-id'));
+      //var currentPaper = getLocalPaper(currentPaper.getAttribute('data-paper-id'));
+			console.log(currentPaperE);
 
+			var currentPaperId = currentPaperE.getAttribute('data-paper-id');
+			getPaper(currentPaperId, function(currentPaper){
 
-      formE.titleE.value = currentPaper.title;
-      formE.abstractE.value = currentPaper.abstract;
-      formE.citationE.value = currentPaper.citation;
+				formE.titleE.value = currentPaper.title;
+	      formE.abstractE.value = currentPaper.abstract;
+	      formE.citationE.value = currentPaper.citation;
 
-      for (var i=0; i<currentPaper.authors.length; i++){
-        addAuthorById(currentPaper.authors[i], currentPaper.papers_id);
-      }
+				getAuthors(function(authors){
+
+					//Makes it so the current user can't remove themself as an author of a paper
+					getCurrentUser(function(currentUser){
+							var current_user_index = -1;
+							for(var i = 0; i < currentPaper.authors.length; i++){
+								if( currentPaper.authors[i].users_id != currentUser.users_id){
+									addAuthorById(currentPaper.authors[i], currentPaper.papers_id);
+
+									//Loop over authors, if exists in authors, delete it from array
+									//Only adds authors that are not already in the paper to the dropdown list
+									var current_author_index = -1;
+									for(var j = 0; j < authors.users.length; j++){
+										if( currentPaper.authors[i].users_id == authors.users[j].users_id){
+											current_author_index = j;
+										}
+									}
+									if (current_author_index != -1){
+										authors.users.splice(current_author_index, 1);
+									}
+								}
+							}
+							//Creates dropdown of authors
+							genAuthors(authors);
+						});
+				});
+
+			});
   }
 
 	/*

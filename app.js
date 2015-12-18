@@ -129,7 +129,7 @@ app.post('/api/papers/authors/delete', function(req, res){
     authors_id : req.body.authors_id
   }
 
-  console.log('here');
+  console.log('here123');
 
   paper_mid.deleteAuthor(data, function(err, result){
     if (err){
@@ -144,11 +144,17 @@ app.post('/api/papers/authors/delete', function(req, res){
 });
 
 //Strictly adds just the authors from a given paper
+// Takes a list of author ids as authors
 app.post('/api/papers/authors/add', function(req, res){
   var data = {
     papers_id : req.body.papers_id,
     users_id : req.body.userId,
     authors : req.body.authors // Equals a list of authors_id
+  }
+  console.log(data.authors);
+
+  if (!data.authors){
+    data.authors = [];
   }
 
   paper_mid.addAuthors(data, function(err, result){

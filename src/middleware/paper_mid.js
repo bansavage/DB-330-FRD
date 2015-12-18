@@ -274,7 +274,6 @@ function Paper(){
               console.log(err);
               res.status(404).send({message: 'Paper lookup error'});
             }else{
-              console.log(papers);
               papers.forEach(function(paper, index, arr){
                 if (paper.papers_id == papers_id){
                   next(); // User has access to the paper
@@ -524,6 +523,7 @@ var deletePaperFunction = function(obj, callback, err){
 // Called by createPapersUsersMap and this
 var addAuthorsFunction = function(obj, callback, err, result){
     if (err) {throw err;}
+    console.log(obj.authors);
     if (obj.authors.length <= 0) {
       callback('Authors does not exist', result);
     }else{
@@ -590,6 +590,9 @@ var deleteAuthorFunction = function(obj, callback, err){
     console.log(err);
     callback(err, '');
   }
+
+  console.log("here");
+
   db.getConnection(function(err, connection, err) {
     try{
       if (err) {throw err;}
