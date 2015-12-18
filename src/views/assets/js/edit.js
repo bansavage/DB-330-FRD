@@ -703,7 +703,7 @@
 			//console.log(keysOnPage.length+ " was added");
 		}
 		else{
-			inputKey = document.getElementById("pKey").value;
+			inputKey = document.getElementsByClassName("pKey")[0].value;
 				if( inputKey == "" ){
 					bool = false;
 				}
