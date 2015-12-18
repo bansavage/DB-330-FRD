@@ -228,7 +228,7 @@
 	 	var keywords = [];
 	 	var authors  = [];
 	 	for(var k = 0; k<document.getElementsByClassName("m-key").length;k++){
-	 		var val = document.getElementsByClassName("m-key")[k].Page[i].getAttribute("data-val");
+	 		var val = document.getElementsByClassName("m-key")[k].getAttribute("data-val");
 	 		console.log(val);
 	 		keywords.push( val );
 	 	}

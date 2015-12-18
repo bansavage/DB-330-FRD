@@ -1,32 +1,36 @@
 (function(){
   var token = localStorage.getItem("token");
-  var headers = {};
-if(token){
-    headers['x-access-token'] = token;
-}
 
-  var init = function(){
 
-    $.ajax({
-      url: `/api/users`,
-      type: "GET",
-      headers: headers,
-      success : function(data, textStatus, jqXHR){
-        if (status > 400){
-          //window.location.href = `/login`;
-        }else{
-          setupPage(data);
+        var init = function(){
+          var headers = {};
+          if(token){
+            headers['x-access-token'] = token;
+
+            $.ajax({
+              url: `/api/users`,
+              type: "GET",
+              headers: headers,
+              success : function(data, textStatus, jqXHR){
+                if (status > 400){
+                  //window.location.href = `/login`;
+                }else{
+                  setupPage(data);
+                }
+                console.log(textStatus);
+                return true;
+              },
+              error : function(jqXHR, textStatus, errorThrown){
+                console.log(textStatus);
+                window.location.href = `/login`;
+              }
+            });
+            listenOnATags();
         }
-        console.log(textStatus);
-        return true;
-      },
-      error : function(jqXHR, textStatus, errorThrown){
-        console.log(textStatus);
-        window.location.href = `/login`;
+        else{
+          console.log("no token");
+        }
       }
-    });
-    listenOnATags();
-  }
 
   var setupPage = function(data){
     var el = document.getElementById("db-menu-dropdown");
@@ -45,19 +49,23 @@ if(token){
     }
   }
 
+
   var listenOnATags = function(){
     var aTags = document.getElementsByTagName("a");
     for(var i = 0; i < aTags.length-1; i++){
-      aTagEventListenerAdd(aTags, i)
+      if(aTags[i].getAttribute('href')){
+        aTagEventListenerAdd(aTags, i)
+      }
     }
   }
 
   //Separates it so the index can be perssisted
   var aTagEventListenerAdd = function(aTags, index){
-    aTags[index].addEventListener('click', function(e){
-      e.preventDefault();
-      goWithToken(aTags[index].getAttribute('href'));
-    });
+
+      aTags[index].addEventListener('click', function(e){
+        e.preventDefault();
+        goWithToken(aTags[index].getAttribute('href'));
+      });
   }
 
   // Acts just like the user clicked on the a tag, but attaches the token to the request

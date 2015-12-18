@@ -6,7 +6,7 @@
     window.location.href = "/login";
   }
 
-  var logoutEl = document.getElementsByClassName('fa-sign-out')[0];
+  var logoutEl = document.getElementsByClassName('signout')[0];
   logoutEl.addEventListener('click', function(e){
     e.preventDefault();
     logout();
