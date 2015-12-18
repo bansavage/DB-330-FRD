@@ -330,7 +330,7 @@
 							console.log('Remove was Unsuccessful');
 		        }else{
 
-							$("#pAuthor").append("<option id='author-"+authors_id+"'value='"+authors_id+"'>"+author.fName +
+							$("#pAuthor").append("<option class='authorOpt' id='author-"+authors_id+"'value='"+authors_id+"'>"+author.fName +
 							 										" " + author.lName + "</option>");
 							self.remove();
 		        }
@@ -419,16 +419,16 @@
 	function getData( cp, lp ){
 
 		var data = {};
-		var cp_title, cp_abstract, cp_citation; 
+		var cp_title, cp_abstract, cp_citation;
 		var lp_title, lp_abstract, lp_citation;
 
-	 	cp_title      =  cp.titleE.value; 
-	 	cp_abstract   =  cp.abstractE.value; 
-	 	cp_citations  =  cp.citationE.value; 
+	 	cp_title      =  cp.titleE.value;
+	 	cp_abstract   =  cp.abstractE.value;
+	 	cp_citations  =  cp.citationE.value;
 
-	 	lp_title      =  lp.title; 
-	 	lp_abstract   =  lp.abstract; 
-	 	lp_citations  =  lp.citation; 
+	 	lp_title      =  lp.title;
+	 	lp_abstract   =  lp.abstract;
+	 	lp_citations  =  lp.citation;
 
 
 	 	//Compare values
@@ -482,7 +482,7 @@
 		 			title: valid_data.abstract,
 		 	};
 		 	$.ajax({
-		 		url: "/api/papers/edit", 
+		 		url: "/api/papers/edit",
 		 		type: "POST",
 		 		data: JSON.stringify(data), //
 		 		contentType: "application/json",
@@ -523,5 +523,3 @@
 
 	 init();
  })();
-
-

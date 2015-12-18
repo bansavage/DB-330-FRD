@@ -54,6 +54,7 @@ function User(){
     db.getConnection(function(err, connection) {
       try{
         if (err) {throw err;}
+        console.log(obj.permission);
         if (obj.permission == undefined){
             obj.permission = "public";
         }
